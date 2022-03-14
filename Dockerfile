@@ -1,16 +1,3 @@
-FROM golang:1.17-alpine AS builder
-ENV CGO_ENABLED=0
-RUN apk add --update make
-WORKDIR /backend
-COPY go.* .
-RUN --mount=type=cache,target=/go/pkg/mod \
-    --mount=type=cache,target=/root/.cache/go-build \
-    go mod download
-COPY . .
-RUN --mount=type=cache,target=/go/pkg/mod \
-    --mount=type=cache,target=/root/.cache/go-build \
-    make bin
-
 FROM node:14.17-alpine3.13 AS client-builder
 WORKDIR /ui
 # cache packages in layer
@@ -25,7 +12,6 @@ RUN npm run build
 
 # TODO multi-arch build
 FROM alpine as downloader
-#FROM opensuse/leap@sha256:24a57f245ae32ef60f8fb7fb3229c58070d4710d082736541cc7f216d02a71f9 AS downloader
 ARG HELM_VERSION=3.7.2
 ARG HELM_CHECKSUM_LINUX_AMD64=4ae30e48966aba5f807a4e140dad6736ee1a392940101e4d79ffb4ee86200a9e
 ARG HELM_CHECKSUM_DARWIN_ARM64=260d4b8bffcebc6562ea344dfe88efe252cf9511dd6da3cccebf783773d42aec
@@ -33,7 +19,6 @@ ARG HELM_CHECKSUM_DARWIN_AMD64=5a0738afb1e194853aab00258453be8624e0a1d34fcc3c779
 ARG HELM_CHECKSUM_WINDOWS=299165f0af46bece9a61b41305cca8e8d5ec5319a4b694589cd71e6b75aca77e
 
 RUN apk add --no-cache wget coreutils unzip
-#RUN zypper ref && zypper install --no-recommends -y wget tar gzip && rm -fr /var/cache/*
 
 RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
     sh -c 'echo "${HELM_CHECKSUM_LINUX_AMD64} helm-v${HELM_VERSION}-linux-amd64.tar.gz" | sha256sum -w -c' && \
@@ -62,10 +47,6 @@ COPY --from=downloader /linux-amd64 /linux-amd64
 COPY --from=downloader /darwin-amd64 /darwin-amd64
 COPY --from=downloader /darwin-arm64 /darwin-arm64
 COPY --from=downloader /windows-amd64/helm.exe /windows-amd64/
-
-# the vm backend we don't need
-COPY --from=builder /backend/bin/service /
-COPY docker-compose.yaml .
 
 # the extension, UI and such
 COPY metadata.json .

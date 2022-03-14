@@ -2,12 +2,6 @@
   "name": "epinio-docker",
   "provider": "SUSE",
   "icon": "epinio.svg",
-  "vm": {
-    "composefile": "docker-compose.yaml",
-    "exposes": {
-      "socket": "extension-epinio-docker.sock"
-    }
-  },
   "ui": {
     "dashboard-tab": {
       "title": "Epinio-Docker",
