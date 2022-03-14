@@ -50,6 +50,6 @@ COPY --from=downloader /windows-amd64/helm.exe /windows-amd64/
 
 # the extension, UI and such
 COPY metadata.json .
-COPY docker.svg .
+COPY epinio.svg .
 COPY --from=client-builder /ui/build ui
 CMD /service -socket /run/guest-services/extension-epinio-docker.sock
