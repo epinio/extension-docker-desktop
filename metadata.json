@@ -1,0 +1,42 @@
+{
+  "name": "epinio-docker",
+  "provider": "SUSE",
+  "icon": "epinio.svg",
+  "vm": {
+    "composefile": "docker-compose.yaml",
+    "exposes": {
+      "socket": "extension-epinio-docker.sock"
+    }
+  },
+  "ui": {
+    "dashboard-tab": {
+      "title": "Epinio-Docker",
+      "src": "index.html",
+      "root": "ui",
+      "backend": {
+        "socket": "extension-epinio-docker.sock"
+      }
+    }
+  },
+  "host": {
+    "binaries": [
+      {
+        "darwin": [
+          {
+            "path": "/darwin-arm64/helm"
+          }
+        ],
+        "windows": [
+          {
+            "path": "/windows-amd64/helm.exe"
+          }
+        ],
+        "linux": [
+          {
+            "path": "/linux-amd64/helm"
+          }
+        ]
+      }
+    ]
+  }
+}
