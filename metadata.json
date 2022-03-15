@@ -6,10 +6,7 @@
     "dashboard-tab": {
       "title": "Epinio-Docker",
       "src": "index.html",
-      "root": "ui",
-      "backend": {
-        "socket": "extension-epinio-docker.sock"
-      }
+      "root": "ui"
     }
   },
   "host": {
