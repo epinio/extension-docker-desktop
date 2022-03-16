@@ -1,10 +1,10 @@
 {
-  "name": "epinio-docker",
+  "name": "epinio",
   "provider": "SUSE",
   "icon": "epinio.svg",
   "ui": {
     "dashboard-tab": {
-      "title": "Epinio-Docker",
+      "title": "Epinio",
       "src": "index.html",
       "root": "ui"
     }
@@ -15,6 +15,9 @@
         "darwin": [
           {
             "path": "/darwin-arm64/helm"
+          },
+          {
+            "path": "/darwin-arm64/kubectl"
           }
         ],
         "windows": [
@@ -25,6 +28,9 @@
         "linux": [
           {
             "path": "/linux-amd64/helm"
+          },
+          {
+            "path": "/linux-amd64/kubectl"
           }
         ]
       }

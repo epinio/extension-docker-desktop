@@ -2,16 +2,8 @@ IMAGE?=epinio/docker-extension
 
 BUILDER=buildx-multi-arch
 
-STATIC_FLAGS=CGO_ENABLED=0
-LDFLAGS="-s -w"
-GO_BUILD=$(STATIC_FLAGS) go build -trimpath -ldflags=$(LDFLAGS)
-
 INFO_COLOR = \033[0;36m
 NO_COLOR   = \033[m
-
-bin: ## Build the binary for the current platform
-	@echo "$(INFO_COLOR)Building...$(NO_COLOR)"
-	$(GO_BUILD) -o bin/service ./vm
 
 extension: ## Build service image to be deployed as a desktop extension
 	docker build --tag=$(IMAGE) .

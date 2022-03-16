@@ -1,107 +1,106 @@
 import React from "react";
 import "./App.css";
+import KubernetesCheck from "./KubernetesCheck";
+import Installer from "./Installer";
 import { DockerMuiThemeProvider } from '@docker/docker-mui-theme';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from "@mui/material/Button";
-import Alert from "@mui/material/Alert";
-import {Paper} from "@mui/material";
+import {BottomNavigation, Box, Card, CardActions, CardContent, Grid, Typography} from "@mui/material";
 
-class Kubernetes extends React.Component {
+class Opener extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {running: false, context: ""};
+    this.state = {username: "", password: ""};
+    this.open = this.open.bind(this);
   }
 
   componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
+    this.getCredentials();
   }
 
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
+  async getCredentials() {
+    try {
+      const result = await window.ddClient.extension.host.cli.exec(
+        "kubectl",
+        ["get", "secret", "-n", "epinio", "default-epinio-user", "-o", "jsonpath='{.data}'"]
+      )
+      const obj = result.parseJsonObject();
+      console.debug(obj);
+      this.setState({username: atob(obj.username), password: atob(obj.password)});
 
-  tick() {
-    var state = false
-    if (state) {
-      this.setState({
-        running: true,
-        context: "foo",
-      });
-    } else {
-      this.setState({
-        running: false,
-        context: "",
-      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error);
+      } else {
+        console.log(JSON.stringify(error));
+      }
+      this.setState({username: "", password: ""});
     }
   }
 
-  kubernetesOK(props) {
-    return (
-      <Alert severity="success">
-      Kubernetes is running, selected context is "{props.context}"
-      </Alert>
-    )
-  }
-
-  kubernetesMissing(props) {
-    return (
-      <Alert severity="error">
-      You need a Kubernetes cluster to use Epinio. Go to 'Settings -&gt; Kubernetes' and enable it.
-      </Alert>
-    )
+  async open() {
+    await this.getCredentials();
+    window.ddClient.host.openExternal("https://" + this.props.domain);
   }
 
   render() {
-    if (this.state.running)
-      return (
-        <div>
-          <this.kubernetesOK context={this.state.context} />
-        </div>
-      );
-    else
-      return (
-        <div>
-          <this.kubernetesMissing/>
-        </div>
-      );
+    const disabled = !this.props.enabled;
+    return (
+      <Card>
+        <CardContent>
+          <Typography>
+            Open the Epinio UI in a browser.
+          </Typography>
+          <br/>
+          <Typography variant="body2" align="left">
+            User: {this.state.username} <br/>
+            Password: {this.state.password} <br/>
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button onClick={this.open} disabled={disabled}>
+            Open
+          </Button>
+        </CardActions>
+      </Card>
+    );
   }
 }
 
+
 function App() {
-  const [response, setResponse] = React.useState("");
-  const get = async () => {
-    const result = await window.ddClient.extension.host.cli.exec("helm", ["-h"], {
-      stream: {
-        onOutput(data: { stdout: string } | { stderr: string }): void {
-          console.error(data.stdout);
-        },
-        onError(error: any): void {
-          console.error(error);
-        },
-        onClose(exitCode: number): void {
-          console.log("onClose with exit code " + exitCode);
-        },
-      },
-    });
-    setResponse(JSON.stringify(result));
-  };
+  const domain = "localdev.me";
+  const uiDomain = "ui.localdev.me";
+  const [enabled, setEnabled] = React.useState("");
 
   return (
     <DockerMuiThemeProvider>
       <CssBaseline />
       <div className="App">
-        <Paper>
-          <Kubernetes />
-        </Paper>
-        <Paper>
-          <Button variant="contained" onClick={get}>
-            Debug
-          </Button>
-          <pre>{response}</pre>
-        </Paper>
+
+        <Box sx={{ width: '100%' }}>
+          <Typography variant="subtitle1" component="div" gutterBottom>
+            Epinio - From Source To Deployment
+          </Typography>
+        </Box>
+
+        <Grid container spacing={2}>
+
+          <Grid item>
+            <Installer domain={domain} enabled={enabled} />
+          </Grid>
+
+          <Grid item>
+            <Opener domain={uiDomain} enabled={enabled} key={enabled} />
+          </Grid>
+
+        </Grid>
+
+        <br/>
+
+        <BottomNavigation>
+          <KubernetesCheck onEnabledChanged={setEnabled} />
+        </BottomNavigation>
       </div>
     </DockerMuiThemeProvider>
   );
