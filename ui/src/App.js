@@ -7,6 +7,34 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Button from "@mui/material/Button";
 import {BottomNavigation, Box, Card, CardActions, CardContent, Grid, Typography} from "@mui/material";
 
+class Info extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {version: "", kube_version: ""};
+  }
+
+  componentDidMount() {
+    window.ddClient.extension.vm.service.get(this.props.url + "/api/v1/info").then((value) => this.setState(value))
+  }
+
+  render() {
+    const disabled = !this.props.enabled;
+    return (
+      <Card>
+        <CardContent>
+          <Typography>
+            Info
+          </Typography>
+          <br/>
+          <Typography variant="body2" align="left">
+            Epinio: { this.state.version } <br/>
+            Kubernetes: { this.state.kube_version }
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  }
+}
 class Opener extends React.Component {
   constructor(props) {
     super(props);
@@ -18,6 +46,7 @@ class Opener extends React.Component {
     this.getCredentials();
   }
 
+  // TODO move state up
   async getCredentials() {
     try {
       const result = await window.ddClient.extension.host.cli.exec(
@@ -67,10 +96,11 @@ class Opener extends React.Component {
   }
 }
 
-
 function App() {
   const domain = "localdev.me";
   const uiDomain = "ui.localdev.me";
+  // TODO get admin:password
+  const apiURL = "http://admin:password@epinio.localdev.me";
   const [enabled, setEnabled] = React.useState("");
 
   return (
@@ -94,6 +124,9 @@ function App() {
             <Opener domain={uiDomain} enabled={enabled} key={enabled} />
           </Grid>
 
+          <Grid item>
+            <Info url={apiURL} enabled={enabled} key={enabled} />
+          </Grid>
         </Grid>
 
         <br/>
