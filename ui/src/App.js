@@ -10,7 +10,7 @@ import {BottomNavigation, Box, Card, CardActions, CardContent, Grid, Paper, Typo
 class Info extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {version: "", kube_version: ""};
+    this.state = {version: "-", kube_version: "-"};
   }
 
   componentDidMount() {
@@ -24,6 +24,9 @@ class Info extends React.Component {
         <CardContent>
           <Typography>
             Info
+          </Typography>
+          <Typography variant="body2">
+            <a href="https://epinio.io">Homepage</a> | <a href="https://github.com/epinio/epinio/releases">CLI download</a>
           </Typography>
           <br/>
           <Typography variant="body2" align="left">
@@ -116,7 +119,7 @@ function App() {
 
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Installer domain={domain} enabled={enabled} />
+            <Installer domain={domain} uiDomain={uiDomain} enabled={enabled} />
           </Grid>
 
           <Grid item xs={4}>

@@ -72,17 +72,19 @@ class Installer extends React.Component {
       console.log("installed: epinio");
       this.setState({progress: 75});
 
-      console.log("installing Epinio chart");
+      console.log("installing Epinio UI chart");
       this.setState({progress: 80});
       result = await this.helm([
         "upgrade", "--install", "epinio-ui",
+        "--namespace", "epinio",
         "--set", "global.domain=" + this.props.uiDomain,
         "--set", "ingress.ingressClassName=nginx",
+        "--set", 'ingress.annotations.nginx\.ingress\.kubernetes\.io/ssl-redirect:"false"',
         "plugins/epinio_docker-extension/ui/ui/charts/epinio-ui-0.1.0.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
-      console.log("installed: epinio");
+      console.log("installed: epinio UI");
       this.setState({progress: 100});
 
     } catch (error) {
