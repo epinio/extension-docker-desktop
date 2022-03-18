@@ -5,7 +5,7 @@ import Installer from "./Installer";
 import { DockerMuiThemeProvider } from '@docker/docker-mui-theme';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from "@mui/material/Button";
-import {BottomNavigation, Box, Card, CardActions, CardContent, Grid, Typography} from "@mui/material";
+import {BottomNavigation, Box, Card, CardActions, CardContent, Grid, Paper, Typography} from "@mui/material";
 
 class Info extends React.Component {
   constructor(props) {
@@ -115,25 +115,25 @@ function App() {
         </Box>
 
         <Grid container spacing={2}>
-
-          <Grid item>
+          <Grid item xs={6}>
             <Installer domain={domain} enabled={enabled} />
           </Grid>
 
-          <Grid item>
-            <Opener domain={uiDomain} enabled={enabled} key={enabled} />
+          <Grid item xs={4}>
+            <Info url={apiURL} enabled={enabled} key={enabled} />
           </Grid>
 
-          <Grid item>
-            <Info url={apiURL} enabled={enabled} key={enabled} />
+          <Grid item xs={4}>
+            <Opener domain={uiDomain} enabled={enabled} key={enabled} />
           </Grid>
         </Grid>
 
-        <br/>
+        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+          <BottomNavigation>
+            <KubernetesCheck onEnabledChanged={setEnabled} />
+          </BottomNavigation>
+        </Paper>
 
-        <BottomNavigation>
-          <KubernetesCheck onEnabledChanged={setEnabled} />
-        </BottomNavigation>
       </div>
     </DockerMuiThemeProvider>
   );
