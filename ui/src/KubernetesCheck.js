@@ -4,7 +4,7 @@ import Alert from "@mui/material/Alert";
 class KubernetesCheck extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {running: false, context: "", error: ""};
+    this.state = {error: ""};
   }
 
   componentDidMount() {
@@ -21,8 +21,7 @@ class KubernetesCheck extends React.Component {
 
   setRunning(val, error) {
     this.props.onEnabledChanged(val);
-    // TODO duplicates state internally, needed?
-    this.setState({ running: val, error: error });
+    this.setState({ error: error });
   }
 
   async check() {
@@ -69,7 +68,7 @@ class KubernetesCheck extends React.Component {
   }
 
   render() {
-    if (this.state.running)
+    if (this.props.running)
       return (
         <div>
           <this.kubernetesOK />

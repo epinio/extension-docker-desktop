@@ -1,11 +1,11 @@
 
 import React from "react";
-import {Box, Button, Card, CardActions, CardContent, LinearProgress, Typography} from "@mui/material";
+import {Alert, Box, Button, Card, CardActions, CardContent, LinearProgress, Typography} from "@mui/material";
 
 class Installer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {response: "", progress: 0};
+    this.state = {error: null, progress: 0};
     this.install = this.install.bind(this);
   }
 
@@ -28,13 +28,13 @@ class Installer extends React.Component {
   }
 
   async install() {
-    this.setState({response: "", progress: 0});
+    this.setState({error: null, progress: 0});
 
     try {
       console.log("installing NGINX chart");
       this.setState({progress: 10});
       let result = await this.helm([
-        "upgrade", "--install", "ingress-nginx",
+        "upgrade", "--install", "--wait", "ingress-nginx",
         "--create-namespace", "--namespace", "ingress-nginx",
         "plugins/epinio_extension-docker-desktop/ui/ui/charts/ingress-nginx-4.0.18.tgz"
       ]);
@@ -71,25 +71,9 @@ class Installer extends React.Component {
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
       console.log("installed: epinio");
-      this.setState({progress: 75});
-
-      console.log("installing Epinio UI chart");
-      this.setState({progress: 80});
-      result = await this.helm([
-        "upgrade", "--install", "epinio-ui",
-        "--namespace", "epinio",
-        "--set", "global.domain=" + this.props.uiDomain,
-        "--set", "ingress.ingressClassName=nginx",
-        "--set", 'ingress.annotations.nginx\.ingress\.kubernetes\.io/ssl-redirect:"false"',
-        "plugins/epinio_extension-docker-desktop/ui/ui/charts/epinio-ui-0.1.0.tgz"
-      ]);
-      console.debug(JSON.stringify(result));
-      console.log(result.stdout);
-      console.log("installed: epinio UI");
       this.setState({progress: 100});
-
     } catch (error) {
-      this.setState({response: error.message});
+      this.setState({error: error.message});
       return;
     }
 
@@ -97,6 +81,14 @@ class Installer extends React.Component {
 
   render() {
     // TODO install is idempotent, but maybe also detect working installation?
+    var error = null;
+    if (this.state.error != null) {
+      error = (
+        <Alert severity="error">
+          {this.state.error}
+        </Alert>
+      );
+    }
     const disabled = !this.props.enabled;
     return (
       <Card>
@@ -106,7 +98,7 @@ class Installer extends React.Component {
           </Typography>
 
           <Box sx={{ width: '50%' }}>
-            <Typography>{this.state.response}</Typography>
+            {error}
           </Box>
         </CardContent>
         <CardActions>
