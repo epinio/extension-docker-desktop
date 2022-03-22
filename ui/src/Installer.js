@@ -65,7 +65,8 @@ class Installer extends React.Component {
         "--create-namespace", "--namespace", "epinio",
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
-        "plugins/epinio_extension-docker-desktop/ui/ui/charts/epinio-0.7.1.tgz"
+        "--set", "'ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect=false" + "'",
+        "plugins/epinio_extension-docker-desktop/ui/ui/charts/epinio-0.7.2.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);

@@ -98,12 +98,11 @@ FROM alpine as downloader-charts
 WORKDIR /charts
 RUN wget https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.0.18/ingress-nginx-4.0.18.tgz
 RUN wget https://charts.jetstack.io/charts/cert-manager-v1.7.1.tgz
-RUN wget https://github.com/epinio/helm-charts/releases/download/epinio-0.7.1/epinio-0.7.1.tgz
-RUN wget https://github.com/epinio/helm-charts/releases/download/epinio-ui-0.1.0/epinio-ui-0.1.0.tgz
+RUN wget https://github.com/epinio/helm-charts/releases/download/epinio-0.7.2/epinio-0.7.2.tgz
 
 
 FROM alpine
-LABEL org.opencontainers.image.title="epinio-docker" \
+LABEL org.opencontainers.image.title="epinio-extension-docker-desktop" \
     org.opencontainers.image.description="Epinio" \
     org.opencontainers.image.vendor="SUSE" \
     com.docker.desktop.extension.api.version=">= 0.2.0"
