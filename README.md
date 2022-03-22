@@ -2,16 +2,22 @@
 
 https://epinio.io
 
-## Build Image
+## Install Extension
+
+    docker-extension extension install ghcr.io/epinio/extension-docker-desktop:v0.0.1-2
+
+## Dev
+
+### Build Image
 
     make
 
-## Install/Update Extension
+### Install/Update
 
-    bin/docker-extension extension install epinio/extension-docker-desktop
-    bin/docker-extension extension update epinio/extension-docker-desktop
+    docker-extension extension install epinio/extension-docker-desktop
+    docker-extension extension update epinio/extension-docker-desktop
 
-## Dev
+### Debug
 
     # serve ui from local server
     docker-extension extension dev ui-source epinio/extension-docker-desktop http://localhost:3000

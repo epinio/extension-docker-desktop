@@ -52,6 +52,7 @@ function App() {
   const domain = "localdev.me";
   const uiDomain = "epinio.localdev.me";
   const [enabled, setEnabled] = React.useState(false);
+  const [installation, setInstallation] = React.useState(false);
   const [credentials, setCredentials] = React.useState({username: "", password: ""});
   const [info, setInfo] = React.useState({version: "-", kube_version: "-"});
 
@@ -60,7 +61,7 @@ function App() {
       <CssBaseline />
       <div className="App">
 
-        <Credentials enabled={enabled} credentials={credentials} onCredentialsChanged={setCredentials} />
+        <Credentials enabled={enabled} credentials={credentials} onCredentialsChanged={setCredentials} installation={installation} />
 
         <Box sx={{ width: '100%' }}>
           <Typography variant="subtitle1" component="div" gutterBottom>
@@ -70,7 +71,7 @@ function App() {
 
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Installer domain={domain} enabled={enabled} />
+            <Installer domain={domain} enabled={enabled} onInstallationChanged={setInstallation}/>
           </Grid>
 
           <Grid item xs={4}>

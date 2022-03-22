@@ -4,6 +4,10 @@ import useTraceUpdate from "../tracer.js";
 import {Card, CardContent, Typography} from "@mui/material";
 import {credentialsOK} from "./Credentials";
 
+function infoChanged(info, update) {
+  return info.version !== update.version;
+}
+
 function Info(props) {
   useTraceUpdate(props);
   React.useEffect(() => {
@@ -13,18 +17,18 @@ function Info(props) {
       console.log("check info api endpoint");
       window.ddClient.extension.vm.service.get(apiURL).then(
         (value) => {
-          const info = props.info;
-          info.version = value.version;
-          info.kube_version = value.kube_version;
-          props.onInfoChanged(info);
+          const u = {version: value.version, kube_version: value.kube_version};
+          if (infoChanged(props.info, u)) {
+            props.onInfoChanged(u);
+          }
         }
       ).catch(
         (error) => {
           console.error(error);
-          const info = props.info;
-          info.version = "-";
-          info.kube_version = "-";
-          props.onInfoChanged(info);
+          const u = {version: "-", kube_version: "-"};
+          if (infoChanged(props.info, u)) {
+            props.onInfoChanged(u);
+          }
         }
       );
     }

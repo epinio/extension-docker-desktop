@@ -72,8 +72,11 @@ class EpinioInstaller extends React.Component {
       console.log(result.stdout);
       console.log("installed: epinio");
       this.setState({progress: 100});
+      this.props.onInstallationChanged(true);
+
     } catch (error) {
       this.setState({error: error.message});
+      this.props.onInstallationChanged(false);
       return;
     }
 
