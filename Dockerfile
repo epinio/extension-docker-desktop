@@ -26,36 +26,36 @@ ARG KUBECTL_CHECKSUM_LINUX_AMD64=3f0398d4c8a5ff633e09abd0764ed3b9091fafbe3044970
 ARG KUBECTL_CHECKSUM_WINDOWS_AMD64=2447e0af25842a1b546110e3beb76154998f660cf3d147314d9c7472b983fbcd
 
 # /darwin amd64
-RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-darwin-amd64.tar.gz && \
+RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-darwin-amd64.tar.gz && \
     sh -c 'echo "${HELM_CHECKSUM_DARWIN_AMD64} helm-v${HELM_VERSION}-darwin-amd64.tar.gz" | sha256sum -w -c' && \
     tar xfz helm-v${HELM_VERSION}-darwin-amd64.tar.gz darwin-amd64/helm && \
     mkdir -p /darwin && \
     mv darwin-amd64/helm /darwin/helm && \
     chmod +x /darwin/helm
-RUN wget https://dl.k8s.io/v${KUBECTL_VERSION}/bin/darwin/amd64/kubectl &&\
+RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/darwin/amd64/kubectl &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_DARWIN_AMD64} kubectl" | sha256sum -w -c' && \
     mv kubectl darwin/kubectl && \
     chmod +x /darwin/kubectl
 
 # /linux amd64
-RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
+RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
     sh -c 'echo "${HELM_CHECKSUM_LINUX_AMD64} helm-v${HELM_VERSION}-linux-amd64.tar.gz" | sha256sum -w -c' && \
     tar xfz helm-v${HELM_VERSION}-linux-amd64.tar.gz linux-amd64/helm && \
     mkdir -p /linux && \
     mv linux-amd64/helm /linux/helm && \
     chmod +x /linux/helm
-RUN wget https://dl.k8s.io/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
+RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_LINUX_AMD64} kubectl" | sha256sum -w -c' && \
     mv kubectl linux/kubectl && \
     chmod +x /linux/kubectl
 
 # /windows amd64
-RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-windows-amd64.zip && \
+RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-windows-amd64.zip && \
     sh -c 'echo "${HELM_CHECKSUM_WINDOWS_AMD64} helm-v${HELM_VERSION}-windows-amd64.zip" | sha256sum -w -c' && \
     unzip helm-v${HELM_VERSION}-windows-amd64.zip && \
     mkdir /windows && \
     mv windows-amd64/helm.exe /windows/helm.exe
-RUN wget https://dl.k8s.io/v${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe &&\
+RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_WINDOWS_AMD64} kubectl.exe" | sha256sum -w -c' && \
     mv kubectl.exe /windows/kubectl.exe
 
@@ -69,25 +69,25 @@ ARG KUBECTL_CHECKSUM_DARWIN_ARM64=f870cabdfd446b5217c1be255168edd99d8f015c974abe
 ARG KUBECTL_CHECKSUM_LINUX_ARM64=aa45dba48791eeb78a994a2723c462d155af4e39fdcfbcb39ce9c96f604a967a
 
 # /darwin arm64
-RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-darwin-arm64.tar.gz && \
+RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-darwin-arm64.tar.gz && \
     sh -c 'echo "${HELM_CHECKSUM_DARWIN_ARM64} helm-v${HELM_VERSION}-darwin-arm64.tar.gz" | sha256sum -w -c' && \
     tar xfz helm-v${HELM_VERSION}-darwin-arm64.tar.gz darwin-arm64/helm && \
     mkdir -p /darwin && \
     mv darwin-arm64/helm /darwin/helm && \
     chmod +x /darwin/helm
-RUN wget https://dl.k8s.io/v${KUBECTL_VERSION}/bin/darwin/arm64/kubectl &&\
+RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/darwin/arm64/kubectl &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_DARWIN_ARM64} kubectl" | sha256sum -w -c' && \
     mv kubectl darwin/kubectl && \
     chmod +x /darwin/kubectl
 
 # /linux arm64
-RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-arm64.tar.gz && \
+RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-linux-arm64.tar.gz && \
     sh -c 'echo "${HELM_CHECKSUM_LINUX_ARM64} helm-v${HELM_VERSION}-linux-arm64.tar.gz" | sha256sum -w -c' && \
     tar xfz helm-v${HELM_VERSION}-linux-arm64.tar.gz linux-arm64/helm && \
     mkdir -p /linux && \
     mv linux-arm64/helm /linux/helm && \
     chmod +x /linux/helm
-RUN wget https://dl.k8s.io/v${KUBECTL_VERSION}/bin/linux/arm64/kubectl &&\
+RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/linux/arm64/kubectl &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_LINUX_ARM64} kubectl" | sha256sum -w -c' && \
     mv kubectl linux/kubectl && \
     chmod +x /linux/kubectl
@@ -96,9 +96,9 @@ FROM downloader-$TARGETARCH AS downloader
 
 FROM alpine as downloader-charts
 WORKDIR /charts
-RUN wget https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.0.18/ingress-nginx-4.0.18.tgz
-RUN wget https://charts.jetstack.io/charts/cert-manager-v1.7.1.tgz
-RUN wget https://github.com/epinio/helm-charts/releases/download/epinio-0.7.2/epinio-0.7.2.tgz
+RUN wget -nv https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.0.18/ingress-nginx-4.0.18.tgz
+RUN wget -nv https://charts.jetstack.io/charts/cert-manager-v1.7.1.tgz
+RUN wget -nv https://github.com/epinio/helm-charts/releases/download/epinio-0.7.2/epinio-0.7.2.tgz
 
 
 FROM alpine
