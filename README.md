@@ -4,7 +4,7 @@ https://epinio.io
 
 ## Install Extension
 
-    docker-extension extension install ghcr.io/epinio/extension-docker-desktop:v0.0.1-2
+    docker-extension extension install ghcr.io/epinio/extension-docker-desktop:v0.0.1-3
 
 ## Dev
 
