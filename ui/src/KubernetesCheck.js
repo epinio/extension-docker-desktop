@@ -11,7 +11,7 @@ class KubernetesCheck extends React.Component {
     this.check();
     this.timerID = setInterval(
       () => this.check(),
-      10000
+      20000
     );
   }
 

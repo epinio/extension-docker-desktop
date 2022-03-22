@@ -2,7 +2,7 @@
 import React from "react";
 import {Alert, Box, Button, Card, CardActions, CardContent, LinearProgress, Typography} from "@mui/material";
 
-class Installer extends React.Component {
+class EpinioInstaller extends React.Component {
   constructor(props) {
     super(props);
     this.state = {error: null, progress: 0};
@@ -114,4 +114,4 @@ class Installer extends React.Component {
   }
 }
 
-export default Installer;
+export default EpinioInstaller;
