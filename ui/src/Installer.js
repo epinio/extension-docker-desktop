@@ -36,7 +36,7 @@ class Installer extends React.Component {
       let result = await this.helm([
         "upgrade", "--install", "ingress-nginx",
         "--create-namespace", "--namespace", "ingress-nginx",
-        "plugins/epinio_docker-extension/ui/ui/charts/ingress-nginx-4.0.18.tgz"
+        "plugins/epinio_extension-docker-desktop/ui/ui/charts/ingress-nginx-4.0.18.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -51,7 +51,7 @@ class Installer extends React.Component {
         "--create-namespace", "--namespace", "cert-manager",
         "--set", "installCRDs=true",
         "--set", "extraArgs[0]=--enable-certificate-owner-ref=true",
-        "plugins/epinio_docker-extension/ui/ui/charts/cert-manager-v1.7.1.tgz"
+        "plugins/epinio_extension-docker-desktop/ui/ui/charts/cert-manager-v1.7.1.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -65,7 +65,7 @@ class Installer extends React.Component {
         "--create-namespace", "--namespace", "epinio",
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
-        "plugins/epinio_docker-extension/ui/ui/charts/epinio-0.7.1.tgz"
+        "plugins/epinio_extension-docker-desktop/ui/ui/charts/epinio-0.7.1.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -80,7 +80,7 @@ class Installer extends React.Component {
         "--set", "global.domain=" + this.props.uiDomain,
         "--set", "ingress.ingressClassName=nginx",
         "--set", 'ingress.annotations.nginx\.ingress\.kubernetes\.io/ssl-redirect:"false"',
-        "plugins/epinio_docker-extension/ui/ui/charts/epinio-ui-0.1.0.tgz"
+        "plugins/epinio_extension-docker-desktop/ui/ui/charts/epinio-ui-0.1.0.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
