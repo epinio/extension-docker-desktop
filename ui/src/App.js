@@ -21,7 +21,7 @@ class Opener extends React.Component {
   }
 
   async open() {
-    window.ddClient.host.openExternal("http://" + this.props.uiDomain);
+    window.ddClient.host.openExternal("https://" + this.props.uiDomain);
   }
 
   render() {
