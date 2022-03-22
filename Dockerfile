@@ -114,7 +114,6 @@ COPY --from=downloader /linux /linux
 COPY --from=downloader-amd64 /windows /windows
 
 COPY --from=downloader-charts /charts /ui/charts
-COPY curl /curl
 
 # the extension, UI and such
 COPY metadata.json .
