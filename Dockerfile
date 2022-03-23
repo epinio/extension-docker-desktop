@@ -1,3 +1,13 @@
+FROM golang:1.17-alpine AS builder
+ENV CGO_ENABLED=0
+WORKDIR /dist
+COPY *.go .
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    GOOS="darwin" go build -o darwin/ -ldflags "-s -w" helmwrapper.go && \
+    GOOS="linux" go build -o linux/ -ldflags "-s -w" helmwrapper.go && \
+    GOOS="windows" go build -o windows/ -ldflags "-s -w" helmwrapper.go
+
 FROM node:14.17-alpine3.13 AS client-builder
 WORKDIR /ui
 # cache packages in layer
@@ -113,7 +123,11 @@ COPY --from=downloader /linux /linux
 # couldn't find helm binary for arm64, so always ship amd64 binaries
 COPY --from=downloader-amd64 /windows /windows
 
-COPY --from=downloader-charts /charts /ui/charts
+COPY --from=builder /dist/darwin/helmwrapper /darwin
+COPY --from=builder /dist/linux/helmwrapper /linux
+COPY --from=builder /dist/windows/helmwrapper.exe /windows
+
+COPY --from=downloader-charts /charts /charts
 
 # the extension, UI and such
 COPY metadata.json .
