@@ -23,10 +23,7 @@ function Credentials(props) {
         const u = {username: atob(obj.username), password: atob(obj.password)};
         if (credsChanged(props.credentials, u)) {
           props.onCredentialsChanged(u);
-        } else {
-          console.log("credentials unchanged");
         }
-
       } catch (error) {
         if (error instanceof Error) {
           console.error(error);
