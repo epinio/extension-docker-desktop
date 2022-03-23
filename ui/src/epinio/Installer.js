@@ -1,7 +1,6 @@
 
 import React from "react";
 import {Alert, Box, Button, Card, CardActions, CardContent, LinearProgress, Typography} from "@mui/material";
-import normalizePath from "normalize-path";
 
 class EpinioInstaller extends React.Component {
   constructor(props) {
@@ -37,7 +36,7 @@ class EpinioInstaller extends React.Component {
       let result = await this.helm([
         "upgrade", "--install", "--wait", "ingress-nginx",
         "--create-namespace", "--namespace", "ingress-nginx",
-        normalizePath("plugins/epinio_extension-docker-desktop/ui/ui/charts/ingress-nginx-4.0.18.tgz")
+        "plugins/epinio_extension-docker-desktop/ui/ui/charts/ingress-nginx-4.0.18.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -52,7 +51,7 @@ class EpinioInstaller extends React.Component {
         "--create-namespace", "--namespace", "cert-manager",
         "--set", "installCRDs=true",
         "--set", "extraArgs[0]=--enable-certificate-owner-ref=true",
-        normalizePath("plugins/epinio_extension-docker-desktop/ui/ui/charts/cert-manager-v1.7.1.tgz")
+        "plugins/epinio_extension-docker-desktop/ui/ui/charts/cert-manager-v1.7.1.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -67,7 +66,7 @@ class EpinioInstaller extends React.Component {
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
         "--set", "'ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect=false" + "'",
-        normalizePath("plugins/epinio_extension-docker-desktop/ui/ui/charts/epinio-0.7.2.tgz")
+        "plugins/epinio_extension-docker-desktop/ui/ui/charts/epinio-0.7.2.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
