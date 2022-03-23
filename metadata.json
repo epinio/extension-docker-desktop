@@ -37,7 +37,7 @@
             "path": "/linux/helm"
           },
           {
-            "path": "/darwin/helmwrapper"
+            "path": "/linux/helmwrapper"
           },
           {
             "path": "/linux/kubectl"
@@ -57,7 +57,7 @@
             "path": "/windows/helm.exe"
           },
           {
-            "path": "/darwin/helmwrapper.exe"
+            "path": "/windows/helmwrapper.exe"
           },
           {
             "path": "/windows/kubectl.exe"

@@ -47,7 +47,7 @@ jobs:
         platforms: linux/amd64,linux/arm64
         push: true
         tags: |
-          ghcr.io/epinio/extension-docker-desktop:latest
-          ghcr.io/epinio/extension-docker-desktop:${{ steps.get_tag.outputs.TAG }}
           splatform/epinio-extension-docker-desktop:latest
           splatform/epinio-extension-docker-desktop:${{ steps.get_tag.outputs.TAG }}
+          ghcr.io/epinio/extension-docker-desktop:latest
+          ghcr.io/epinio/extension-docker-desktop:${{ steps.get_tag.outputs.TAG }}
