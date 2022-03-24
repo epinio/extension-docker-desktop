@@ -4,7 +4,7 @@ import Alert from "@mui/material/Alert";
 class KubernetesCheck extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {error: ""};
+    this.state = {node: "", error: ""};
   }
 
   componentDidMount() {
@@ -19,9 +19,9 @@ class KubernetesCheck extends React.Component {
     clearInterval(this.timerID);
   }
 
-  setRunning(val, error) {
+  setRunning(val, node, error) {
     this.props.onEnabledChanged(val);
-    this.setState({ error: error });
+    this.setState({ node: node, error: error });
   }
 
   async check() {
@@ -30,49 +30,53 @@ class KubernetesCheck extends React.Component {
 
       const obj = result.parseJsonObject();
       if (obj.items.length < 1) {
-        this.setRunning(false, "no nodes found in cluster")
+        this.setRunning(false, "", "no nodes found in cluster")
         return;
       }
 
+      const node = obj.items[0].metadata.name;
+      this.setRunning(true, node, "");
+
     } catch(error) {
       if (error instanceof Error) {
-        this.setRunning(false, error.message)
+        this.setRunning(false, "", error.message)
       } else {
         //console.error(JSON.stringify(error));
-        this.setRunning(false, error.stderr)
+        this.setRunning(false, "", error.stderr)
       }
-      return;
     }
-
-    this.setRunning(true, "");
-  }
-
-  kubernetesOK(props) {
-    return (
-      <Alert severity="success">
-      Kubernetes is running
-      </Alert>
-    );
-  }
-
-  kubernetesMissing(props) {
-    return (
-      <Alert severity="error">
-        You need a Kubernetes cluster to use Epinio. Go to 'Preferences -&gt; Kubernetes' and enable it.<br/> Make sure to select the right Kubernetes context.
-
-        <p>
-        {props.error}
-        </p>
-      </Alert>
-    );
   }
 
   render() {
     if (this.props.running)
-      return <this.kubernetesOK />;
+      return <KubernetesOK node={this.state.node} />;
     else
-      return <this.kubernetesMissing error={this.state.error} />;
+      return <KubernetesMissing error={this.state.error} />;
   }
+}
+
+function KubernetesOK(props) {
+  if (props.node === "docker-desktop")
+    return <Alert severity="success">
+      Kubernetes is running
+    </Alert>
+  else
+    return <Alert severity="info">
+      Kubernetes is running, however you are not connected to a Docker Desktop node.
+      The "Install" button might not work with other clusters.
+    </Alert>
+}
+
+function KubernetesMissing(props) {
+  return (
+    <Alert severity="error">
+      You need a Kubernetes cluster to use Epinio. Go to 'Preferences -&gt; Kubernetes' and enable it.<br/> Make sure to select the right Kubernetes context.
+
+      <p>
+      {props.error}
+      </p>
+    </Alert>
+  );
 }
 
 export default KubernetesCheck;
