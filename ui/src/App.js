@@ -67,16 +67,16 @@ function App() {
           </Typography>
         </Box>
 
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
+        <Grid container spacing={2} mt={5} direction="column">
+          <Grid item>
             <Installer domain={domain} enabled={enabled} onInstallationChanged={setInstallation}/>
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item>
             <Info epiDomain={uiDomain} enabled={enabled} credentials={credentials} info={info} onInfoChanged={setInfo} />
           </Grid>
 
-          <Grid item xs={4}>
+          <Grid item>
             <Opener uiDomain={uiDomain} enabled={enabled} credentials={credentials} info={info} />
           </Grid>
         </Grid>
