@@ -8,44 +8,38 @@ import Info from "./epinio/API";
 import { DockerMuiThemeProvider } from '@docker/docker-mui-theme';
 import CssBaseline from '@mui/material/CssBaseline';
 import Button from "@mui/material/Button";
-import {BottomNavigation, Box, Card, CardActions, CardContent, Grid, Paper, Typography} from "@mui/material";
+import {BottomNavigation, BottomNavigationAction, Box, Card, CardActions, CardContent, Grid, Paper, Typography} from "@mui/material";
+import HomeIcon from '@mui/icons-material/Home';
+import DownloadIcon from '@mui/icons-material/Download';
+
+function Link(props) {
+  const open = () => { window.ddClient.host.openExternal(props.url); };
+  return <Button onClick={open} disabled={props.disabled}>{props.title}</Button>
+}
 
 function infoOK(info) {
   return info && info.version !== "" && info.version !== "-";
 }
 
-class Opener extends React.Component {
-  constructor(props) {
-    super(props);
-    this.open = this.open.bind(this);
-  }
-
-  async open() {
-    window.ddClient.host.openExternal("https://" + this.props.uiDomain);
-  }
-
-  render() {
-    const disabled = !this.props.enabled || !credentialsOK(this.props.credentials) || !infoOK(this.props.info);
-    return (
-      <Card>
-        <CardContent>
-          <Typography>
-            Open the Epinio UI in a browser.
-          </Typography>
-          <br/>
-          <Typography variant="body2" align="left">
-            User: {this.props.credentials.username} <br/>
-            Password: {this.props.credentials.password} <br/>
-          </Typography>
-        </CardContent>
-        <CardActions>
-          <Button onClick={this.open} disabled={disabled}>
-            Open
-          </Button>
-        </CardActions>
-      </Card>
-    );
-  }
+function Opener(props) {
+  const disabled = !props.enabled || !credentialsOK(props.credentials) || !infoOK(props.info);
+  return (
+    <Card>
+      <CardContent>
+        <Typography>
+          Open the Epinio UI in a browser.
+        </Typography>
+        <br/>
+        <Typography variant="body2" align="left">
+          User: {props.credentials.username} <br/>
+          Password: {props.credentials.password} <br/>
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Link url={"https://"+props.uiDomain} title="Open" disabled={disabled} />
+      </CardActions>
+    </Card>
+  );
 }
 
 function App() {
@@ -55,6 +49,10 @@ function App() {
   const [installation, setInstallation] = React.useState(false);
   const [credentials, setCredentials] = React.useState({username: "", password: ""});
   const [info, setInfo] = React.useState({version: "-", kube_version: "-"});
+
+  const open = (e) => {
+    window.ddClient.host.openExternal(e.currentTarget.attributes['url'].value);
+  };
 
   return (
     <DockerMuiThemeProvider>
@@ -84,8 +82,10 @@ function App() {
         </Grid>
 
         <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-          <BottomNavigation>
-            <KubernetesCheck running={enabled} onEnabledChanged={setEnabled} />
+          <KubernetesCheck running={enabled} onEnabledChanged={setEnabled} />
+          <BottomNavigation showLabels>
+            <BottomNavigationAction label="epinio.io" icon={<HomeIcon />} onClick={open} url="https://epinio.io" />
+            <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={open} url="https://github.com/epinio/epinio/releases" />
           </BottomNavigation>
         </Paper>
 

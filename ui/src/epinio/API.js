@@ -34,14 +34,13 @@ function Info(props) {
     }
   }, [props]);
 
+  const msg = props.info.version === "" ? "Not Connected" : "Connected";
+
   return (
     <Card>
       <CardContent>
         <Typography>
-          Info
-        </Typography>
-        <Typography variant="body2">
-          <a href="https://epinio.io">Homepage</a> | <a href="https://github.com/epinio/epinio/releases">CLI download</a>
+        {msg}
         </Typography>
         <br/>
         <Typography variant="body2" align="left">

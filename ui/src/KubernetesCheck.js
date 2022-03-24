@@ -69,17 +69,9 @@ class KubernetesCheck extends React.Component {
 
   render() {
     if (this.props.running)
-      return (
-        <div>
-          <this.kubernetesOK />
-        </div>
-      );
+      return <this.kubernetesOK />;
     else
-      return (
-        <div>
-          <this.kubernetesMissing error={this.state.error} />
-        </div>
-      );
+      return <this.kubernetesMissing error={this.state.error} />;
   }
 }
 
