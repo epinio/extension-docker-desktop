@@ -1,4 +1,3 @@
-
 import React from "react";
 import {Alert, Box, Button, Card, CardActions, CardContent, LinearProgress, Typography} from "@mui/material";
 
@@ -65,7 +64,7 @@ class EpinioInstaller extends React.Component {
         "--create-namespace", "--namespace", "epinio",
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
-        "--set", "'ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect=false" + "'",
+        "--set", "'ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect=false'",
         "epinio-0.7.2.tgz"
       ]);
       console.debug(JSON.stringify(result));
@@ -84,7 +83,7 @@ class EpinioInstaller extends React.Component {
 
   render() {
     // TODO install is idempotent, but maybe also detect working installation?
-    var error = null;
+    var error = (<div><br/> <br/> <br/></div>);
     if (this.state.error != null) {
       error = (
         <Alert severity="error">

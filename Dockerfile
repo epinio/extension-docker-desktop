@@ -34,6 +34,8 @@ ARG HELM_CHECKSUM_WINDOWS_AMD64=299165f0af46bece9a61b41305cca8e8d5ec5319a4b69458
 ARG KUBECTL_CHECKSUM_DARWIN_AMD64=7bd22a5f9eec4a0d905ea00a20735d018e2c37977be2d8ec656fbbb631801492
 ARG KUBECTL_CHECKSUM_LINUX_AMD64=3f0398d4c8a5ff633e09abd0764ed3b9091fafbe3044970108794b02731c72d6
 ARG KUBECTL_CHECKSUM_WINDOWS_AMD64=2447e0af25842a1b546110e3beb76154998f660cf3d147314d9c7472b983fbcd
+# https://github.com/epinio/epinio/releases
+ARG EPINIO_VERSION=0.6.1
 
 # /darwin amd64
 RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-darwin-amd64.tar.gz && \
@@ -46,6 +48,8 @@ RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/darwin/amd64/kubectl &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_DARWIN_AMD64} kubectl" | sha256sum -w -c' && \
     mv kubectl darwin/kubectl && \
     chmod +x /darwin/kubectl
+RUN wget -nv https://github.com/epinio/epinio/releases/download/v${EPINIO_VERSION}/epinio-darwin-x86_64 -O /darwin/epinio && \
+    chmod +x /darwin/epinio
 
 # /linux amd64
 RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz && \
@@ -58,6 +62,8 @@ RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_LINUX_AMD64} kubectl" | sha256sum -w -c' && \
     mv kubectl linux/kubectl && \
     chmod +x /linux/kubectl
+RUN wget -nv https://github.com/epinio/epinio/releases/download/v${EPINIO_VERSION}/epinio-linux-x86_64 -O /linux/epinio && \
+    chmod +x /linux/epinio
 
 # /windows amd64
 RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-windows-amd64.zip && \
@@ -68,6 +74,9 @@ RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-windows-amd64.zip && \
 RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/windows/amd64/kubectl.exe &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_WINDOWS_AMD64} kubectl.exe" | sha256sum -w -c' && \
     mv kubectl.exe /windows/kubectl.exe
+RUN wget -nv https://github.com/epinio/epinio/releases/download/v${EPINIO_VERSION}/epinio-windows-x86_64.zip && \
+    unzip epinio-windows-x86_64.zip && \
+    mv epinio.exe /windows/epinio.exe
 
 FROM alpine as downloader-arm64
 RUN apk add --no-cache wget coreutils unzip
@@ -77,6 +86,7 @@ ARG HELM_CHECKSUM_DARWIN_ARM64=260d4b8bffcebc6562ea344dfe88efe252cf9511dd6da3ccc
 ARG HELM_CHECKSUM_LINUX_ARM64=b0214eabbb64791f563bd222d17150ce39bf4e2f5de49f49fdb456ce9ae8162f
 ARG KUBECTL_CHECKSUM_DARWIN_ARM64=f870cabdfd446b5217c1be255168edd99d8f015c974abe01f7b80a4e0ca11b2b
 ARG KUBECTL_CHECKSUM_LINUX_ARM64=aa45dba48791eeb78a994a2723c462d155af4e39fdcfbcb39ce9c96f604a967a
+ARG EPINIO_VERSION=0.6.1
 
 # /darwin arm64
 RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-darwin-arm64.tar.gz && \
@@ -89,6 +99,8 @@ RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/darwin/arm64/kubectl &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_DARWIN_ARM64} kubectl" | sha256sum -w -c' && \
     mv kubectl darwin/kubectl && \
     chmod +x /darwin/kubectl
+RUN wget -nv https://github.com/epinio/epinio/releases/download/v${EPINIO_VERSION}/epinio-darwin-arm64 -O /darwin/epinio && \
+    chmod +x /darwin/epinio
 
 # /linux arm64
 RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-linux-arm64.tar.gz && \
@@ -101,6 +113,8 @@ RUN wget -nv https://dl.k8s.io/v${KUBECTL_VERSION}/bin/linux/arm64/kubectl &&\
     sh -c 'echo "${KUBECTL_CHECKSUM_LINUX_ARM64} kubectl" | sha256sum -w -c' && \
     mv kubectl linux/kubectl && \
     chmod +x /linux/kubectl
+RUN wget -nv https://github.com/epinio/epinio/releases/download/v${EPINIO_VERSION}/epinio-linux-arm64 -O /linux/epinio && \
+    chmod +x /linux/epinio
 
 FROM downloader-$TARGETARCH AS downloader
 

@@ -14,6 +14,9 @@
       {
         "darwin": [
           {
+            "path": "/darwin/epinio"
+          },
+          {
             "path": "/darwin/helm"
           },
           {
@@ -34,6 +37,9 @@
         ],
         "linux": [
           {
+            "path": "/linux/epinio"
+          },
+          {
             "path": "/linux/helm"
           },
           {
@@ -53,6 +59,9 @@
           }
         ],
         "windows": [
+          {
+            "path": "/windows/epinio.exe"
+          },
           {
             "path": "/windows/helm.exe"
           },
