@@ -62,6 +62,15 @@ export function Lister(props) {
   const [table, setTable] = React.useState([]);
 
   React.useEffect(() => {
+    tick();
+    var timerID = setInterval(() => tick(), 15000);
+
+    return function cleanup() {
+      clearInterval(timerID);
+    };
+  }, []);
+
+  const tick = () => {
     if (props.enabled && credentialsOK(props.credentials)) {
       const creds = props.credentials;
       const apiURL = sprintf("http://%s:%s@%s/api/v1/namespaces/workspace/applications", creds.username, creds.password, props.apiDomain);
@@ -70,13 +79,15 @@ export function Lister(props) {
         (value) => {
           console.log(value);
           var t = [];
-          for (var i=0; i < value.length; i++) {
+          for (var i = 0; i < value.length; i++) {
             t[i] = {
               id: value[i].meta.name,
               state: value[i].status,
               instances: value[i].configuration.instances,
-              dstatus: value[i].deployment.status,
             };
+            if (value[i].deployment) {
+              t[i].status = value[i].deployment.status;
+            }
             if (value[i].configuration.routes.length > 0) {
               t[i].route = value[i].configuration.routes[0];
             }
@@ -88,8 +99,10 @@ export function Lister(props) {
           console.error(error);
         }
       );
+    } else {
+      setTable([]);
     }
-  }, [props.enabled, props.credentials, props.apiDomain, props.appName]);
+  };
 
   const columns = [
     {field: "id", headerName: "Name", width: "160"},
