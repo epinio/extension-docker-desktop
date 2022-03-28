@@ -97,10 +97,9 @@ export function Lister(props) {
       ).catch(
         (error) => {
           console.error(error);
+          setTable([]);
         }
       );
-    } else {
-      setTable([]);
     }
   };
 
