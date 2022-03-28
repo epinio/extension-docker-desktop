@@ -91,6 +91,7 @@ class EpinioInstaller extends React.Component {
         </Alert>
       );
     }
+    const progress = this.state.progress == 100 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
     const disabled = !this.props.enabled;
     return (
       <Card>
@@ -109,7 +110,7 @@ class EpinioInstaller extends React.Component {
           </Button>
         </CardActions>
         <Box sx={{ width: '100%' }}>
-          <LinearProgress variant="determinate" value={this.state.progress} />
+          {progress}
         </Box>
       </Card>
     );

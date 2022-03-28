@@ -11,6 +11,10 @@ function infoChanged(info, update) {
   return info.version !== update.version;
 }
 
+export function infoOK(info) {
+  return info && info.version !== "" && info.version !== "-";
+}
+
 export function Info(props) {
   useTraceUpdate(props);
   React.useEffect(() => {
@@ -41,13 +45,13 @@ export function Info(props) {
 
   return (
     <Grid container direction="row" alignItems="center" width="20%">
-      <Grid item xs={2}>
+      <Grid item xs={1}>
         {icon}
       </Grid>
       <Grid item xs={4}>
         Epinio: { props.info.version }
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={5}>
         Kubernetes: { props.info.kube_version }
       </Grid>
     </Grid>

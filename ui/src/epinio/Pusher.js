@@ -43,7 +43,7 @@ export function Pusher(props) {
       await epinio([
         "settings", "update",
       ]);
-      const result =  epinio([
+      const result = epinio([
         "apps", "push",
         "-n", name,
         "-p", folder
@@ -65,7 +65,7 @@ export function Pusher(props) {
       </Grid>
 
       <Grid item xs={5}>
-        <Input onDrop={drag} value={folder} />
+        <Input onDrop={drag} value={folder} disabled={props.disabled} />
         <p>Drag 'n' drop a folder here</p>
       </Grid>
 
@@ -76,7 +76,7 @@ export function Pusher(props) {
       </Grid>
       <Grid item xs={2}>
         <label htmlFor="contained-button-file">
-          <Button variant="outlined" startIcon={<SendIcon />} onClick={send}>Upload</Button>
+          <Button variant="outlined" startIcon={<SendIcon />} onClick={send} disabled={props.disabled}>Upload</Button>
         </label>
       </Grid>
 

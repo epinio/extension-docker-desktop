@@ -8,6 +8,7 @@ import Installer from "./epinio/Installer";
 import Credentials from "./epinio/Credentials";
 import {credentialsOK} from "./epinio/Credentials";
 import {Info,  Lister} from "./epinio/API";
+import {infoOK} from "./epinio/API";
 import {Pusher} from "./epinio/Pusher";
 
 import Button from "@mui/material/Button";
@@ -20,12 +21,7 @@ function Link(props) {
   return <Button onClick={open} disabled={props.disabled}>{props.title}</Button>
 }
 
-function infoOK(info) {
-  return info && info.version !== "" && info.version !== "-";
-}
-
 function Opener(props) {
-  const disabled = !props.enabled || !credentialsOK(props.credentials) || !infoOK(props.info);
   return (
     <Card>
       <CardContent>
@@ -39,7 +35,7 @@ function Opener(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Link url={"https://"+props.uiDomain} title="Open" disabled={disabled} />
+        <Link url={"https://"+props.uiDomain} title="Open" disabled={props.disabled} />
       </CardActions>
     </Card>
   );
@@ -62,6 +58,8 @@ function App() {
     setAppName(name);
   }
 
+  const disabled = !enabled || !credentialsOK(credentials) || !infoOK(info);
+
   return (
     <DockerMuiThemeProvider>
       <CssBaseline />
@@ -81,7 +79,7 @@ function App() {
           </Grid>
 
           <Grid item xs={4}>
-            <Opener uiDomain={uiDomain} enabled={enabled} credentials={credentials} info={info} />
+            <Opener uiDomain={uiDomain} enabled={enabled} credentials={credentials} info={info} disabled={disabled} />
           </Grid>
 
           <Grid item xs={12} mt={2}>
@@ -95,7 +93,7 @@ function App() {
                 <Grid container spacing={2} direction="column">
                   <Pusher apiDomain={uiDomain} enabled={enabled} credentials={credentials} onPushed={handleAppName} list={
                     <Lister apiDomain={uiDomain} enabled={enabled} credentials={credentials} appName={appName} />
-                  } />
+                  } disabled={disabled} />
                 </Grid>
               </CardActions>
             </Card>
