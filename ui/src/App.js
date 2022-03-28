@@ -102,7 +102,9 @@ function App() {
         </Grid>
 
         <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-          <KubernetesCheck running={enabled} onEnabledChanged={setEnabled} />
+          <Box sx={{ width: '100%' }}>
+            <KubernetesCheck running={enabled} onEnabledChanged={setEnabled} />
+          </Box>
 
           <BottomNavigation showLabels>
             <Info apiDomain={uiDomain} enabled={enabled} credentials={credentials} info={info} onInfoChanged={setInfo} />

@@ -91,7 +91,7 @@ class EpinioInstaller extends React.Component {
         </Alert>
       );
     }
-    const progress = this.state.progress == 100 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
+    const progress = this.state.progress == 100 || this.state.progress == 0 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
     const disabled = !this.props.enabled;
     return (
       <Card>

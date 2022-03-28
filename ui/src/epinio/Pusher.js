@@ -59,7 +59,7 @@ export function Pusher(props) {
     <Grid container m={2}>
       <Grid item xs={4}>
         <label htmlFor="contained-input-name">
-          <Input value={name} onChange={e => setName(e.target.value)} />
+          <Input value={name} onChange={e => setName(e.target.value)} disabled={props.disabled} />
           <p>Name</p>
         </label>
       </Grid>

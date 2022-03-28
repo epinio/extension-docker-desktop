@@ -68,13 +68,12 @@ function KubernetesOK(props) {
 }
 
 function KubernetesMissing(props) {
+  const errmsg = props.error ? <p>{props.error}</p> : null;
   return (
     <Alert severity="error">
-      You need a Kubernetes cluster to use Epinio. Go to 'Preferences -&gt; Kubernetes' and enable it.<br/> Make sure to select the right Kubernetes context.
+      You need a Kubernetes cluster to use Epinio. Go to 'Preferences -&gt; Kubernetes' and enable it. Make sure to select the right Kubernetes context.
 
-      <p>
-      {props.error}
-      </p>
+      {errmsg}
     </Alert>
   );
 }
