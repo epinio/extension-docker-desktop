@@ -26,3 +26,16 @@ https://epinio.io
 
     # debug console
     docker-extension extension dev debug epinio/extension-docker-desktop
+
+## Release
+
+### Update Charts
+
+* `Dockerfile `(download)
+* `metadata`.json (host folder)
+* `ui/src/epinio/Installer.js` (runtime installation)
+
+### Update Binaries
+
+* `Dockerfile `(download)
+* `metadata`.json (host folder)

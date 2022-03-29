@@ -65,7 +65,7 @@ class EpinioInstaller extends React.Component {
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
         "--set", "ingress.nginxSSLRedirect=false",
-        "epinio-0.7.2.tgz"
+        "epinio-0.7.3.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
