@@ -2,7 +2,7 @@ import React from "react";
 import {sprintf} from "sprintf-js";
 import useTraceUpdate from "../tracer.js";
 import {credentialsOK} from "./Credentials";
-import { Grid, Typography} from "@mui/material";
+import { Grid } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import CloudIcon from '@mui/icons-material/Cloud';
 import CloudOffIcon from '@mui/icons-material/CloudOff';

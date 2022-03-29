@@ -32,7 +32,7 @@
             "path": "/charts/cert-manager-v1.7.1.tgz"
           },
           {
-            "path": "/charts/epinio-0.7.2.tgz"
+            "path": "/charts/epinio-0.7.3.tgz"
           }
         ],
         "linux": [
@@ -55,7 +55,7 @@
             "path": "/charts/cert-manager-v1.7.1.tgz"
           },
           {
-            "path": "/charts/epinio-0.7.2.tgz"
+            "path": "/charts/epinio-0.7.3.tgz"
           }
         ],
         "windows": [
@@ -78,7 +78,7 @@
             "path": "/charts/cert-manager-v1.7.1.tgz"
           },
           {
-            "path": "/charts/epinio-0.7.2.tgz"
+            "path": "/charts/epinio-0.7.3.tgz"
           }
         ]
       }

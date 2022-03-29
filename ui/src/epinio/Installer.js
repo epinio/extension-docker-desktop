@@ -64,7 +64,7 @@ class EpinioInstaller extends React.Component {
         "--create-namespace", "--namespace", "epinio",
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
-        "--set", "'ingress.annotations.nginx\\.ingress\\.kubernetes\\.io/ssl-redirect=false'",
+        "--set", "ingress.nginxSSLRedirect=false",
         "epinio-0.7.2.tgz"
       ]);
       console.debug(JSON.stringify(result));
@@ -91,7 +91,7 @@ class EpinioInstaller extends React.Component {
         </Alert>
       );
     }
-    const progress = this.state.progress == 100 || this.state.progress == 0 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
+    const progress = this.state.progress === 100 || this.state.progress === 0 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
     const disabled = !this.props.enabled;
     return (
       <Card>

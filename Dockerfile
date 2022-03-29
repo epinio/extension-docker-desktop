@@ -122,7 +122,7 @@ FROM alpine as downloader-charts
 WORKDIR /charts
 RUN wget -nv https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.0.18/ingress-nginx-4.0.18.tgz
 RUN wget -nv https://charts.jetstack.io/charts/cert-manager-v1.7.1.tgz
-RUN wget -nv https://github.com/epinio/helm-charts/releases/download/epinio-0.7.2/epinio-0.7.2.tgz
+RUN wget -nv https://github.com/epinio/helm-charts/releases/download/epinio-0.7.3/epinio-0.7.3.tgz
 
 
 FROM alpine
