@@ -35,21 +35,24 @@ export function Pusher(props) {
   };
 
   const send = async (ev) => {
-    // TODO remove debug
-    props.onPushed("debug");
-
     if (folder !== "" && name !== "") {
       console.log(folder);
-      await epinio([
-        "settings", "update",
-      ]);
-      const result = epinio([
-        "apps", "push",
-        "-n", name,
-        "-p", folder
-      ]);
-      console.log(result.stderr);
-      // TODO display errors for pushing
+      try {
+        await epinio([
+          "settings", "update",
+        ]);
+        const result = await epinio([
+          "apps", "push",
+          "-n", name,
+          "-p", folder
+        ]);
+        if (result.stderr.length > 0) {
+          console.log(result.stderr);
+        }
+        console.info(result.stdout);
+      } catch(error) {
+        window.ddClient.desktopUI.toast.error("Epinio failed to deploy: " + error);
+      }
       props.onPushed(name);
     }
   };
@@ -65,7 +68,7 @@ export function Pusher(props) {
       </Grid>
 
       <Grid item xs={5}>
-        <Input onDrop={drag} value={folder} disabled={props.disabled} />
+        <Input onDrop={drag} value={folder} disabled={props.disabled} sx={{ width: '50ch' }} />
         <p>Drag 'n' drop a folder here</p>
       </Grid>
 

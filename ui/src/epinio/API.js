@@ -58,22 +58,28 @@ export function Info(props) {
   );
 }
 
-export function Lister(props) {
-  const [table, setTable] = React.useState([]);
+export class Lister extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {table: []};
+  }
 
-  React.useEffect(() => {
-    tick();
-    var timerID = setInterval(() => tick(), 15000);
+  componentDidMount() {
+    this.list();
+    this.timerID = setInterval(
+      () => this.list(),
+      15000
+    );
+  }
 
-    return function cleanup() {
-      clearInterval(timerID);
-    };
-  }, []);
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
 
-  const tick = () => {
-    if (props.enabled && credentialsOK(props.credentials)) {
-      const creds = props.credentials;
-      const apiURL = sprintf("http://%s:%s@%s/api/v1/namespaces/workspace/applications", creds.username, creds.password, props.apiDomain);
+  list() {
+    if (this.props.enabled && credentialsOK(this.props.credentials)) {
+      const creds = this.props.credentials;
+      const apiURL = sprintf("http://%s:%s@%s/api/v1/namespaces/workspace/applications", creds.username, creds.password, this.props.apiDomain);
       console.log("check app list api endpoint");
       window.ddClient.extension.vm.service.get(apiURL).then(
         (value) => {
@@ -92,35 +98,37 @@ export function Lister(props) {
               t[i].route = value[i].configuration.routes[0];
             }
           }
-          setTable(t);
+          this.setState({table: t});
         }
       ).catch(
         (error) => {
           console.error(error);
-          setTable([]);
+          this.setState({table: []});
         }
       );
     }
-  };
+  }
 
-  const columns = [
-    {field: "id", headerName: "Name", width: "160"},
-    {field: "state", headerName: "State", sortable: true, width: "80"},
-    {field: "instances", headerName: "Instances", type: "number",  width: "80"},
-    {field: "route", headerName: "Route", width: "160"},
-    {field: "dstatus", headerName: "Info", width: "320"},
-  ];
+  render() {
+    const columns = [
+      {field: "id", headerName: "Name", width: "160"},
+      {field: "state", headerName: "State", sortable: true, width: "80"},
+      {field: "instances", headerName: "Instances", type: "number", width: "80"},
+      {field: "route", headerName: "Route", width: "160"},
+      {field: "dstatus", headerName: "Info", width: "320"},
+    ];
 
-  return (
-    <div style={{ height: 300, width: '100%' }}>
-    <DataGrid
-      rows={table}
-      columns={columns}
-      pageSize={5}
-      rowsPerPageOptions={[5]}
-    />
-    </div>
-  )
+    return (
+      <div style={{height: 300, width: '100%'}}>
+        <DataGrid
+          rows={this.state.table}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5]}
+        />
+      </div>
+    )
+  }
 }
 
 export default Info;
