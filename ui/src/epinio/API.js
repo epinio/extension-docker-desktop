@@ -1,7 +1,7 @@
 import React from "react";
 import {sprintf} from "sprintf-js";
 import {credentialsOK} from "./Credentials";
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import CloudIcon from '@mui/icons-material/Cloud';
 import CloudOffIcon from '@mui/icons-material/CloudOff';
@@ -90,7 +90,7 @@ export class Lister extends React.Component {
               instances: value[i].configuration.instances,
             };
             if (value[i].deployment) {
-              t[i].status = value[i].deployment.status;
+              t[i].dstatus = value[i].deployment.status;
             }
             if (value[i].configuration.routes.length > 0) {
               t[i].route = value[i].configuration.routes[0];
@@ -112,7 +112,12 @@ export class Lister extends React.Component {
       {field: "id", headerName: "Name", width: "160"},
       {field: "state", headerName: "State", sortable: true, width: "80"},
       {field: "instances", headerName: "Instances", type: "number", width: "80"},
-      {field: "route", headerName: "Route", width: "160"},
+      {
+        field: "route", headerName: "Route", width: "160", renderCell: (params) => {
+          const open = () => {window.ddClient.host.openExternal("https://"+params.row.route);};
+          return <Button onClick={open}>{params.row.route}</Button>;
+        }
+      },
       {field: "dstatus", headerName: "Info", width: "320"},
     ];
 
