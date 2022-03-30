@@ -1,5 +1,4 @@
 import React from "react";
-import useTraceUpdate from "../tracer.js";
 
 function credsChanged(creds, update) {
   return creds.username !== update.username || creds.password !== update.password;
@@ -11,7 +10,6 @@ export function credentialsOK(creds) {
 
 // Credentials will fetch the default user, when props.enabled is true
 function Credentials(props) {
-  useTraceUpdate(props);
   React.useEffect(() => {
     const getCredentials = async () => {
       try {

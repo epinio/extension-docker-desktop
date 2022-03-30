@@ -1,5 +1,7 @@
 import React from "react";
 
+// copied from https://stackoverflow.com/a/51082563
+
 function useTraceUpdate(props) {
   const prev = React.useRef(props);
   React.useEffect(() => {

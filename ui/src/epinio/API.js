@@ -1,6 +1,5 @@
 import React from "react";
 import {sprintf} from "sprintf-js";
-import useTraceUpdate from "../tracer.js";
 import {credentialsOK} from "./Credentials";
 import { Grid } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
@@ -16,7 +15,6 @@ export function infoOK(info) {
 }
 
 export function Info(props) {
-  useTraceUpdate(props);
   React.useEffect(() => {
     if (props.enabled && credentialsOK(props.credentials)) {
       const creds = props.credentials;
