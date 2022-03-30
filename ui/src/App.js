@@ -12,7 +12,7 @@ import {infoOK} from "./epinio/API";
 import {Pusher} from "./epinio/Pusher";
 
 import Button from "@mui/material/Button";
-import {BottomNavigation, BottomNavigationAction, Box, Card, CardActions, CardContent, Grid, Paper, Typography} from "@mui/material";
+import {Alert, Modal, BottomNavigation, BottomNavigationAction, Box, Card, CardActions, CardContent, Grid, Paper, Typography} from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import DownloadIcon from '@mui/icons-material/Download';
 
@@ -49,7 +49,15 @@ function App() {
   const [credentials, setCredentials] = React.useState({username: "", password: ""});
   const [info, setInfo] = React.useState({version: "-", kube_version: "-"});
 
-  const open = (e) => {
+  const [error, setError] = React.useState(null);
+  const [errorOpen, setErrorOpen] = React.useState(false);
+  const handleErrorClose = () => setErrorOpen(false);
+  const handleError = (error) => {
+    setError(error);
+    setErrorOpen(true);
+  }
+
+  const openURL = (e) => {
     window.ddClient.host.openExternal(e.currentTarget.attributes['url'].value);
   };
 
@@ -59,6 +67,35 @@ function App() {
     <DockerMuiThemeProvider>
       <CssBaseline />
       <div className="App">
+
+        <div>
+        <Modal
+          open={errorOpen}
+          onClose={handleErrorClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+            <Box sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '80%',
+              bgcolor: 'background.paper',
+              border: '2px solid #000',
+              boxShadow: 24,
+              p: 4,
+            }}
+            >
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Error
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 10 }}>
+              <Alert severity="error">{error}</Alert>
+            </Typography>
+          </Box>
+        </Modal>
+        </div>
 
         <Credentials enabled={enabled} credentials={credentials} onCredentialsChanged={setCredentials} installation={installation} />
 
@@ -70,7 +107,7 @@ function App() {
 
         <Grid container mt={2} columnSpacing={2}>
           <Grid item xs={8}>
-            <Installer domain={domain} enabled={enabled} onInstallationChanged={setInstallation}/>
+            <Installer domain={domain} enabled={enabled} onInstallationChanged={setInstallation} onError={handleError}/>
           </Grid>
 
           <Grid item xs={4}>
@@ -86,7 +123,7 @@ function App() {
               </CardContent>
               <CardActions>
                 <Grid container spacing={2} direction="column">
-                  <Pusher apiDomain={uiDomain} enabled={enabled} credentials={credentials} list={
+                  <Pusher apiDomain={uiDomain} enabled={enabled} credentials={credentials} onError={handleError} list={
                     <Lister apiDomain={uiDomain} enabled={enabled} credentials={credentials} />
                   } disabled={disabled} />
                 </Grid>
@@ -103,8 +140,8 @@ function App() {
 
           <BottomNavigation showLabels sx={{gridTemplateColumns: 'repeat(4, 1fr)'}}>
             <Info apiDomain={uiDomain} enabled={enabled} credentials={credentials} info={info} onInfoChanged={setInfo} />
-            <BottomNavigationAction label="epinio.io" icon={<HomeIcon />} onClick={open} url="https://epinio.io" />
-            <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={open} url="https://github.com/epinio/epinio/releases" />
+            <BottomNavigationAction label="epinio.io" icon={<HomeIcon />} onClick={openURL} url="https://epinio.io" />
+            <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={openURL} url="https://github.com/epinio/epinio/releases" />
           </BottomNavigation>
         </Paper>
 

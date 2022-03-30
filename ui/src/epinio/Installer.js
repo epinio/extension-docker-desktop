@@ -4,7 +4,7 @@ import {Alert, Box, Button, Card, CardActions, CardContent, LinearProgress, Typo
 class EpinioInstaller extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {error: null, progress: 0};
+    this.state = {progress: 0};
     this.install = this.install.bind(this);
   }
 
@@ -27,8 +27,6 @@ class EpinioInstaller extends React.Component {
   }
 
   async install() {
-    this.setState({error: null, progress: 0});
-
     try {
       console.log("installing NGINX chart");
       this.setState({progress: 10});
@@ -74,8 +72,8 @@ class EpinioInstaller extends React.Component {
       this.props.onInstallationChanged(true);
 
     } catch (error) {
-      this.setState({error: error.message});
       this.props.onInstallationChanged(false);
+      this.props.onError(error.message);
       return;
     }
 
@@ -83,14 +81,6 @@ class EpinioInstaller extends React.Component {
 
   render() {
     // TODO install is idempotent, but maybe also detect working installation?
-    var error = null;
-    if (this.state.error != null) {
-      error = (
-        <Alert severity="error">
-          {this.state.error}
-        </Alert>
-      );
-    }
     const progress = this.state.progress === 100 || this.state.progress === 0 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
     const disabled = !this.props.enabled;
     return (
@@ -99,10 +89,6 @@ class EpinioInstaller extends React.Component {
           <Typography>
             Install Epinio in Kubernetes
           </Typography>
-
-          <Box sx={{ width: '50%' }}>
-            {error}
-          </Box>
         </CardContent>
         <CardActions>
           <Button onClick={this.install} disabled={disabled}>

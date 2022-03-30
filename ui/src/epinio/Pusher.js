@@ -36,7 +36,7 @@ export function Pusher(props) {
 
   const send = async (ev) => {
     if (folder !== "" && name !== "") {
-      console.log(folder);
+      window.ddClient.desktopUI.toast.success("Using buildpacks to deploy '" + name + "', this can take a few minutes.");
       try {
         await epinio([
           "settings", "update",
@@ -51,7 +51,7 @@ export function Pusher(props) {
         }
         console.info(result.stdout);
       } catch(error) {
-        window.ddClient.desktopUI.toast.error("Epinio failed to deploy: " + error);
+        props.onError("Epinio failed to deploy: " + error);
       }
     }
   };
