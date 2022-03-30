@@ -48,15 +48,10 @@ function App() {
   const [installation, setInstallation] = React.useState(false);
   const [credentials, setCredentials] = React.useState({username: "", password: ""});
   const [info, setInfo] = React.useState({version: "-", kube_version: "-"});
-  const [appName, setAppName] = React.useState("");
 
   const open = (e) => {
     window.ddClient.host.openExternal(e.currentTarget.attributes['url'].value);
   };
-
-  const handleAppName = (name) => {
-    setAppName(name);
-  }
 
   const disabled = !enabled || !credentialsOK(credentials) || !infoOK(info);
 
@@ -91,8 +86,8 @@ function App() {
               </CardContent>
               <CardActions>
                 <Grid container spacing={2} direction="column">
-                  <Pusher apiDomain={uiDomain} enabled={enabled} credentials={credentials} onPushed={handleAppName} list={
-                    <Lister apiDomain={uiDomain} enabled={enabled} credentials={credentials} appName={appName} />
+                  <Pusher apiDomain={uiDomain} enabled={enabled} credentials={credentials} list={
+                    <Lister apiDomain={uiDomain} enabled={enabled} credentials={credentials} />
                   } disabled={disabled} />
                 </Grid>
               </CardActions>

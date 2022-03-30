@@ -53,7 +53,6 @@ export function Pusher(props) {
       } catch(error) {
         window.ddClient.desktopUI.toast.error("Epinio failed to deploy: " + error);
       }
-      props.onPushed(name);
     }
   };
 
