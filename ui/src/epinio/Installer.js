@@ -1,5 +1,6 @@
 import React from "react";
-import {Alert, Box, Button, Card, CardActions, CardContent, LinearProgress, Typography} from "@mui/material";
+import {Box, Button, Card, CardActions, CardContent, LinearProgress, Typography} from "@mui/material";
+import InstallDesktopIcon from '@mui/icons-material/InstallDesktop';
 
 class EpinioInstaller extends React.Component {
   constructor(props) {
@@ -84,14 +85,19 @@ class EpinioInstaller extends React.Component {
     const progress = this.state.progress === 100 || this.state.progress === 0 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
     const disabled = !this.props.enabled;
     return (
-      <Card sx={{ height: '140px' }}>
+      <Card sx={{ height: '160px' }}>
         <CardContent>
           <Typography>
             Install Epinio in Kubernetes
           </Typography>
+          <br/>
+          <Typography variant="body2" align="left">
+          The Application Development Engine for Kubernetes.
+          Epinio uses build packs to create container images from source code.
+          </Typography>
         </CardContent>
         <CardActions>
-          <Button onClick={this.install} disabled={disabled}>
+          <Button startIcon={<InstallDesktopIcon/>} variant="outlined" onClick={this.install} disabled={disabled}>
             Install
           </Button>
         </CardActions>

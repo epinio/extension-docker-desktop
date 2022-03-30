@@ -15,15 +15,16 @@ import Button from "@mui/material/Button";
 import {Alert, Modal, BottomNavigation, BottomNavigationAction, Box, Card, CardActions, CardContent, Grid, Paper, Typography} from "@mui/material";
 import HomeIcon from '@mui/icons-material/Home';
 import DownloadIcon from '@mui/icons-material/Download';
+import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
 
 function Link(props) {
   const open = () => { window.ddClient.host.openExternal(props.url); };
-  return <Button onClick={open} disabled={props.disabled}>{props.title}</Button>
+  return <Button startIcon={<OpenInBrowserIcon />} variant="outlined" onClick={open} disabled={props.disabled}>{props.title}</Button>
 }
 
 function Opener(props) {
   return (
-    <Card sx={{ height: '140px' }}>
+    <Card sx={{ height: '160px' }}>
       <CardContent>
         <Typography>
           Open the Epinio UI in a browser.
