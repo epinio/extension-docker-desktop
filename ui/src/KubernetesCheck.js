@@ -57,9 +57,7 @@ class KubernetesCheck extends React.Component {
 
 function KubernetesOK(props) {
   if (props.node === "docker-desktop")
-    return <Alert severity="success">
-      Kubernetes is running
-    </Alert>
+    return null;
   else
     return <Alert severity="info">
       Kubernetes is running, however you are not connected to a Docker Desktop node.
