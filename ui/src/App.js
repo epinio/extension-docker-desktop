@@ -23,7 +23,7 @@ function Link(props) {
 
 function Opener(props) {
   return (
-    <Card>
+    <Card sx={{ height: '140px' }}>
       <CardContent>
         <Typography>
           Open the Epinio UI in a browser.
@@ -73,7 +73,7 @@ function App() {
           </Typography>
         </Box>
 
-        <Grid container mt={2}>
+        <Grid container mt={2} columnSpacing={2}>
           <Grid item xs={8}>
             <Installer domain={domain} enabled={enabled} onInstallationChanged={setInstallation}/>
           </Grid>
@@ -106,7 +106,7 @@ function App() {
             <KubernetesCheck running={enabled} onEnabledChanged={setEnabled} />
           </Box>
 
-          <BottomNavigation showLabels>
+          <BottomNavigation showLabels sx={{gridTemplateColumns: 'repeat(4, 1fr)'}}>
             <Info apiDomain={uiDomain} enabled={enabled} credentials={credentials} info={info} onInfoChanged={setInfo} />
             <BottomNavigationAction label="epinio.io" icon={<HomeIcon />} onClick={open} url="https://epinio.io" />
             <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={open} url="https://github.com/epinio/epinio/releases" />

@@ -83,7 +83,7 @@ class EpinioInstaller extends React.Component {
 
   render() {
     // TODO install is idempotent, but maybe also detect working installation?
-    var error = (<div><br/> <br/> <br/></div>);
+    var error = null;
     if (this.state.error != null) {
       error = (
         <Alert severity="error">
@@ -94,7 +94,7 @@ class EpinioInstaller extends React.Component {
     const progress = this.state.progress === 100 || this.state.progress === 0 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
     const disabled = !this.props.enabled;
     return (
-      <Card>
+      <Card sx={{ height: '140px' }}>
         <CardContent>
           <Typography>
             Install Epinio in Kubernetes

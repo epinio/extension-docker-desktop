@@ -42,14 +42,14 @@ export function Info(props) {
   const icon = props.info.version === "" ? <CloudOffIcon /> : <CloudIcon />;
 
   return (
-    <Grid container direction="row" alignItems="center" width="20%">
+    <Grid container direction="row" alignItems="center" width="30%">
       <Grid item xs={1}>
         {icon}
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={5}>
         Epinio: { props.info.version }
       </Grid>
-      <Grid item xs={5}>
+      <Grid item xs={6}>
         Kubernetes: { props.info.kube_version }
       </Grid>
     </Grid>
