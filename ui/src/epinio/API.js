@@ -22,7 +22,7 @@ export function Info(props) {
       console.log("check info api endpoint");
       window.ddClient.extension.vm.service.get(apiURL).then(
         (value) => {
-          const u = {version: value.version, kube_version: value.kube_version};
+          const u = {version: value.version};
           if (infoChanged(props.info, u)) {
             props.onInfoChanged(u);
           }
@@ -30,7 +30,7 @@ export function Info(props) {
       ).catch(
         (error) => {
           console.error(error);
-          const u = {version: "-", kube_version: "-"};
+          const u = {version: "-"};
           if (infoChanged(props.info, u)) {
             props.onInfoChanged(u);
           }
@@ -46,11 +46,8 @@ export function Info(props) {
       <Grid item xs={1}>
         {icon}
       </Grid>
-      <Grid item xs={5}>
+      <Grid item xs={11}>
         Epinio: { props.info.version }
-      </Grid>
-      <Grid item xs={6}>
-        Kubernetes: { props.info.kube_version }
       </Grid>
     </Grid>
   );

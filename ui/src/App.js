@@ -48,7 +48,7 @@ function App() {
   const [enabled, setEnabled] = React.useState(false);
   const [installation, setInstallation] = React.useState(false);
   const [credentials, setCredentials] = React.useState({username: "", password: ""});
-  const [info, setInfo] = React.useState({version: "-", kube_version: "-"});
+  const [info, setInfo] = React.useState({version: "-"});
 
   const [error, setError] = React.useState(null);
   const [errorOpen, setErrorOpen] = React.useState(false);
@@ -112,7 +112,7 @@ function App() {
           </Grid>
 
           <Grid item xs={4}>
-            <Opener uiDomain={uiDomain} enabled={enabled} credentials={credentials} info={info} disabled={disabled} />
+            <Opener uiDomain={uiDomain} enabled={enabled} credentials={credentials} disabled={disabled} />
           </Grid>
 
           <Grid item xs={12} mt={2}>
