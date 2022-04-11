@@ -45,10 +45,10 @@ function Opener(props) {
 function App() {
   const domain = "localdev.me";
   const uiDomain = "epinio.localdev.me";
-  const [enabled, setEnabled] = React.useState(false);
+  const [hasKubernetes, setHasKubernetes] = React.useState(false);
   const [installation, setInstallation] = React.useState(false);
   const [credentials, setCredentials] = React.useState({username: "", password: ""});
-  const [info, setInfo] = React.useState("-");
+  const [epinioInfo, setEpinioInfo] = React.useState("-");
 
   const [error, setError] = React.useState(null);
   const [errorOpen, setErrorOpen] = React.useState(false);
@@ -62,7 +62,7 @@ function App() {
     window.ddClient.host.openExternal(e.currentTarget.attributes['url'].value);
   };
 
-  const disabled = !enabled || !credentialsOK(credentials) || !infoOK(info);
+  const disabled = !hasKubernetes || !credentialsOK(credentials) || !infoOK(epinioInfo);
 
   return (
     <DockerMuiThemeProvider>
@@ -98,7 +98,7 @@ function App() {
         </Modal>
         </div>
 
-        <Credentials enabled={enabled} credentials={credentials} onCredentialsChanged={setCredentials} installation={installation} />
+        <Credentials enabled={hasKubernetes} credentials={credentials} onCredentialsChanged={setCredentials} installation={installation} />
 
         <Box sx={{ width: '100%' }}>
           <Typography variant="subtitle1" component="div" gutterBottom>
@@ -108,11 +108,11 @@ function App() {
 
         <Grid container mt={2} columnSpacing={2}>
           <Grid item xs={8}>
-            <Installer domain={domain} enabled={enabled} onInstallationChanged={setInstallation} onError={handleError}/>
+            <Installer domain={domain} enabled={hasKubernetes} onInstallationChanged={setInstallation} onError={handleError}/>
           </Grid>
 
           <Grid item xs={4}>
-            <Opener uiDomain={uiDomain} enabled={enabled} credentials={credentials} disabled={disabled} />
+            <Opener uiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} disabled={disabled} />
           </Grid>
 
           <Grid item xs={12} mt={2}>
@@ -124,8 +124,8 @@ function App() {
               </CardContent>
               <CardActions>
                 <Grid container spacing={2} direction="column">
-                  <Pusher apiDomain={uiDomain} enabled={enabled} credentials={credentials} onError={handleError} list={
-                    <Lister apiDomain={uiDomain} enabled={enabled} credentials={credentials} />
+                  <Pusher apiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} onError={handleError} list={
+                    <Lister apiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} />
                   } disabled={disabled} />
                 </Grid>
               </CardActions>
@@ -136,11 +136,11 @@ function App() {
 
         <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
           <Box sx={{ width: '100%' }}>
-            <KubernetesCheck running={enabled} onEnabledChanged={setEnabled} />
+            <KubernetesCheck running={hasKubernetes} onEnabledChanged={setHasKubernetes} />
           </Box>
 
           <BottomNavigation showLabels sx={{gridTemplateColumns: 'repeat(4, 1fr)'}}>
-            <Info apiDomain={uiDomain} enabled={enabled} credentials={credentials} info={info} onInfoChanged={setInfo} />
+            <Info apiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} info={epinioInfo} onInfoChanged={setEpinioInfo} />
             <BottomNavigationAction label="epinio.io" icon={<HomeIcon />} onClick={openURL} url="https://epinio.io" />
             <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={openURL} url="https://github.com/epinio/epinio/releases" />
           </BottomNavigation>
