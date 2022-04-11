@@ -1,6 +1,4 @@
 {
-  "name": "epinio",
-  "provider": "SUSE",
   "icon": "epinio.svg",
   "ui": {
     "dashboard-tab": {
