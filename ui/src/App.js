@@ -48,7 +48,7 @@ function App() {
   const [enabled, setEnabled] = React.useState(false);
   const [installation, setInstallation] = React.useState(false);
   const [credentials, setCredentials] = React.useState({username: "", password: ""});
-  const [info, setInfo] = React.useState({version: "-"});
+  const [info, setInfo] = React.useState("-");
 
   const [error, setError] = React.useState(null);
   const [errorOpen, setErrorOpen] = React.useState(false);

@@ -6,12 +6,8 @@ import { DataGrid } from '@mui/x-data-grid';
 import CloudIcon from '@mui/icons-material/Cloud';
 import CloudOffIcon from '@mui/icons-material/CloudOff';
 
-function infoChanged(info, update) {
-  return info.version !== update.version;
-}
-
 export function infoOK(info) {
-  return info && info.version !== "" && info.version !== "-";
+  return info && info !== "" && info !== "-";
 }
 
 export function Info(props) {
@@ -22,18 +18,12 @@ export function Info(props) {
       console.log("check info api endpoint");
       window.ddClient.extension.vm.service.get(apiURL).then(
         (value) => {
-          const u = {version: value.version};
-          if (infoChanged(props.info, u)) {
-            props.onInfoChanged(u);
-          }
+            props.onInfoChanged(value.version);
         }
       ).catch(
         (error) => {
           console.error(error);
-          const u = {version: "-"};
-          if (infoChanged(props.info, u)) {
-            props.onInfoChanged(u);
-          }
+            props.onInfoChanged("-");
         }
       );
     }
@@ -47,7 +37,7 @@ export function Info(props) {
         {icon}
       </Grid>
       <Grid item xs={11}>
-        Epinio: { props.info.version }
+        Epinio: { props.info }
       </Grid>
     </Grid>
   );
