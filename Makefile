@@ -1,4 +1,4 @@
-IMAGE?=splatform/epinio-extension-docker-desktop
+IMAGE?=splatform/epinio-docker-desktop
 
 BUILDER=buildx-multi-arch
 

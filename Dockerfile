@@ -126,7 +126,7 @@ RUN wget -nv https://github.com/epinio/helm-charts/releases/download/epinio-0.7.
 
 
 FROM alpine
-LABEL org.opencontainers.image.title="epinio-extension-docker-desktop" \
+LABEL org.opencontainers.image.title="epinio-docker-desktop" \
     org.opencontainers.image.description="Push from source to Kubernetes in one step (https://epinio.io)" \
     org.opencontainers.image.vendor="SUSE Rancher" \
     com.docker.desktop.extension.icon="https://epinio.io/images/icon-epinio.svg" \

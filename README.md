@@ -4,7 +4,7 @@ https://epinio.io
 
 ## Install Extension
 
-    docker-extension extension install splatform/epinio-extension-docker-desktop
+    docker-extension extension install splatform/epinio-docker-desktop
 
     # backup on ghcr.io/epinio/extension-docker-desktop
 
