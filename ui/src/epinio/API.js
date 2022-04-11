@@ -39,7 +39,7 @@ export function Info(props) {
     }
   }, [props]);
 
-  const icon = props.info.version === "" ? <CloudOffIcon /> : <CloudIcon />;
+  const icon = infoOK(props.info) ? <CloudIcon /> : <CloudOffIcon />;
 
   return (
     <Grid container direction="row" alignItems="center" width="30%">
