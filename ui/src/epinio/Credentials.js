@@ -5,7 +5,7 @@ function credsChanged(creds, update) {
 }
 
 export function credentialsOK(creds) {
-  return creds && creds.username !== "" && creds.password !== "";
+  return creds && creds.username !== "-" && creds.password !== "-";
 }
 
 // Credentials will fetch the default user, when props.enabled is true

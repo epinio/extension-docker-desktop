@@ -74,7 +74,8 @@ class EpinioInstaller extends React.Component {
 
     } catch (error) {
       this.props.onInstallationChanged(false);
-      this.props.onError(error.message);
+      var msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;
+      this.props.onError(msg);
       return;
     }
 

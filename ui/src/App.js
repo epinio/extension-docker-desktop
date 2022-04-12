@@ -47,7 +47,7 @@ function App() {
   const uiDomain = "epinio.localdev.me";
   const [hasKubernetes, setHasKubernetes] = React.useState(false);
   const [installation, setInstallation] = React.useState(false);
-  const [credentials, setCredentials] = React.useState({username: "", password: ""});
+  const [credentials, setCredentials] = React.useState({username: "-", password: "-"});
   const [epinioInfo, setEpinioInfo] = React.useState("-");
 
   const [error, setError] = React.useState(null);
