@@ -18,19 +18,7 @@
             "path": "/darwin/helm"
           },
           {
-            "path": "/darwin/helmwrapper"
-          },
-          {
             "path": "/darwin/kubectl"
-          },
-          {
-            "path": "/charts/ingress-nginx-4.0.18.tgz"
-          },
-          {
-            "path": "/charts/cert-manager-v1.7.1.tgz"
-          },
-          {
-            "path": "/charts/epinio-0.8.0.tgz"
           }
         ],
         "linux": [
@@ -41,19 +29,7 @@
             "path": "/linux/helm"
           },
           {
-            "path": "/linux/helmwrapper"
-          },
-          {
             "path": "/linux/kubectl"
-          },
-          {
-            "path": "/charts/ingress-nginx-4.0.18.tgz"
-          },
-          {
-            "path": "/charts/cert-manager-v1.7.1.tgz"
-          },
-          {
-            "path": "/charts/epinio-0.8.0.tgz"
           }
         ],
         "windows": [
@@ -64,19 +40,7 @@
             "path": "/windows/helm.exe"
           },
           {
-            "path": "/windows/helmwrapper.exe"
-          },
-          {
             "path": "/windows/kubectl.exe"
-          },
-          {
-            "path": "/charts/ingress-nginx-4.0.18.tgz"
-          },
-          {
-            "path": "/charts/cert-manager-v1.7.1.tgz"
-          },
-          {
-            "path": "/charts/epinio-0.7.3.tgz"
           }
         ]
       }

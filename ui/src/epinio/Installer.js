@@ -11,7 +11,7 @@ class EpinioInstaller extends React.Component {
 
   async helm(args) {
     try {
-      return await window.ddClient.extension.host.cli.exec("helmwrapper", args);
+      return await window.ddClient.extension.host.cli.exec("helm", args);
     } catch(error) {
       if (error instanceof Error) {
         console.error(error.message);
@@ -34,7 +34,7 @@ class EpinioInstaller extends React.Component {
       let result = await this.helm([
         "upgrade", "--install", "--wait", "ingress-nginx",
         "--create-namespace", "--namespace", "ingress-nginx",
-        "ingress-nginx-4.0.18.tgz"
+        "https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.0.18/ingress-nginx-4.0.18.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -49,7 +49,7 @@ class EpinioInstaller extends React.Component {
         "--create-namespace", "--namespace", "cert-manager",
         "--set", "installCRDs=true",
         "--set", "extraArgs[0]=--enable-certificate-owner-ref=true",
-        "cert-manager-v1.7.1.tgz"
+        "https://charts.jetstack.io/charts/cert-manager-v1.7.1.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -64,7 +64,7 @@ class EpinioInstaller extends React.Component {
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
         "--set", "ingress.nginxSSLRedirect=false",
-        "epinio-0.8.0.tgz"
+        "https://github.com/epinio/helm-charts/releases/download/epinio-0.9.0/epinio-0.9.0.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);

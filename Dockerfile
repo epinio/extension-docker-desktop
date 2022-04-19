@@ -1,13 +1,3 @@
-FROM golang:1.17-alpine AS builder
-ENV CGO_ENABLED=0
-WORKDIR /dist
-COPY *.go .
-RUN --mount=type=cache,target=/go/pkg/mod \
-    --mount=type=cache,target=/root/.cache/go-build \
-    GOOS="darwin" go build -o darwin/ -ldflags "-s -w" helmwrapper.go && \
-    GOOS="linux" go build -o linux/ -ldflags "-s -w" helmwrapper.go && \
-    GOOS="windows" go build -o windows/ -ldflags "-s -w" helmwrapper.go
-
 FROM node:14.17-alpine3.13 AS client-builder
 WORKDIR /ui
 # cache packages in layer
@@ -35,7 +25,7 @@ ARG KUBECTL_CHECKSUM_DARWIN_AMD64=7bd22a5f9eec4a0d905ea00a20735d018e2c37977be2d8
 ARG KUBECTL_CHECKSUM_LINUX_AMD64=3f0398d4c8a5ff633e09abd0764ed3b9091fafbe3044970108794b02731c72d6
 ARG KUBECTL_CHECKSUM_WINDOWS_AMD64=2447e0af25842a1b546110e3beb76154998f660cf3d147314d9c7472b983fbcd
 # https://github.com/epinio/epinio/releases
-ARG EPINIO_VERSION=0.6.1
+ARG EPINIO_VERSION=0.7.1
 
 # /darwin amd64
 RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-darwin-amd64.tar.gz && \
@@ -86,7 +76,7 @@ ARG HELM_CHECKSUM_DARWIN_ARM64=260d4b8bffcebc6562ea344dfe88efe252cf9511dd6da3ccc
 ARG HELM_CHECKSUM_LINUX_ARM64=b0214eabbb64791f563bd222d17150ce39bf4e2f5de49f49fdb456ce9ae8162f
 ARG KUBECTL_CHECKSUM_DARWIN_ARM64=f870cabdfd446b5217c1be255168edd99d8f015c974abe01f7b80a4e0ca11b2b
 ARG KUBECTL_CHECKSUM_LINUX_ARM64=aa45dba48791eeb78a994a2723c462d155af4e39fdcfbcb39ce9c96f604a967a
-ARG EPINIO_VERSION=0.6.1
+ARG EPINIO_VERSION=0.7.1
 
 # /darwin arm64
 RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-darwin-arm64.tar.gz && \
@@ -118,13 +108,6 @@ RUN wget -nv https://github.com/epinio/epinio/releases/download/v${EPINIO_VERSIO
 
 FROM downloader-$TARGETARCH AS downloader
 
-FROM alpine as downloader-charts
-WORKDIR /charts
-RUN wget -nv https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.0.18/ingress-nginx-4.0.18.tgz
-RUN wget -nv https://charts.jetstack.io/charts/cert-manager-v1.7.1.tgz
-RUN wget -nv https://github.com/epinio/helm-charts/releases/download/epinio-0.8.0/epinio-0.8.0.tgz
-
-
 FROM alpine
 LABEL org.opencontainers.image.title="epinio-docker-desktop" \
     org.opencontainers.image.description="Push from source to Kubernetes in one step (https://epinio.io)" \
@@ -137,12 +120,6 @@ COPY --from=downloader /darwin /darwin
 COPY --from=downloader /linux /linux
 # couldn't find helm binary for arm64, so always ship amd64 binaries
 COPY --from=downloader-amd64 /windows /windows
-
-COPY --from=builder /dist/darwin/helmwrapper /darwin
-COPY --from=builder /dist/linux/helmwrapper /linux
-COPY --from=builder /dist/windows/helmwrapper.exe /windows
-
-COPY --from=downloader-charts /charts /charts
 
 # the extension, UI and such
 COPY metadata.json .
