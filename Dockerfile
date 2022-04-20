@@ -108,11 +108,15 @@ RUN wget -nv https://github.com/epinio/epinio/releases/download/v${EPINIO_VERSIO
 
 FROM downloader-$TARGETARCH AS downloader
 
-FROM alpine
-LABEL org.opencontainers.image.title="epinio-docker-desktop" \
-    org.opencontainers.image.description="Push from source to Kubernetes in one step (https://epinio.io)" \
+FROM scratch
+LABEL org.opencontainers.image.title="Epinio" \
+    org.opencontainers.image.description="Push from source to Kubernetes in one step" \
     org.opencontainers.image.vendor="SUSE Rancher" \
     com.docker.desktop.extension.icon="https://epinio.io/images/icon-epinio.svg" \
+    com.docker.extension.publisher-url="https://epinio.io" \
+    com.docker.extension.screenshots='[{"alt": "Epinio after Installation", "url": "https://epinio.io/images/epinio-docker-desktop-screenshot.png"}]' \
+    com.docker.extension.detailed-description="<h1>The Application Development Engine for Kubernetes</h1><h3>Tame your developer workflow to go from Code to URL in one step.</h3>Epinio installs into any Kubernetes cluster to bring your application from source code to deployment and allow for Developers and Operators to work better together!" \
+    com.docker.extension.additional-urls='[{"title":"Documentation","url":"https://docs.epinio.io/"},{"title":"Issues","url":"https://github.com/epinio/epinio/issues"},{"title":"CLI","url":"https://github.com/epinio/epinio/releases"},{"title":"Slack","url":"https://rancher-users.slack.com/?redir=%2Fmessages%2Fepinio"}]' \
     com.docker.desktop.extension.api.version=">= 0.2.0"
 
 # binaries, to be copied onto the host
@@ -125,4 +129,3 @@ COPY --from=downloader-amd64 /windows /windows
 COPY metadata.json .
 COPY epinio.svg .
 COPY --from=client-builder /ui/build ui
-CMD /service -socket /run/guest-services/extension-epinio-docker.sock
