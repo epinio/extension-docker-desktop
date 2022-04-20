@@ -1,6 +1,7 @@
 import React from "react";
-import { Box, Button, Grid, Input } from '@mui/material';
+import { Box, Button, Grid, IconButton, Input } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import CircularProgress from '@mui/material/CircularProgress';
 
 export function Pusher(props) {
@@ -34,6 +35,17 @@ export function Pusher(props) {
     }
   };
 
+  const handleOpen = async (ev) => {
+    const result = await window.ddClient.desktopUI.dialog.showOpenDialog({
+      properties: ["openDirectory"],
+    });
+    if (!result.canceled) {
+      if (result.filePaths.length > 0) {
+        setFolder(result.filePaths[0]);
+      }
+    }
+  };
+
   const send = async (ev) => {
     if (folder !== "" && name !== "") {
       window.ddClient.desktopUI.toast.success("Using buildpacks to deploy '" + name + "', this can take a few minutes.");
@@ -59,27 +71,27 @@ export function Pusher(props) {
   const spinner = progress ? <CircularProgress /> : null;
   return (
     <Grid container m={2}>
-      <Grid item xs={4}>
+      <Grid item xs={3}>
         <label htmlFor="contained-input-name">
           <Input value={name} onChange={e => setName(e.target.value)} disabled={props.disabled} />
           <p>Name</p>
         </label>
       </Grid>
 
-      <Grid item xs={5}>
-        <Input onDrop={drag} value={folder} disabled={props.disabled} sx={{ width: '50ch' }} />
-        <p>Drag 'n' drop a folder here</p>
+      <Grid item xs={6}>
+        <Input onDrop={drag} value={folder} disabled={props.disabled} sx={{ width: '30ch' }} />
+        <IconButton aria-label="open" onClick={handleOpen} disabled={props.disabled}>
+          <FolderOpenIcon />
+        </IconButton>
       </Grid>
 
+      <Grid item xs={2}>
+        <Button variant="outlined" startIcon={<SendIcon />} onClick={send} disabled={props.disabled}>Upload</Button>
+      </Grid>
       <Grid item xs={1}>
         <Box sx={{display: 'flex'}}>
           {spinner}
         </Box>
-      </Grid>
-      <Grid item xs={2}>
-        <label htmlFor="contained-button-file">
-          <Button variant="outlined" startIcon={<SendIcon />} onClick={send} disabled={props.disabled}>Upload</Button>
-        </label>
       </Grid>
 
       <Grid item xs={12}>
