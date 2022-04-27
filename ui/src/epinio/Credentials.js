@@ -23,11 +23,12 @@ function Credentials(props) {
           props.onCredentialsChanged(u);
         }
       } catch (error) {
-        if (error instanceof Error) {
-          console.error(error);
-        } else {
-          console.log(JSON.stringify(error));
-        }
+        // for debugging:
+        // if (error instanceof Error) {
+        //   console.error(error);
+        // } else {
+        //   console.log(JSON.stringify(error));
+        // }
         const u = {username: "-", password: "-"};
         if (credsChanged(props.credentials, u)) {
           props.onCredentialsChanged(u);
@@ -35,7 +36,6 @@ function Credentials(props) {
       }
     };
     if (props.enabled) {
-      console.log("get credentials");
       getCredentials()
     }
   }, [props]);
