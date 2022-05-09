@@ -111,7 +111,7 @@ FROM downloader-$TARGETARCH AS downloader
 FROM scratch
 LABEL org.opencontainers.image.title="Epinio" \
     org.opencontainers.image.description="Push from source to Kubernetes in one step" \
-    org.opencontainers.image.vendor="SUSE Rancher" \
+    org.opencontainers.image.vendor="Rancher by SUSE" \
     com.docker.desktop.extension.icon="https://epinio.io/images/icon-epinio.svg" \
     com.docker.extension.publisher-url="https://epinio.io" \
     com.docker.extension.screenshots='[{"alt": "Epinio after Installation", "url": "https://epinio.io/images/epinio-docker-desktop-screenshot.png"}]' \
