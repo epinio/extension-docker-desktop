@@ -40,5 +40,6 @@ https://epinio.io
 
 ### Update Epinio
 
-* `Dockerfile `(download CLI)
-* `ui/src/epinio/Installer.js` (helm chart)
+* `Dockerfile `(download CLI, 2x `ARG EPINIO_VERSION`)
+* `ui/src/epinio/Installer.js` (helm chart, 1x `epinio/helm-charts/releases`)
+* `ui/src/App.js` (download endpoint, 2nd `DownloadIcon`)
