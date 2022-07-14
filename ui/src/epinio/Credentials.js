@@ -13,9 +13,10 @@ function Credentials(props) {
   React.useEffect(() => {
     const getCredentials = async () => {
       try {
+	// note: `-l` returns a list, hence the `.items...`, even if only a single secret matches
         const result = await window.ddClient.extension.host.cli.exec(
           "kubectl",
-          ["get", "secret", "-n", "epinio", "default-epinio-user", "-o", "jsonpath={.data}"]
+          ["get", "secret", "-n", "epinio", "-l", "epinio.io/role=admin", "-o", "jsonpath={.items[*].data}"]
         );
         const obj = result.parseJsonObject();
         const u = {username: atob(obj.username), password: atob(obj.password)};
