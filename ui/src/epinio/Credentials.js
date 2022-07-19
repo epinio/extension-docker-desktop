@@ -19,7 +19,9 @@ function Credentials(props) {
           ["get", "secret", "-n", "epinio", "-l", "epinio.io/role=admin", "-o", "jsonpath={.items[0].data}"]
         );
         const obj = result.parseJsonObject();
-        const u = {username: atob(obj.username), password: atob(obj.password)};
+	  // Retrieval above as check that epinio is present.
+	  // Creds hardwired, unchanged from defaults
+        const u = {username: "admin", password: "password"};
         if (credsChanged(props.credentials, u)) {
           props.onCredentialsChanged(u);
         }
