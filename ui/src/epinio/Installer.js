@@ -49,7 +49,7 @@ class EpinioInstaller extends React.Component {
         "--create-namespace", "--namespace", "cert-manager",
         "--set", "installCRDs=true",
         "--set", "extraArgs[0]=--enable-certificate-owner-ref=true",
-        "https://charts.jetstack.io/charts/cert-manager-v1.7.1.tgz"
+        "https://charts.jetstack.io/charts/cert-manager-v1.8.2.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -64,7 +64,7 @@ class EpinioInstaller extends React.Component {
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
         "--set", "ingress.nginxSSLRedirect=false",
-        "https://github.com/epinio/helm-charts/releases/download/epinio-1.0.0/epinio-1.0.0.tgz"
+        "https://github.com/epinio/helm-charts/releases/download/epinio-1.1.0/epinio-1.1.0.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
