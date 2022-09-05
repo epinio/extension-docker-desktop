@@ -50,10 +50,14 @@ export function Pusher(props) {
     if (folder !== "" && name !== "") {
       window.ddClient.desktopUI.toast.success("Using buildpacks to deploy '" + name + "', this can take a few minutes.");
       try {
-        await epinio([
-          "settings", "update",
+        var epinioURL = "https://"+props.apiDomain;
+        var result = await epinio([
+          "login", "--trust-ca", "-u", "admin", "-p", "password", epinioURL
         ]);
-        const result = await epinio([
+        if (result.stderr.length > 0) {
+          console.log(result.stderr);
+        }
+        result = await epinio([
           "apps", "push",
           "-n", name,
           "-p", folder
