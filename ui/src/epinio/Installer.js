@@ -99,7 +99,7 @@ class EpinioInstaller extends React.Component {
         </CardContent>
         <CardActions>
           <Button startIcon={<InstallDesktopIcon/>} variant="outlined" onClick={this.install} disabled={disabled}>
-            Install
+            Install/Upgrade
           </Button>
         </CardActions>
         <Box sx={{ width: '100%' }}>
