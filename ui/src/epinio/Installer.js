@@ -34,7 +34,7 @@ class EpinioInstaller extends React.Component {
       let result = await this.helm([
         "upgrade", "--install", "--wait", "ingress-nginx",
         "--create-namespace", "--namespace", "ingress-nginx",
-        "https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.0.18/ingress-nginx-4.0.18.tgz"
+        "https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.3.0/ingress-nginx-4.3.0.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -49,7 +49,7 @@ class EpinioInstaller extends React.Component {
         "--create-namespace", "--namespace", "cert-manager",
         "--set", "installCRDs=true",
         "--set", "extraArgs[0]=--enable-certificate-owner-ref=true",
-        "https://charts.jetstack.io/charts/cert-manager-v1.8.2.tgz"
+        "https://charts.jetstack.io/charts/cert-manager-v1.9.1.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -64,7 +64,7 @@ class EpinioInstaller extends React.Component {
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
         "--set", "ingress.nginxSSLRedirect=false",
-        "https://github.com/epinio/helm-charts/releases/download/epinio-1.1.0/epinio-1.1.0.tgz"
+        "https://github.com/epinio/helm-charts/releases/download/epinio-1.3.0/epinio-1.3.0.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
@@ -99,7 +99,7 @@ class EpinioInstaller extends React.Component {
         </CardContent>
         <CardActions>
           <Button startIcon={<InstallDesktopIcon/>} variant="outlined" onClick={this.install} disabled={disabled}>
-            Install
+            Install/Upgrade
           </Button>
         </CardActions>
         <Box sx={{ width: '100%' }}>
