@@ -64,7 +64,7 @@ class EpinioInstaller extends React.Component {
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
         "--set", "ingress.nginxSSLRedirect=false",
-        "https://github.com/epinio/helm-charts/releases/download/epinio-1.4.0/epinio-1.4.0.tgz"
+        "https://github.com/epinio/helm-charts/releases/download/epinio-1.5.1/epinio-1.5.1.tgz"
       ]);
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
