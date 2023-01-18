@@ -1,0 +1,131 @@
+---
+name: "Bump epinio version in docker extension"
+
+# Define git repository configuration to know where to push changes
+
+scms:
+  extensionDockerDesktop:
+    kind: "github"
+    spec:
+      user: "{{ .github.epinio.user }}"
+      email: "{{ .github.epinio.email }}"
+      owner: "{{ .github.epinio.owner }}"
+      repository: "{{ .github.epinio.repository }}"
+      token: '{{ requiredEnv .github.epinio.token }}'
+      username: "{{ .github.epinio.username }}"
+      branch: "{{ .github.epinio.branch }}"
+
+# Define pullrequest configuration if one needs to be created
+
+actions:
+  extensionDockerDesktop:
+    kind: "github/pullrequest"
+    scmid: "extensionDockerDesktop"
+    spec:
+      labels:
+        - "epinio"
+
+# Defines where we get source values for condition checks, and replacement in targets
+
+sources:
+  epinio:
+    name: "Get Latest epinio version"
+    kind: "githubrelease"
+    spec:
+      owner: "epinio"
+      repository: "epinio"
+      username: '{{ requiredEnv .github.epinio.username }}'
+      token: '{{ requiredEnv .github.epinio.token }}'
+    transformers:
+      - trimprefix: "v"
+  dockerfile:
+    name: "Dockerfile"
+    kind: "file"
+    scmid: "extensionDockerDesktop"
+    spec:
+      file: "Dockerfile"
+  installerjs:
+    name: "Installer.js"
+    kind: "file"
+    scmid: "extensionDockerDesktop"
+    spec:
+      file: "ui/src/epinio/Installer.js"
+  appjs:
+    name: "App.js"
+    kind: "file"
+    scmid: "extensionDockerDesktop"
+    spec:
+      file: "ui/src/App.js"
+
+## Defines the conditions that must pass in order to update targets
+#
+conditions:
+  dockerImage:
+    name: 'Check that ghcr.io/epinio/epinio-server:{{ source "epinio" }} is published'
+    kind: "dockerimage"
+    sourceid: "epinio"
+    transformers:
+      - addprefix: "v"
+    spec:
+      image: "ghcr.io/epinio/epinio-server"
+      architecture: "amd64"
+
+  dockerfile:
+    name: 'Check that Dockerfile contains version specification'
+    kind: "file"
+    disablesourceinput: true
+    scmid: "extensionDockerDesktop"
+    spec:
+      file: Dockerfile
+      matchpattern: 'ARG EPINIO_VERSION=.*'
+#
+  installerjs:
+    name: 'Check that Installer.js contains versioned Epinio tarball reference'
+    kind: "file"
+    disablesourceinput: true
+    scmid: "extensionDockerDesktop"
+    spec:
+      file: "ui/src/epinio/Installer.js"
+      matchpattern: 'https://github.com/epinio/helm-charts/releases/download/epinio-(.*)/epinio-(.*).tgz'
+
+  appjs:
+    name: 'Check that App.js contains versioned Epinio release reference'
+    kind: "file"
+    disablesourceinput: true
+    scmid: "extensionDockerDesktop"
+    spec:
+      file: "ui/src/App.js"
+      matchpattern: 'url="https://github.com/epinio/epinio/releases/tag/v(.*)" />'
+#
+## Defines what needs to be updated if needed
+#
+targets:
+  dockerfile:
+    name: "Update Epinio version assignment in Dockerfile"
+    disablesourceinput: true
+    kind: "file"
+    scmid: "extensionDockerDesktop"
+    spec:
+      file: "Dockerfile"
+      matchpattern: 'ARG EPINIO_VERSION=(.*)'
+      replacepattern: 'ARG EPINIO_VERSION={{ source "epinio" }}'
+#
+  installerjs:
+    name: "Update versioned Epinio tarball reference in ui/src/Installer.js"
+    disablesourceinput: true
+    kind: "file"
+    scmid: "extensionDockerDesktop"
+    spec:
+      file: "ui/src/epinio/Installer.js"
+      matchpattern: 'https://github.com/epinio/helm-charts/releases/download/epinio-(.*)/epinio-(.*).tgz'
+      replacepattern: 'https://github.com/epinio/helm-charts/releases/download/epinio-{{ source "epinio" }}/epinio-{{ source "epinio" }}.tgz'
+#
+  appjs:
+    name: "Update versioned Epinio release reference in ui/src/App.js"
+    disablesourceinput: true
+    kind: "file"
+    scmid: "extensionDockerDesktop"
+    spec:
+      file: "ui/src/App.js"
+      matchpattern: 'url="https://github.com/epinio/epinio/releases/tag/v(.*)" />'
+      replacepattern: 'url="https://github.com/epinio/epinio/releases/tag/v{{ source "epinio" }}" />'
