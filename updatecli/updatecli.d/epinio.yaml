@@ -21,6 +21,7 @@ actions:
   extensionDockerDesktop:
     kind: "github/pullrequest"
     scmid: "extensionDockerDesktop"
+    title: '[updatecli] Bump Epinio version used to {{ source "epinio" }}'
     spec:
       labels:
         - "epinio"
@@ -38,24 +39,6 @@ sources:
       token: '{{ requiredEnv .github.epinio.token }}'
     transformers:
       - trimprefix: "v"
-  dockerfile:
-    name: "Dockerfile"
-    kind: "file"
-    scmid: "extensionDockerDesktop"
-    spec:
-      file: "Dockerfile"
-  installerjs:
-    name: "Installer.js"
-    kind: "file"
-    scmid: "extensionDockerDesktop"
-    spec:
-      file: "ui/src/epinio/Installer.js"
-  appjs:
-    name: "App.js"
-    kind: "file"
-    scmid: "extensionDockerDesktop"
-    spec:
-      file: "ui/src/App.js"
 
 ## Defines the conditions that must pass in order to update targets
 #
