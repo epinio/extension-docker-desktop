@@ -142,7 +142,7 @@ function App() {
           <BottomNavigation showLabels sx={{gridTemplateColumns: 'repeat(4, 1fr)'}}>
             <Info apiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} info={epinioInfo} onInfoChanged={setEpinioInfo} />
             <BottomNavigationAction label="epinio.io" icon={<HomeIcon />} onClick={openURL} url="https://epinio.io" />
-            <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={openURL} url="https://github.com/epinio/epinio/releases/tag/v1.6.1" />
+            <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={openURL} url="https://github.com/epinio/epinio/releases/tag/v1.6.2" />
           </BottomNavigation>
         </Paper>
 
