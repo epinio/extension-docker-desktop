@@ -81,6 +81,52 @@ class EpinioInstaller extends React.Component {
 
   }
 
+  async uninstall() {
+    try {
+      console.log("uninstalling Epinio chart");
+      this.setState({progress: 10});
+      result = await this.helm([
+        "uninstall", "--wait", "epinio",
+        "--namespace", "epinio"
+      ]);
+      console.debug(JSON.stringify(result));
+      console.log(result.stdout);
+      console.log("installed: epinio");
+      this.setState({progress: 25});
+      this.props.onInstallationChanged(true);
+
+      console.log("uninstalling cert-manager chart");
+      this.setState({progress: 30});
+      result = await this.helm([
+        "uninstall", "--wait", "cert-manager",
+        "--namespace", "cert-manager"
+      ]);
+      console.debug(JSON.stringify(result));
+      console.log(result.stdout);
+      console.log("uninstalled: cert-manager");
+      this.setState({progress: 50});
+
+      console.log("uninstalling NGINX chart");
+      this.setState({progress: 75});
+      let result = await this.helm([
+        "uninstall", "--wait", "ingress-nginx",
+        "--namespace", "ingress-nginx"
+      ]);
+      console.debug(JSON.stringify(result));
+      console.log(result.stdout);
+      // https://github.com/docker/for-mac/issues/4903
+      console.log("nginx successfully uninstalled");
+      this.setState({progress: 100});
+
+    } catch (error) {
+      this.props.onInstallationChanged(false);
+      var msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;
+      this.props.onError(msg);
+      return;
+    }
+
+  }
+
   render() {
     // TODO install is idempotent, but maybe also detect working installation?
     const progress = this.state.progress === 100 || this.state.progress === 0 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
@@ -100,6 +146,11 @@ class EpinioInstaller extends React.Component {
         <CardActions>
           <Button startIcon={<InstallDesktopIcon/>} variant="outlined" onClick={this.install} disabled={disabled}>
             Install/Upgrade
+          </Button>
+        </CardActions>
+        <CardActions>
+          <Button variant="outlined" onClick={this.uninstall} disabled={disabled}>
+            Unistall
           </Button>
         </CardActions>
         <Box sx={{ width: '100%' }}>
