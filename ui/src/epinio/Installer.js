@@ -7,6 +7,7 @@ class EpinioInstaller extends React.Component {
     super(props);
     this.state = {progress: 0};
     this.install = this.install.bind(this);
+    this.uninstall = this.uninstall.bind(this);
   }
 
   async helm(args) {
@@ -147,10 +148,8 @@ class EpinioInstaller extends React.Component {
           <Button startIcon={<InstallDesktopIcon/>} variant="outlined" onClick={this.install} disabled={disabled}>
             Install/Upgrade
           </Button>
-        </CardActions>
-        <CardActions>
           <Button variant="outlined" onClick={this.uninstall} disabled={disabled}>
-            Unistall
+            Uninstall
           </Button>
         </CardActions>
         <Box sx={{ width: '100%' }}>
