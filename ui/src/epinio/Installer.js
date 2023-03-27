@@ -1,6 +1,7 @@
 import React from "react";
 import {Box, Button, Card, CardActions, CardContent, LinearProgress, Typography} from "@mui/material";
 import InstallDesktopIcon from '@mui/icons-material/InstallDesktop';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 class EpinioInstaller extends React.Component {
   constructor(props) {
@@ -145,10 +146,10 @@ class EpinioInstaller extends React.Component {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button startIcon={<InstallDesktopIcon/>} variant="outlined" onClick={this.install} disabled={disabled}>
+          <Button startIcon={<InstallDesktopIcon/>} variant="contained" onClick={this.install} disabled={disabled}>
             Install/Upgrade
           </Button>
-          <Button variant="outlined" onClick={this.uninstall} disabled={disabled}>
+          <Button startIcon={<DeleteIcon/>} variant="outlined" onClick={this.uninstall} disabled={disabled} color="secondary">
             Uninstall
           </Button>
         </CardActions>
