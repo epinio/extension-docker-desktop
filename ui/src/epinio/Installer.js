@@ -149,7 +149,7 @@ class EpinioInstaller extends React.Component {
           <Button startIcon={<InstallDesktopIcon/>} variant="contained" onClick={this.install} disabled={disabled}>
             Install/Upgrade
           </Button>
-          <Button startIcon={<DeleteIcon/>} variant="outlined" onClick={this.uninstall} disabled={disabled} color="secondary">
+          <Button startIcon={<DeleteIcon/>} variant="contained" onClick={this.uninstall} disabled={disabled} color="secondary">
             Uninstall
           </Button>
         </CardActions>
