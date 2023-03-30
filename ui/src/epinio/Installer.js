@@ -119,9 +119,10 @@ class EpinioInstaller extends React.Component {
       // https://github.com/docker/for-mac/issues/4903
       console.log("nginx successfully uninstalled");
       this.setState({progress: 100});
-
-    } catch (error) {
       this.props.onInstallationChanged(false);
+    } 
+    catch (error) {
+      this.props.onInstallationChanged(true);
       var msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;
       this.props.onError(msg);
       return;
