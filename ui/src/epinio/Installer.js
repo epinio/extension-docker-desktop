@@ -76,7 +76,6 @@ class EpinioInstaller extends React.Component {
       console.log("installed: epinio");
       this.setState({ progress: 100 });
       this.props.onInstallationChanged(true);
-
     } catch (error) {
       this.props.onInstallationChanged(false);
       const msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;
@@ -121,7 +120,6 @@ class EpinioInstaller extends React.Component {
       console.log("nginx successfully uninstalled");
       this.setState({ progress: 100 });
       this.props.onInstallationChanged(false);
-
     } catch (error) {
       this.props.onInstallationChanged(true);
       const msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;

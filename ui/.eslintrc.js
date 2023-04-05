@@ -25,12 +25,13 @@ module.exports = {
     quotes: 'off',
     semi: 'off',
     'no-undef': 'off',
-    'object-property-newline': 'off',
-    'object-shorthand': 'off',
-    'padded-blocks': 'off',
-    'space-before-function-paren': 'off',
-    'react/no-unescaped-entities': 'off',
-    'react/prop-types': 'off',
-    'react/react-in-jsx-scope': 'off'
+    'space-before-function-paren': [
+      'error',
+      {
+        anonymous: 'always',
+        named: 'never'
+      }
+    ],
+    'react/prop-types': 'off'
   }
 }
