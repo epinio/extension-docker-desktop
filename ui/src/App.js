@@ -30,7 +30,7 @@ function Opener(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Link url={"https://"+props.uiDomain} title="Open" disabled={props.disabled} />
+        <Link url={"https://" + props.uiDomain} title="Open" disabled={props.disabled} />
       </CardActions>
     </Card>
   );
@@ -41,7 +41,7 @@ function App() {
   const uiDomain = "epinio.localdev.me";
   const [hasKubernetes, setHasKubernetes] = React.useState(false);
   const [installation, setInstallation] = React.useState(false);
-  const [credentials, setCredentials] = React.useState({username: "-", password: "-"});
+  const [credentials, setCredentials] = React.useState({ username: "-", password: "-" });
   const [epinioInfo, setEpinioInfo] = React.useState("-");
 
   const [error, setError] = React.useState(null);
@@ -53,7 +53,7 @@ function App() {
   }
 
   const openURL = (e) => {
-    window.ddClient.host.openExternal(e.currentTarget.attributes['url'].value);
+    window.ddClient.host.openExternal(e.currentTarget.attributes.url.value);
   };
 
   const disabled = !hasKubernetes || !credentialsOK(credentials) || !infoOK(epinioInfo);
@@ -138,7 +138,7 @@ function App() {
             <KubernetesCheck running={hasKubernetes} onEnabledChanged={setHasKubernetes} />
           </Box>
 
-          <BottomNavigation showLabels sx={{gridTemplateColumns: 'repeat(4, 1fr)'}}>
+          <BottomNavigation showLabels sx={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
             <Info apiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} info={epinioInfo} onInfoChanged={setEpinioInfo} />
             <BottomNavigationAction label="epinio.io" icon={<HomeIcon />} onClick={openURL} url="https://epinio.io" />
             <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={openURL} url="https://github.com/epinio/epinio/releases/tag/v1.7.1" />

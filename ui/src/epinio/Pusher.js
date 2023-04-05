@@ -15,7 +15,7 @@ export function Pusher(props) {
   const epinio = async (args) => {
     try {
       setProgress(true);
-      var result = await window.ddClient.extension.host.cli.exec("epinio", args);
+      const result = await window.ddClient.extension.host.cli.exec("epinio", args);
       setProgress(null);
       return result;
     } catch (error) {
@@ -49,8 +49,8 @@ export function Pusher(props) {
     if (folder !== "" && name !== "") {
       window.ddClient.desktopUI.toast.success("Using buildpacks to deploy '" + name + "', this can take a few minutes.");
       try {
-        var epinioURL = "https://"+props.apiDomain;
-        var result = await epinio([
+        const epinioURL = "https://" + props.apiDomain;
+        let result = await epinio([
           "login", "--trust-ca", "-u", "admin", "-p", "password", epinioURL
         ]);
         if (result.stderr.length > 0) {
@@ -65,7 +65,7 @@ export function Pusher(props) {
           console.log(result.stderr);
         }
         console.info(result.stdout);
-      } catch(error) {
+      } catch (error) {
         props.onError("Epinio failed to deploy: " + error);
       }
     }
@@ -92,7 +92,7 @@ export function Pusher(props) {
         <Button variant="outlined" startIcon={<SendIcon />} onClick={send} disabled={props.disabled}>Upload</Button>
       </Grid>
       <Grid item xs={1}>
-        <Box sx={{display: 'flex'}}>
+        <Box sx={{ display: 'flex' }}>
           {spinner}
         </Box>
       </Grid>

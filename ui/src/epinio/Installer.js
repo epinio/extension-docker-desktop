@@ -16,7 +16,7 @@ class EpinioInstaller extends React.Component {
   async helm(args) {
     try {
       return await window.ddClient.extension.host.cli.exec("helm", args);
-    } catch(error) {
+    } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
         throw error;
@@ -34,7 +34,7 @@ class EpinioInstaller extends React.Component {
   async install() {
     try {
       console.log("installing NGINX chart");
-      this.setState({progress: 10});
+      this.setState({ progress: 10 });
       let result = await this.helm([
         "upgrade", "--install", "--atomic", "ingress-nginx",
         "--create-namespace", "--namespace", "ingress-nginx",
@@ -44,10 +44,10 @@ class EpinioInstaller extends React.Component {
       console.log(result.stdout);
       // https://github.com/docker/for-mac/issues/4903
       console.log("installed: you might need to restart docker-desktop if localhost:443 doesn't forward to nginx");
-      this.setState({progress: 25});
+      this.setState({ progress: 25 });
 
       console.log("installing cert-manager chart");
-      this.setState({progress: 30});
+      this.setState({ progress: 30 });
       result = await this.helm([
         "upgrade", "--install", "--atomic", "cert-manager",
         "--create-namespace", "--namespace", "cert-manager",
@@ -58,10 +58,10 @@ class EpinioInstaller extends React.Component {
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
       console.log("installed: cert-manager");
-      this.setState({progress: 50});
+      this.setState({ progress: 50 });
 
       console.log("installing Epinio chart");
-      this.setState({progress: 55});
+      this.setState({ progress: 55 });
       result = await this.helm([
         "upgrade", "--install", "epinio",
         "--create-namespace", "--namespace", "epinio",
@@ -74,22 +74,20 @@ class EpinioInstaller extends React.Component {
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
       console.log("installed: epinio");
-      this.setState({progress: 100});
+      this.setState({ progress: 100 });
       this.props.onInstallationChanged(true);
 
     } catch (error) {
       this.props.onInstallationChanged(false);
-      var msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;
+      const msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;
       this.props.onError(msg);
-      return;
     }
-
   }
 
   async uninstall() {
     try {
       console.log("uninstalling Epinio chart");
-      this.setState({progress: 10});
+      this.setState({ progress: 10 });
       let result = await this.helm([
         "uninstall", "--wait", "epinio",
         "--namespace", "epinio"
@@ -97,11 +95,11 @@ class EpinioInstaller extends React.Component {
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
       console.log("installed: epinio");
-      this.setState({progress: 25});
+      this.setState({ progress: 25 });
       this.props.onInstallationChanged(true);
 
       console.log("uninstalling cert-manager chart");
-      this.setState({progress: 30});
+      this.setState({ progress: 30 });
       result = await this.helm([
         "uninstall", "--wait", "cert-manager",
         "--namespace", "cert-manager"
@@ -109,10 +107,10 @@ class EpinioInstaller extends React.Component {
       console.debug(JSON.stringify(result));
       console.log(result.stdout);
       console.log("uninstalled: cert-manager");
-      this.setState({progress: 50});
+      this.setState({ progress: 50 });
 
       console.log("uninstalling NGINX chart");
-      this.setState({progress: 75});
+      this.setState({ progress: 75 });
       result = await this.helm([
         "uninstall", "--wait", "ingress-nginx",
         "--namespace", "ingress-nginx"
@@ -121,16 +119,14 @@ class EpinioInstaller extends React.Component {
       console.log(result.stdout);
       // https://github.com/docker/for-mac/issues/4903
       console.log("nginx successfully uninstalled");
-      this.setState({progress: 100});
+      this.setState({ progress: 100 });
       this.props.onInstallationChanged(false);
 
     } catch (error) {
       this.props.onInstallationChanged(true);
-      var msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;
+      const msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;
       this.props.onError(msg);
-      return;
     }
-
   }
 
   render() {

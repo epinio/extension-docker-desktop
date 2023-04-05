@@ -17,12 +17,12 @@ export function Info(props) {
       console.log("check info api endpoint");
       window.ddClient.extension.vm.service.get(apiURL).then(
         (value) => {
-            props.onInfoChanged(value.version);
+          props.onInfoChanged(value.version);
         }
       ).catch(
         (error) => {
           console.error(error);
-            props.onInfoChanged("-");
+          props.onInfoChanged("-");
         }
       );
     }
@@ -45,7 +45,7 @@ export function Info(props) {
 export class Lister extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {table: []};
+    this.state = { table: [] };
   }
 
   componentDidMount() {
@@ -68,8 +68,8 @@ export class Lister extends React.Component {
       window.ddClient.extension.vm.service.get(apiURL).then(
         (value) => {
           console.log(value);
-          var t = [];
-          for (var i = 0; i < value.length; i++) {
+          const t = [];
+          for (i = 0; i < value.length; i++) {
             t[i] = {
               id: value[i].meta.name,
               state: value[i].status,
@@ -82,12 +82,12 @@ export class Lister extends React.Component {
               t[i].route = value[i].configuration.routes[0];
             }
           }
-          this.setState({table: t});
+          this.setState({ table: t });
         }
       ).catch(
         (error) => {
           console.error(error);
-          this.setState({table: []});
+          this.setState({ table: [] });
         }
       );
     }
@@ -95,22 +95,22 @@ export class Lister extends React.Component {
 
   render() {
     const columns = [
-      {field: "id", headerName: "Name", width: "160"},
-      {field: "state", headerName: "State", sortable: true, width: "80"},
-      {field: "instances", headerName: "Instances", type: "number", width: "80"},
+      { field: "id", headerName: "Name", width: "160" },
+      { field: "state", headerName: "State", sortable: true, width: "80" },
+      { field: "instances", headerName: "Instances", type: "number", width: "80" },
       {
         field: "route", headerName: "Route", width: "160", renderCell: (params) => {
           const open = () => {
-            window.ddClient.host.openExternal("https://"+params.row.route);
+            window.ddClient.host.openExternal("https://" + params.row.route);
           };
           return <Button onClick={open}>{params.row.route}</Button>;
         }
       },
-      {field: "dstatus", headerName: "Info", width: "320"}
+      { field: "dstatus", headerName: "Info", width: "320" }
     ];
 
     return (
-      <div style={{height: 300, width: '100%'}}>
+      <div style={{ height: 300, width: '100%' }}>
         <DataGrid
           rows={this.state.table}
           columns={columns}

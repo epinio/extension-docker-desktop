@@ -4,7 +4,7 @@ import Alert from '@mui/material/Alert'
 class KubernetesCheck extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {node: "", error: ""};
+    this.state = { node: "", error: "" };
   }
 
   componentDidMount() {
@@ -37,32 +37,33 @@ class KubernetesCheck extends React.Component {
       const node = obj.items[0].metadata.name;
       this.setRunning(true, node, "");
 
-    } catch(error) {
+    } catch (error) {
       if (error instanceof Error) {
         this.setRunning(false, "", error.message)
       } else {
-        //console.error(JSON.stringify(error));
+        // console.error(JSON.stringify(error));
         this.setRunning(false, "", error.stderr)
       }
     }
   }
 
   render() {
-    if (this.props.running)
+    if (this.props.running) {
       return <KubernetesOK node={this.state.node} />;
-    else
-      return <KubernetesMissing error={this.state.error} />;
+    }
+    return <KubernetesMissing error={this.state.error} />;
   }
 }
 
 function KubernetesOK(props) {
-  if (props.node === "docker-desktop")
+  if (props.node === "docker-desktop") {
     return null;
-  else
-    return <Alert severity="info">
-      Kubernetes is running, however you are not connected to a Docker Desktop node.
-      The "Install" button might not work with other clusters.
-    </Alert>
+  }
+
+  return <Alert severity="info">
+    Kubernetes is running, however you are not connected to a Docker Desktop node.
+    The "Install" button might not work with other clusters.
+  </Alert>
 }
 
 function KubernetesMissing(props) {
