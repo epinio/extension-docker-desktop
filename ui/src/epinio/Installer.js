@@ -15,7 +15,7 @@ class EpinioInstaller extends React.Component {
 
   async helm(args) {
     try {
-      return await window.ddClient.extension.host.cli.exec("helm", args)
+      return await window.ddClient.extension.host.cli.exec('helm', args)
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message)
@@ -33,12 +33,12 @@ class EpinioInstaller extends React.Component {
 
   async install() {
     try {
-      console.log("installing NGINX chart")
+      console.log('installing NGINX chart')
       this.setState({ progress: 10 })
       let result = await this.helm([
-        "upgrade", "--install", "--atomic", "ingress-nginx",
-        "--create-namespace", "--namespace", "ingress-nginx",
-        "https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.3.0/ingress-nginx-4.3.0.tgz"
+        'upgrade', '--install', '--atomic', 'ingress-nginx',
+        '--create-namespace', '--namespace', 'ingress-nginx',
+        'https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.3.0/ingress-nginx-4.3.0.tgz'
       ])
       console.debug(JSON.stringify(result))
       console.log(result.stdout)
@@ -46,83 +46,83 @@ class EpinioInstaller extends React.Component {
       console.log("installed: you might need to restart docker-desktop if localhost:443 doesn't forward to nginx")
       this.setState({ progress: 25 })
 
-      console.log("installing cert-manager chart")
+      console.log('installing cert-manager chart')
       this.setState({ progress: 30 })
       result = await this.helm([
-        "upgrade", "--install", "--atomic", "cert-manager",
-        "--create-namespace", "--namespace", "cert-manager",
-        "--set", "installCRDs=true",
-        "--set", "extraArgs[0]=--enable-certificate-owner-ref=true",
-        "https://charts.jetstack.io/charts/cert-manager-v1.9.1.tgz"
+        'upgrade', '--install', '--atomic', 'cert-manager',
+        '--create-namespace', '--namespace', 'cert-manager',
+        '--set', 'installCRDs=true',
+        '--set', 'extraArgs[0]=--enable-certificate-owner-ref=true',
+        'https://charts.jetstack.io/charts/cert-manager-v1.9.1.tgz'
       ])
       console.debug(JSON.stringify(result))
       console.log(result.stdout)
-      console.log("installed: cert-manager")
+      console.log('installed: cert-manager')
       this.setState({ progress: 50 })
 
-      console.log("installing Epinio chart")
+      console.log('installing Epinio chart')
       this.setState({ progress: 55 })
       result = await this.helm([
-        "upgrade", "--install", "epinio",
-        "--create-namespace", "--namespace", "epinio",
-        "--atomic",
-        "--set", "global.domain=" + this.props.domain,
-        "--set", "ingress.ingressClassName=nginx",
-        "--set", "ingress.nginxSSLRedirect=false",
-        "https://github.com/epinio/helm-charts/releases/download/epinio-1.7.1/epinio-1.7.1.tgz"
+        'upgrade', '--install', 'epinio',
+        '--create-namespace', '--namespace', 'epinio',
+        '--atomic',
+        '--set', 'global.domain=' + this.props.domain,
+        '--set', 'ingress.ingressClassName=nginx',
+        '--set', 'ingress.nginxSSLRedirect=false',
+        'https://github.com/epinio/helm-charts/releases/download/epinio-1.7.1/epinio-1.7.1.tgz'
       ])
       console.debug(JSON.stringify(result))
       console.log(result.stdout)
-      console.log("installed: epinio")
+      console.log('installed: epinio')
       this.setState({ progress: 100 })
       this.props.onInstallationChanged(true)
     } catch (error) {
       this.props.onInstallationChanged(false)
-      const msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message
+      const msg = 'If the nginx service is stuck in pending state, you might need to restart docker desktop.' + <br/> + error.message
       this.props.onError(msg)
     }
   }
 
   async uninstall() {
     try {
-      console.log("uninstalling Epinio chart")
+      console.log('uninstalling Epinio chart')
       this.setState({ progress: 10 })
       let result = await this.helm([
-        "uninstall", "--wait", "epinio",
-        "--namespace", "epinio"
+        'uninstall', '--wait', 'epinio',
+        '--namespace', 'epinio'
       ])
       console.debug(JSON.stringify(result))
       console.log(result.stdout)
-      console.log("installed: epinio")
+      console.log('installed: epinio')
       this.setState({ progress: 25 })
       this.props.onInstallationChanged(true)
 
-      console.log("uninstalling cert-manager chart")
+      console.log('uninstalling cert-manager chart')
       this.setState({ progress: 30 })
       result = await this.helm([
-        "uninstall", "--wait", "cert-manager",
-        "--namespace", "cert-manager"
+        'uninstall', '--wait', 'cert-manager',
+        '--namespace', 'cert-manager'
       ])
       console.debug(JSON.stringify(result))
       console.log(result.stdout)
-      console.log("uninstalled: cert-manager")
+      console.log('uninstalled: cert-manager')
       this.setState({ progress: 50 })
 
-      console.log("uninstalling NGINX chart")
+      console.log('uninstalling NGINX chart')
       this.setState({ progress: 75 })
       result = await this.helm([
-        "uninstall", "--wait", "ingress-nginx",
-        "--namespace", "ingress-nginx"
+        'uninstall', '--wait', 'ingress-nginx',
+        '--namespace', 'ingress-nginx'
       ])
       console.debug(JSON.stringify(result))
       console.log(result.stdout)
       // https://github.com/docker/for-mac/issues/4903
-      console.log("nginx successfully uninstalled")
+      console.log('nginx successfully uninstalled')
       this.setState({ progress: 100 })
       this.props.onInstallationChanged(false)
     } catch (error) {
       this.props.onInstallationChanged(true)
-      const msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message
+      const msg = 'If the nginx service is stuck in pending state, you might need to restart docker desktop.' + <br/> + error.message
       this.props.onError(msg)
     }
   }

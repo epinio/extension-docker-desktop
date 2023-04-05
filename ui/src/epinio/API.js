@@ -6,15 +6,15 @@ import { DataGrid } from '@mui/x-data-grid'
 import { credentialsOK } from './Credentials'
 
 export function infoOK(info) {
-  return info && info !== "" && info !== "-"
+  return info && info !== '' && info !== '-'
 }
 
 export function Info(props) {
   React.useEffect(() => {
     if (props.enabled && credentialsOK(props.credentials)) {
       const creds = props.credentials
-      const apiURL = sprintf("http://%s:%s@%s/api/v1/info", creds.username, creds.password, props.apiDomain)
-      console.log("check info api endpoint")
+      const apiURL = sprintf('http://%s:%s@%s/api/v1/info', creds.username, creds.password, props.apiDomain)
+      console.log('check info api endpoint')
       window.ddClient.extension.vm.service.get(apiURL).then(
         (value) => {
           props.onInfoChanged(value.version)
@@ -22,7 +22,7 @@ export function Info(props) {
       ).catch(
         (error) => {
           console.error(error)
-          props.onInfoChanged("-")
+          props.onInfoChanged('-')
         }
       )
     }
@@ -63,8 +63,8 @@ export class Lister extends React.Component {
   list() {
     if (this.props.enabled && credentialsOK(this.props.credentials)) {
       const creds = this.props.credentials
-      const apiURL = sprintf("http://%s:%s@%s/api/v1/namespaces/workspace/applications", creds.username, creds.password, this.props.apiDomain)
-      console.log("check app list api endpoint")
+      const apiURL = sprintf('http://%s:%s@%s/api/v1/namespaces/workspace/applications', creds.username, creds.password, this.props.apiDomain)
+      console.log('check app list api endpoint')
       window.ddClient.extension.vm.service.get(apiURL).then(
         (value) => {
           console.log(value)
@@ -95,21 +95,21 @@ export class Lister extends React.Component {
 
   render() {
     const columns = [
-      { field: "id", headerName: "Name", width: "160" },
-      { field: "state", headerName: "State", sortable: true, width: "80" },
-      { field: "instances", headerName: "Instances", type: "number", width: "80" },
+      { field: 'id', headerName: 'Name', width: '160' },
+      { field: 'state', headerName: 'State', sortable: true, width: '80' },
+      { field: 'instances', headerName: 'Instances', type: 'number', width: '80' },
       {
-        field: "route",
-        headerName: "Route",
-        width: "160",
+        field: 'route',
+        headerName: 'Route',
+        width: '160',
         renderCell: (params) => {
           const open = () => {
-            window.ddClient.host.openExternal("https://" + params.row.route)
+            window.ddClient.host.openExternal('https://' + params.row.route)
           }
           return <Button onClick={open}>{params.row.route}</Button>
         }
       },
-      { field: "dstatus", headerName: "Info", width: "320" }
+      { field: 'dstatus', headerName: 'Info', width: '320' }
     ]
 
     return (

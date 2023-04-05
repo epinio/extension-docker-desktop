@@ -31,19 +31,19 @@ function Opener(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Link url={"https://" + props.uiDomain} title="Open" disabled={props.disabled} />
+        <Link url={'https://' + props.uiDomain} title="Open" disabled={props.disabled} />
       </CardActions>
     </Card>
   )
 }
 
 function App() {
-  const domain = "localdev.me"
-  const uiDomain = "epinio.localdev.me"
+  const domain = 'localdev.me'
+  const uiDomain = 'epinio.localdev.me'
   const [hasKubernetes, setHasKubernetes] = React.useState(false)
   const [installation, setInstallation] = React.useState(false)
-  const [credentials, setCredentials] = React.useState({ username: "-", password: "-" })
-  const [epinioInfo, setEpinioInfo] = React.useState("-")
+  const [credentials, setCredentials] = React.useState({ username: '-', password: '-' })
+  const [epinioInfo, setEpinioInfo] = React.useState('-')
 
   const [error, setError] = React.useState(null)
   const [errorOpen, setErrorOpen] = React.useState(false)
