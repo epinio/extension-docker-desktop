@@ -108,7 +108,12 @@ function App() {
 
         <Grid container mt={2} columnSpacing={2}>
           <Grid item xs={8}>
-            <Installer domain={domain} enabled={hasKubernetes} onInstallationChanged={setInstallation} onError={handleError}/>
+            <Installer
+              domain={domain}
+              hasKubernetes={hasKubernetes}
+              installation={installation}
+              onInstallationChanged={setInstallation}
+              onError={handleError} />
           </Grid>
 
           <Grid item xs={4}>

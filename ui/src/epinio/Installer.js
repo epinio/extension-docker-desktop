@@ -6,7 +6,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 class EpinioInstaller extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {progress: 0};
+    this.state = {
+      progress: 0,
+      installation: false
+    };
     this.install = this.install.bind(this);
     this.uninstall = this.uninstall.bind(this);
   }
@@ -34,7 +37,7 @@ class EpinioInstaller extends React.Component {
       console.log("installing NGINX chart");
       this.setState({progress: 10});
       let result = await this.helm([
-        "upgrade", "--install", "--wait", "ingress-nginx",
+        "upgrade", "--install", "--atomic", "ingress-nginx",
         "--create-namespace", "--namespace", "ingress-nginx",
         "https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.3.0/ingress-nginx-4.3.0.tgz"
       ]);
@@ -47,7 +50,7 @@ class EpinioInstaller extends React.Component {
       console.log("installing cert-manager chart");
       this.setState({progress: 30});
       result = await this.helm([
-        "upgrade", "--install", "--wait", "cert-manager",
+        "upgrade", "--install", "--atomic", "cert-manager",
         "--create-namespace", "--namespace", "cert-manager",
         "--set", "installCRDs=true",
         "--set", "extraArgs[0]=--enable-certificate-owner-ref=true",
@@ -63,6 +66,7 @@ class EpinioInstaller extends React.Component {
       result = await this.helm([
         "upgrade", "--install", "epinio",
         "--create-namespace", "--namespace", "epinio",
+        "--atomic",
         "--set", "global.domain=" + this.props.domain,
         "--set", "ingress.ingressClassName=nginx",
         "--set", "ingress.nginxSSLRedirect=false",
@@ -133,7 +137,9 @@ class EpinioInstaller extends React.Component {
   render() {
     // TODO install is idempotent, but maybe also detect working installation?
     const progress = this.state.progress === 100 || this.state.progress === 0 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
-    const disabled = !this.props.enabled;
+    const hasKubernetes = this.props.hasKubernetes;
+    const installation = this.props.installation;
+    
     return (
       <Card sx={{ height: '160px' }}>
         <CardContent>
@@ -147,10 +153,21 @@ class EpinioInstaller extends React.Component {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button startIcon={<InstallDesktopIcon/>} variant="contained" onClick={this.install} disabled={disabled}>
+          <Button
+            startIcon={<InstallDesktopIcon/>}
+            variant="contained"
+            onClick={this.install}
+            // install button is disabled if kubernetes not available or Epinio already installed
+            disabled={!hasKubernetes || installation} >
             Install/Upgrade
           </Button>
-          <Button startIcon={<DeleteIcon/>} variant="contained" onClick={this.uninstall} disabled={disabled} color="secondary">
+          <Button
+            startIcon={<DeleteIcon/>}
+            variant="contained"
+            onClick={this.uninstall}
+            // uninstall button is disabled if Epinio is not installed
+            disabled={!installation}
+            color="secondary" >
             Uninstall
           </Button>
         </CardActions>
