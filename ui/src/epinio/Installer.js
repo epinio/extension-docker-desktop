@@ -1,7 +1,6 @@
-import React from "react";
-import {Box, Button, Card, CardActions, CardContent, LinearProgress, Typography} from "@mui/material";
-import InstallDesktopIcon from '@mui/icons-material/InstallDesktop';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React from 'react'
+import { Delete as DeleteIcon, InstallDesktop as InstallDesktopIcon } from '@mui/icons-material'
+import { Box, Button, Card, CardActions, CardContent, LinearProgress, Typography } from '@mui/material'
 
 class EpinioInstaller extends React.Component {
   constructor(props) {
@@ -91,7 +90,7 @@ class EpinioInstaller extends React.Component {
     try {
       console.log("uninstalling Epinio chart");
       this.setState({progress: 10});
-      result = await this.helm([
+      let result = await this.helm([
         "uninstall", "--wait", "epinio",
         "--namespace", "epinio"
       ]);
@@ -114,7 +113,7 @@ class EpinioInstaller extends React.Component {
 
       console.log("uninstalling NGINX chart");
       this.setState({progress: 75});
-      let result = await this.helm([
+      result = await this.helm([
         "uninstall", "--wait", "ingress-nginx",
         "--namespace", "ingress-nginx"
       ]);
@@ -124,8 +123,8 @@ class EpinioInstaller extends React.Component {
       console.log("nginx successfully uninstalled");
       this.setState({progress: 100});
       this.props.onInstallationChanged(false);
-    } 
-    catch (error) {
+
+    } catch (error) {
       this.props.onInstallationChanged(true);
       var msg = "If the nginx service is stuck in pending state, you might need to restart docker desktop." + <br/> + error.message;
       this.props.onError(msg);
@@ -139,7 +138,7 @@ class EpinioInstaller extends React.Component {
     const progress = this.state.progress === 100 || this.state.progress === 0 ? null : <LinearProgress variant="determinate" value={this.state.progress} />;
     const hasKubernetes = this.props.hasKubernetes;
     const installation = this.props.installation;
-    
+
     return (
       <Card sx={{ height: '160px' }}>
         <CardContent>

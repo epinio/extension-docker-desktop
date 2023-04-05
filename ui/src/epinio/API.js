@@ -1,10 +1,9 @@
-import React from "react";
-import {sprintf} from "sprintf-js";
-import {credentialsOK} from "./Credentials";
-import { Button, Grid } from "@mui/material";
-import { DataGrid } from '@mui/x-data-grid';
-import CloudIcon from '@mui/icons-material/Cloud';
-import CloudOffIcon from '@mui/icons-material/CloudOff';
+import React from 'react'
+import { sprintf } from 'sprintf-js'
+import { Cloud as CloudIcon, CloudOff as CloudOffIcon } from '@mui/icons-material'
+import { Button, Grid } from '@mui/material'
+import { DataGrid } from '@mui/x-data-grid'
+import { credentialsOK } from './Credentials'
 
 export function infoOK(info) {
   return info && info !== "" && info !== "-";
@@ -74,7 +73,7 @@ export class Lister extends React.Component {
             t[i] = {
               id: value[i].meta.name,
               state: value[i].status,
-              instances: value[i].configuration.instances,
+              instances: value[i].configuration.instances
             };
             if (value[i].deployment) {
               t[i].dstatus = value[i].deployment.status;
@@ -101,11 +100,13 @@ export class Lister extends React.Component {
       {field: "instances", headerName: "Instances", type: "number", width: "80"},
       {
         field: "route", headerName: "Route", width: "160", renderCell: (params) => {
-          const open = () => {window.ddClient.host.openExternal("https://"+params.row.route);};
+          const open = () => {
+            window.ddClient.host.openExternal("https://"+params.row.route);
+          };
           return <Button onClick={open}>{params.row.route}</Button>;
         }
       },
-      {field: "dstatus", headerName: "Info", width: "320"},
+      {field: "dstatus", headerName: "Info", width: "320"}
     ];
 
     return (

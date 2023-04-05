@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 // copied from https://stackoverflow.com/a/51082563
 
