@@ -21,7 +21,7 @@ class KubernetesCheck extends React.Component {
 
   setRunning(val, node, error) {
     this.props.onEnabledChanged(val);
-    this.setState({ node: node, error: error });
+    this.setState({ node, error });
   }
 
   async check() {
@@ -36,7 +36,6 @@ class KubernetesCheck extends React.Component {
 
       const node = obj.items[0].metadata.name;
       this.setRunning(true, node, "");
-
     } catch (error) {
       if (error instanceof Error) {
         this.setRunning(false, "", error.message)
@@ -62,7 +61,7 @@ function KubernetesOK(props) {
 
   return <Alert severity="info">
     Kubernetes is running, however you are not connected to a Docker Desktop node.
-    The "Install" button might not work with other clusters.
+    The &quot;Install&quot; button might not work with other clusters.
   </Alert>
 }
 
@@ -70,7 +69,7 @@ function KubernetesMissing(props) {
   const errmsg = props.error ? <p>{props.error}</p> : null;
   return (
     <Alert severity="error">
-      You need a Kubernetes cluster to use Epinio. Go to 'Preferences -&gt; Kubernetes' and enable it. Make sure to select the right Kubernetes context.
+      You need a Kubernetes cluster to use Epinio. Go to &apos;Preferences -&gt; Kubernetes&apos; and enable it. Make sure to select the right Kubernetes context.
 
       {errmsg}
     </Alert>

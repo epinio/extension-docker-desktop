@@ -99,7 +99,10 @@ export class Lister extends React.Component {
       { field: "state", headerName: "State", sortable: true, width: "80" },
       { field: "instances", headerName: "Instances", type: "number", width: "80" },
       {
-        field: "route", headerName: "Route", width: "160", renderCell: (params) => {
+        field: "route",
+        headerName: "Route",
+        width: "160",
+        renderCell: (params) => {
           const open = () => {
             window.ddClient.host.openExternal("https://" + params.row.route);
           };
