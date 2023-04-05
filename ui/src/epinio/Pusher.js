@@ -1,8 +1,7 @@
-import React from "react";
-import { Box, Button, Grid, IconButton, Input } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import CircularProgress from '@mui/material/CircularProgress';
+import React from 'react'
+import { Box, Button, Grid, IconButton, Input } from '@mui/material'
+import { FolderOpen as FolderOpenIcon, Send as SendIcon } from '@mui/icons-material'
+import CircularProgress from '@mui/material/CircularProgress'
 
 export function Pusher(props) {
   const [folder, setFolder] = React.useState("");
@@ -37,7 +36,7 @@ export function Pusher(props) {
 
   const handleOpen = async (ev) => {
     const result = await window.ddClient.desktopUI.dialog.showOpenDialog({
-      properties: ["openDirectory"],
+      properties: ["openDirectory"]
     });
     if (!result.canceled) {
       if (result.filePaths.length > 0) {

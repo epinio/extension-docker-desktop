@@ -1,21 +1,15 @@
-import React from "react";
-import "./App.css";
-import { DockerMuiThemeProvider } from '@docker/docker-mui-theme';
-import CssBaseline from '@mui/material/CssBaseline';
-
-import KubernetesCheck from "./KubernetesCheck";
-import Installer from "./epinio/Installer";
-import Credentials from "./epinio/Credentials";
-import {credentialsOK} from "./epinio/Credentials";
-import {Info,  Lister} from "./epinio/API";
-import {infoOK} from "./epinio/API";
-import {Pusher} from "./epinio/Pusher";
-
-import Button from "@mui/material/Button";
-import {Alert, Modal, BottomNavigation, BottomNavigationAction, Box, Card, CardActions, CardContent, Grid, Paper, Typography} from "@mui/material";
-import HomeIcon from '@mui/icons-material/Home';
-import DownloadIcon from '@mui/icons-material/Download';
-import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
+import React from 'react'
+import { DockerMuiThemeProvider } from '@docker/docker-mui-theme'
+import { Home as HomeIcon, Download as DownloadIcon, OpenInBrowser as OpenInBrowserIcon } from '@mui/icons-material'
+import {
+  Alert, Button, CssBaseline, Modal, BottomNavigation, BottomNavigationAction, Box,
+  Card, CardActions, CardContent, Grid, Paper, Typography
+} from '@mui/material'
+import { Installer, Pusher } from './epinio'
+import { Credentials, credentialsOK } from './epinio/Credentials'
+import { Info, Lister, infoOK } from './epinio/API'
+import KubernetesCheck from './KubernetesCheck'
+import './App.css'
 
 function Link(props) {
   const open = () => { window.ddClient.host.openExternal(props.url); };
@@ -85,7 +79,7 @@ function App() {
               bgcolor: 'background.paper',
               border: '2px solid #000',
               boxShadow: 24,
-              p: 4,
+              p: 4
             }}
             >
             <Typography id="modal-modal-title" variant="h6" component="h2">

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 function credsChanged(creds, update) {
   return creds.username !== update.username || creds.password !== update.password;
@@ -19,8 +19,8 @@ function Credentials(props) {
           ["get", "secret", "-n", "epinio", "-l", "epinio.io/role=admin", "-o", "jsonpath={.items[0].data}"]
         );
         const obj = result.parseJsonObject();
-	  // Retrieval above as check that epinio is present.
-	  // Creds hardwired, unchanged from defaults
+        // Retrieval above as check that epinio is present.
+        // Creds hardwired, unchanged from defaults
         const u = {username: "admin", password: "password"};
         if (credsChanged(props.credentials, u)) {
           props.onCredentialsChanged(u);
