@@ -4,7 +4,7 @@ https://epinio.io
 
 ## Install Extension
 
-    docker-extension extension install splatform/epinio-docker-desktop
+    docker extension install splatform/epinio-docker-desktop
 
     # backup on ghcr.io/epinio/extension-docker-desktop
 
@@ -16,16 +16,16 @@ https://epinio.io
 
 ### Install/Update
 
-    docker-extension extension install splatform/epinio-docker-desktop
-    docker-extension extension update splatform/epinio-docker-desktop
+    docker extension install splatform/epinio-docker-desktop
+    docker extension update splatform/epinio-docker-desktop
 
 ### Debug
 
     # serve ui from local server
-    docker-extension extension dev ui-source splatform/epinio-docker-desktop http://localhost:3000
+    docker extension dev ui-source splatform/epinio-docker-desktop http://localhost:3000
 
     # debug console
-    docker-extension extension dev debug splatform/epinio-docker-desktop
+    docker extension dev debug splatform/epinio-docker-desktop
 
 ## Release
 
