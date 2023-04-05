@@ -4,74 +4,74 @@ import { FolderOpen as FolderOpenIcon, Send as SendIcon } from '@mui/icons-mater
 import CircularProgress from '@mui/material/CircularProgress'
 
 export function Pusher(props) {
-  const [folder, setFolder] = React.useState("");
-  const [name, setName] = React.useState("test");
-  const [progress, setProgress] = React.useState(null);
+  const [folder, setFolder] = React.useState("")
+  const [name, setName] = React.useState("test")
+  const [progress, setProgress] = React.useState(null)
 
   const drag = (ev) => {
-    setFolder(ev.dataTransfer.files[0].path);
-  };
+    setFolder(ev.dataTransfer.files[0].path)
+  }
 
   const epinio = async (args) => {
     try {
-      setProgress(true);
-      const result = await window.ddClient.extension.host.cli.exec("epinio", args);
-      setProgress(null);
-      return result;
+      setProgress(true)
+      const result = await window.ddClient.extension.host.cli.exec("epinio", args)
+      setProgress(null)
+      return result
     } catch (error) {
-      setProgress(null);
+      setProgress(null)
       if (error instanceof Error) {
-        console.error(error.message);
-        throw error;
+        console.error(error.message)
+        throw error
       } else {
-        console.error(JSON.stringify(error));
+        console.error(JSON.stringify(error))
         if (error.stderr) {
-          throw Error(error.stderr);
+          throw Error(error.stderr)
         } else {
-          throw Error(JSON.stringify(error));
+          throw Error(JSON.stringify(error))
         }
       }
     }
-  };
+  }
 
   const handleOpen = async (ev) => {
     const result = await window.ddClient.desktopUI.dialog.showOpenDialog({
       properties: ["openDirectory"]
-    });
+    })
     if (!result.canceled) {
       if (result.filePaths.length > 0) {
-        setFolder(result.filePaths[0]);
+        setFolder(result.filePaths[0])
       }
     }
-  };
+  }
 
   const send = async (ev) => {
     if (folder !== "" && name !== "") {
-      window.ddClient.desktopUI.toast.success("Using buildpacks to deploy '" + name + "', this can take a few minutes.");
+      window.ddClient.desktopUI.toast.success("Using buildpacks to deploy '" + name + "', this can take a few minutes.")
       try {
-        const epinioURL = "https://" + props.apiDomain;
+        const epinioURL = "https://" + props.apiDomain
         let result = await epinio([
           "login", "--trust-ca", "-u", "admin", "-p", "password", epinioURL
-        ]);
+        ])
         if (result.stderr.length > 0) {
-          console.log(result.stderr);
+          console.log(result.stderr)
         }
         result = await epinio([
           "apps", "push",
           "-n", name,
           "-p", folder
-        ]);
+        ])
         if (result.stderr.length > 0) {
-          console.log(result.stderr);
+          console.log(result.stderr)
         }
-        console.info(result.stdout);
+        console.info(result.stdout)
       } catch (error) {
-        props.onError("Epinio failed to deploy: " + error);
+        props.onError("Epinio failed to deploy: " + error)
       }
     }
-  };
+  }
 
-  const spinner = progress ? <CircularProgress /> : null;
+  const spinner = progress ? <CircularProgress /> : null
   return (
     <Grid container m={2}>
       <Grid item xs={3}>
@@ -104,4 +104,4 @@ export function Pusher(props) {
   )
 }
 
-export default Pusher;
+export default Pusher

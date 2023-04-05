@@ -23,7 +23,6 @@ module.exports = {
   ],
   rules: {
     quotes: 'off',
-    semi: 'off',
     'no-undef': 'off',
     'space-before-function-paren': [
       'error',

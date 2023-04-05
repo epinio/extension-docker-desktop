@@ -3,39 +3,39 @@ import Alert from '@mui/material/Alert'
 
 class KubernetesCheck extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = { node: "", error: "" };
+    super(props)
+    this.state = { node: "", error: "" }
   }
 
   componentDidMount() {
-    this.check();
+    this.check()
     this.timerID = setInterval(
       () => this.check(),
       20000
-    );
+    )
   }
 
   componentWillUnmount() {
-    clearInterval(this.timerID);
+    clearInterval(this.timerID)
   }
 
   setRunning(val, node, error) {
-    this.props.onEnabledChanged(val);
-    this.setState({ node, error });
+    this.props.onEnabledChanged(val)
+    this.setState({ node, error })
   }
 
   async check() {
     try {
       const result = await window.ddClient.extension.host.cli.exec("kubectl", ["get", "nodes", "-o", "json"])
 
-      const obj = result.parseJsonObject();
+      const obj = result.parseJsonObject()
       if (obj.items.length < 1) {
         this.setRunning(false, "", "no nodes found in cluster")
-        return;
+        return
       }
 
-      const node = obj.items[0].metadata.name;
-      this.setRunning(true, node, "");
+      const node = obj.items[0].metadata.name
+      this.setRunning(true, node, "")
     } catch (error) {
       if (error instanceof Error) {
         this.setRunning(false, "", error.message)
@@ -48,15 +48,15 @@ class KubernetesCheck extends React.Component {
 
   render() {
     if (this.props.running) {
-      return <KubernetesOK node={this.state.node} />;
+      return <KubernetesOK node={this.state.node} />
     }
-    return <KubernetesMissing error={this.state.error} />;
+    return <KubernetesMissing error={this.state.error} />
   }
 }
 
 function KubernetesOK(props) {
   if (props.node === "docker-desktop") {
-    return null;
+    return null
   }
 
   return <Alert severity="info">
@@ -66,14 +66,14 @@ function KubernetesOK(props) {
 }
 
 function KubernetesMissing(props) {
-  const errmsg = props.error ? <p>{props.error}</p> : null;
+  const errmsg = props.error ? <p>{props.error}</p> : null
   return (
     <Alert severity="error">
       You need a Kubernetes cluster to use Epinio. Go to &apos;Preferences -&gt; Kubernetes&apos; and enable it. Make sure to select the right Kubernetes context.
 
       {errmsg}
     </Alert>
-  );
+  )
 }
 
-export default KubernetesCheck;
+export default KubernetesCheck
