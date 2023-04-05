@@ -5,8 +5,9 @@ import {
   Alert, Button, CssBaseline, Modal, BottomNavigation, BottomNavigationAction, Box,
   Card, CardActions, CardContent, Grid, Paper, Typography
 } from '@mui/material'
-import { Installer, Pusher } from './epinio'
-import { Credentials, credentialsOK } from './epinio/Credentials'
+import Installer from './epinio/Installer'
+import Pusher from './epinio/Pusher'
+import Credentials, { credentialsOK } from './epinio/Credentials'
 import { Info, Lister, infoOK } from './epinio/API'
 import KubernetesCheck from './KubernetesCheck'
 import './App.css'
