@@ -14,9 +14,15 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '14.x'
-      
-      - name: Install packages and run lint
-        run: |
-          cd ui
-          npm install
-          npm run lint
+
+      - name: Install dependencies
+        working-directory: ui
+        run: npm install
+
+      - name: Lint
+        working-directory: ui
+        run: npm run lint
+
+      - name: Build
+        working-directory: ui
+        run: npm run build
