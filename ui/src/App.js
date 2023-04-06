@@ -13,7 +13,7 @@ import KubernetesCheck from './KubernetesCheck'
 import './App.css'
 
 function Link(props) {
-  const open = () => { window.ddClient.host.openExternal(props.url); };
+  const open = () => { window.ddClient.host.openExternal(props.url) }
   return <Button startIcon={<OpenInBrowserIcon />} variant="outlined" onClick={open} disabled={props.disabled}>{props.title}</Button>
 }
 
@@ -34,30 +34,30 @@ function Opener(props) {
         <Link url={"https://" + props.uiDomain} title="Open" disabled={props.disabled} />
       </CardActions>
     </Card>
-  );
+  )
 }
 
 function App() {
-  const domain = "localdev.me";
-  const uiDomain = "epinio.localdev.me";
-  const [hasKubernetes, setHasKubernetes] = React.useState(false);
-  const [installation, setInstallation] = React.useState(false);
-  const [credentials, setCredentials] = React.useState({ username: "-", password: "-" });
-  const [epinioInfo, setEpinioInfo] = React.useState("-");
+  const domain = "localdev.me"
+  const uiDomain = "epinio.localdev.me"
+  const [hasKubernetes, setHasKubernetes] = React.useState(false)
+  const [installation, setInstallation] = React.useState(false)
+  const [credentials, setCredentials] = React.useState({ username: "-", password: "-" })
+  const [epinioInfo, setEpinioInfo] = React.useState("-")
 
-  const [error, setError] = React.useState(null);
-  const [errorOpen, setErrorOpen] = React.useState(false);
-  const handleErrorClose = () => setErrorOpen(false);
+  const [error, setError] = React.useState(null)
+  const [errorOpen, setErrorOpen] = React.useState(false)
+  const handleErrorClose = () => setErrorOpen(false)
   const handleError = (error) => {
-    setError(error);
-    setErrorOpen(true);
+    setError(error)
+    setErrorOpen(true)
   }
 
   const openURL = (e) => {
-    window.ddClient.host.openExternal(e.currentTarget.attributes.url.value);
-  };
+    window.ddClient.host.openExternal(e.currentTarget.attributes.url.value)
+  }
 
-  const disabled = !hasKubernetes || !credentialsOK(credentials) || !infoOK(epinioInfo);
+  const disabled = !hasKubernetes || !credentialsOK(credentials) || !infoOK(epinioInfo)
 
   return (
     <DockerMuiThemeProvider>
@@ -148,7 +148,7 @@ function App() {
 
       </div>
     </DockerMuiThemeProvider>
-  );
+  )
 }
 
-export default App;
+export default App
