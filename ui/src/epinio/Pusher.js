@@ -4,8 +4,8 @@ import { FolderOpen as FolderOpenIcon, Send as SendIcon } from '@mui/icons-mater
 import CircularProgress from '@mui/material/CircularProgress'
 
 export function Pusher(props) {
-  const [folder, setFolder] = React.useState("")
-  const [name, setName] = React.useState("test")
+  const [folder, setFolder] = React.useState('')
+  const [name, setName] = React.useState('test')
   const [progress, setProgress] = React.useState(null)
 
   const drag = (ev) => {
@@ -15,7 +15,7 @@ export function Pusher(props) {
   const epinio = async (args) => {
     try {
       setProgress(true)
-      const result = await window.ddClient.extension.host.cli.exec("epinio", args)
+      const result = await window.ddClient.extension.host.cli.exec('epinio', args)
       setProgress(null)
       return result
     } catch (error) {
@@ -36,7 +36,7 @@ export function Pusher(props) {
 
   const handleOpen = async (ev) => {
     const result = await window.ddClient.desktopUI.dialog.showOpenDialog({
-      properties: ["openDirectory"]
+      properties: ['openDirectory']
     })
     if (!result.canceled) {
       if (result.filePaths.length > 0) {
@@ -46,27 +46,27 @@ export function Pusher(props) {
   }
 
   const send = async (ev) => {
-    if (folder !== "" && name !== "") {
+    if (folder !== '' && name !== '') {
       window.ddClient.desktopUI.toast.success("Using buildpacks to deploy '" + name + "', this can take a few minutes.")
       try {
-        const epinioURL = "https://" + props.apiDomain
+        const epinioURL = 'https://' + props.apiDomain
         let result = await epinio([
-          "login", "--trust-ca", "-u", "admin", "-p", "password", epinioURL
+          'login', '--trust-ca', '-u', 'admin', '-p', 'password', epinioURL
         ])
         if (result.stderr.length > 0) {
           console.log(result.stderr)
         }
         result = await epinio([
-          "apps", "push",
-          "-n", name,
-          "-p", folder
+          'apps', 'push',
+          '-n', name,
+          '-p', folder
         ])
         if (result.stderr.length > 0) {
           console.log(result.stderr)
         }
         console.info(result.stdout)
       } catch (error) {
-        props.onError("Epinio failed to deploy: " + error)
+        props.onError('Epinio failed to deploy: ' + error)
       }
     }
   }

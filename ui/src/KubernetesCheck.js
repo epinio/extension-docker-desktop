@@ -4,7 +4,7 @@ import Alert from '@mui/material/Alert'
 class KubernetesCheck extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { node: "", error: "" }
+    this.state = { node: '', error: '' }
   }
 
   componentDidMount() {
@@ -26,22 +26,22 @@ class KubernetesCheck extends React.Component {
 
   async check() {
     try {
-      const result = await window.ddClient.extension.host.cli.exec("kubectl", ["get", "nodes", "-o", "json"])
+      const result = await window.ddClient.extension.host.cli.exec('kubectl', ['get', 'nodes', '-o', 'json'])
 
       const obj = result.parseJsonObject()
       if (obj.items.length < 1) {
-        this.setRunning(false, "", "no nodes found in cluster")
+        this.setRunning(false, '', 'no nodes found in cluster')
         return
       }
 
       const node = obj.items[0].metadata.name
-      this.setRunning(true, node, "")
+      this.setRunning(true, node, '')
     } catch (error) {
       if (error instanceof Error) {
-        this.setRunning(false, "", error.message)
+        this.setRunning(false, '', error.message)
       } else {
         // console.error(JSON.stringify(error));
-        this.setRunning(false, "", error.stderr)
+        this.setRunning(false, '', error.stderr)
       }
     }
   }
@@ -55,7 +55,7 @@ class KubernetesCheck extends React.Component {
 }
 
 function KubernetesOK(props) {
-  if (props.node === "docker-desktop") {
+  if (props.node === 'docker-desktop') {
     return null
   }
 

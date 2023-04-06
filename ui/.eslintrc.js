@@ -22,7 +22,6 @@ module.exports = {
     'react'
   ],
   rules: {
-    quotes: 'off',
     'no-undef': 'off',
     'space-before-function-paren': [
       'error',

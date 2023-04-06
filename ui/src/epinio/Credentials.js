@@ -5,7 +5,7 @@ function credsChanged(creds, update) {
 }
 
 export function credentialsOK(creds) {
-  return creds && creds.username !== "-" && creds.password !== "-"
+  return creds && creds.username !== '-' && creds.password !== '-'
 }
 
 // Credentials will fetch the default user, when props.enabled is true
@@ -15,13 +15,13 @@ function Credentials(props) {
       try {
         // note: `-l` returns a list, hence the `.items...`, even if only a single secret matches
         const result = await window.ddClient.extension.host.cli.exec(
-          "kubectl",
-          ["get", "secret", "-n", "epinio", "-l", "epinio.io/role=admin", "-o", "jsonpath={.items[0].data}"]
+          'kubectl',
+          ['get', 'secret', '-n', 'epinio', '-l', 'epinio.io/role=admin', '-o', 'jsonpath={.items[0].data}']
         )
         result.parseJsonObject()
         // Retrieval above as check that epinio is present.
         // Creds hardwired, unchanged from defaults
-        const u = { username: "admin", password: "password" }
+        const u = { username: 'admin', password: 'password' }
         if (credsChanged(props.credentials, u)) {
           props.onCredentialsChanged(u)
         }
@@ -32,7 +32,7 @@ function Credentials(props) {
         // } else {
         //   console.log(JSON.stringify(error));
         // }
-        const u = { username: "-", password: "-" }
+        const u = { username: '-', password: '-' }
         if (credsChanged(props.credentials, u)) {
           props.onCredentialsChanged(u)
         }
