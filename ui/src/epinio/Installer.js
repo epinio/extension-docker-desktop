@@ -11,7 +11,7 @@ export default function EpinioInstaller({
   const [progress, setProgress] = useState(0)
   const [installed, setInstalled] = useState(null)
 
-  async function helm(args) {
+  const helm = async (args) => {
     const result = await window.ddClient.extension.host.cli.exec('helm', args)
     console.debug(JSON.stringify(result))
 
@@ -22,54 +22,55 @@ export default function EpinioInstaller({
     console.debug(result?.stdout)
   }
 
-  async function isEpinioInstalled() {
+  const isEpinioInstalled = async () => {
     console.debug('checking if Epinio is already installed')
 
-    return helm(['status', '--namespace', 'epinio', 'epinio'])
-      .then(() => { setInstalled(true) })
-      .catch(() => { setInstalled(false) })
+    try {
+      await helm(['status', '--namespace', 'epinio', 'epinio'])
+      setInstalled(true)
+    } catch (error) {
+      setInstalled(false)
+    }
   }
 
   async function install() {
-    installNginx()
-      .then(installCertManager)
-      .then(installEpinio)
-      .then(() => {
-        setInstalled(true)
-        onInstallationChanged(true)
-      })
-      .catch(error => {
-        setInstalled(false)
-        onInstallationChanged(false)
+    try {
+      await installNginx()
+      await installCertManager()
+      await installEpinio()
 
-        console.error(error)
-        const msg = 'If the nginx service is stuck in pending state, you might need to restart docker desktop.' + <br/> + JSON.stringify(error)
-        onError(msg)
-      })
-      .finally(() => {
-        setProgress(0)
-      })
+      setInstalled(true)
+      onInstallationChanged(true)
+    } catch (error) {
+      setInstalled(false)
+      onInstallationChanged(false)
+
+      console.error(error)
+      const message = `If the nginx service is stuck in pending state, you might need to restart docker desktop. \n ${JSON.stringify(error)}`
+      onError(message)
+    } finally {
+      setProgress(0)
+    }
   }
 
   async function uninstall() {
-    uninstallEpinio()
-      .then(uninstallCertManager)
-      .then(uninstallNginx)
-      .then(() => {
-        setInstalled(false)
-        onInstallationChanged(true)
-      })
-      .catch(error => {
-        onInstallationChanged(false)
-        console.error(error)
-        onError(msg)
-      })
-      .finally(() => {
-        setProgress(0)
-      })
+    try {
+      await uninstallEpinio()
+      await uninstallCertManager()
+      await uninstallNginx()
+
+      setInstalled(false)
+      onInstallationChanged(true)
+    } catch (error) {
+      onInstallationChanged(false)
+      console.error(error)
+      onError(msg)
+    } finally {
+      setProgress(0)
+    }
   }
 
-  async function installNginx() {
+  const installNginx = async () => {
     console.log('installing nginx chart')
     setProgress(10)
 
@@ -85,7 +86,7 @@ export default function EpinioInstaller({
     setProgress(25)
   }
 
-  async function installCertManager(result) {
+  const installCertManager = async () => {
     console.log('installing cert-manager chart')
     setProgress(30)
 
@@ -101,7 +102,7 @@ export default function EpinioInstaller({
     setProgress(50)
   }
 
-  async function installEpinio() {
+  const installEpinio = async () => {
     console.log('installing epinio chart')
     setProgress(55)
 
@@ -119,7 +120,7 @@ export default function EpinioInstaller({
     setProgress(100)
   }
 
-  async function uninstallEpinio() {
+  const uninstallEpinio = async () => {
     console.log('uninstalling epinio chart')
     setProgress(10)
 
@@ -132,7 +133,7 @@ export default function EpinioInstaller({
     setProgress(25)
   }
 
-  async function uninstallCertManager() {
+  const uninstallCertManager = async () => {
     console.log('uninstalling cert-manager chart')
     setProgress(30)
 
@@ -145,7 +146,7 @@ export default function EpinioInstaller({
     setProgress(50)
   }
 
-  async function uninstallNginx() {
+  const uninstallNginx = async () => {
     console.log('uninstalling nginx chart')
     setProgress(75)
 
