@@ -1,9 +1,8 @@
-name: image
+name: image sandbox
 
 on:
+  workflow_dispatch:
   push:
-    tags:
-      - '0.*'
 
 permissions:
   contents: write
@@ -13,7 +12,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-
     - name: Checkout
       uses: actions/checkout@v2
 
@@ -45,7 +43,7 @@ jobs:
       with:
         context: .
         platforms: linux/amd64,linux/arm64
-        push: true
+        push: false
         tags: |
           splatform/epinio-docker-desktop:latest
           splatform/epinio-docker-desktop:${{ steps.get_tag.outputs.TAG }}
