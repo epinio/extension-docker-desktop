@@ -69,7 +69,7 @@ export class Lister extends React.Component {
         (value) => {
           console.log(value)
           const t = []
-          for (i = 0; i < value.length; i++) {
+          for (let i = 0; i < value.length; i++) {
             t[i] = {
               id: value[i].meta.name,
               state: value[i].status,

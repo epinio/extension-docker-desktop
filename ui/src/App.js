@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { DockerMuiThemeProvider } from '@docker/docker-mui-theme'
 import { Home as HomeIcon, Download as DownloadIcon, OpenInBrowser as OpenInBrowserIcon } from '@mui/icons-material'
 import {
@@ -40,13 +40,13 @@ function Opener(props) {
 function App() {
   const domain = 'localdev.me'
   const uiDomain = 'epinio.localdev.me'
-  const [hasKubernetes, setHasKubernetes] = React.useState(false)
-  const [installation, setInstallation] = React.useState(false)
-  const [credentials, setCredentials] = React.useState({ username: '-', password: '-' })
-  const [epinioInfo, setEpinioInfo] = React.useState('-')
+  const [hasKubernetes, setHasKubernetes] = useState(false)
+  const [installation, setInstallation] = useState(false)
+  const [credentials, setCredentials] = useState({ username: '-', password: '-' })
+  const [epinioInfo, setEpinioInfo] = useState('-')
 
-  const [error, setError] = React.useState(null)
-  const [errorOpen, setErrorOpen] = React.useState(false)
+  const [error, setError] = useState(null)
+  const [errorOpen, setErrorOpen] = useState(false)
   const handleErrorClose = () => setErrorOpen(false)
   const handleError = (error) => {
     setError(error)
@@ -86,7 +86,7 @@ function App() {
             <Typography id="modal-modal-title" variant="h6" component="h2">
               Error
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 10 }}>
+            <Typography component={'span'} id="modal-modal-description" sx={{ mt: 10 }}>
               <Alert severity="error">{error}</Alert>
             </Typography>
           </Box>
@@ -106,7 +106,6 @@ function App() {
             <Installer
               domain={domain}
               hasKubernetes={hasKubernetes}
-              installation={installation}
               onInstallationChanged={setInstallation}
               onError={handleError} />
           </Grid>
