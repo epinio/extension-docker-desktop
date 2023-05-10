@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Delete as DeleteIcon, InstallDesktop as InstallDesktopIcon } from '@mui/icons-material'
 import { Box, Button, Card, CardActions, CardContent, CircularProgress, LinearProgress, Typography } from '@mui/material'
 
@@ -20,24 +20,48 @@ export default function EpinioInstaller({
     }
 
     console.debug(result?.stdout)
+    return result?.stdout
   }
 
   const isEpinioInstalled = async () => {
-    console.debug('checking if Epinio is already installed')
+    console.debug('check Epinio installation')
 
     try {
-      await helm(['status', '--namespace', 'epinio', 'epinio'])
-      setInstalled(true)
+      const result = await helm(['status', '--namespace', 'epinio', 'epinio'])
+
+      // if the release is uninstalling we are in a "pending" state
+      if (result.includes('STATUS: uninstalling')) {
+        console.debug('uninstalling epinio release')
+
+        setInstalled(null)
+      } else {
+        setInstalled(true)
+      }
     } catch (error) {
       setInstalled(false)
     }
   }
 
+  const checkEpinioStatus = async () => {
+    isEpinioInstalled()
+    setInterval(async () => {
+      await isEpinioInstalled()
+    }, 3000)
+  }
+
   async function install() {
     try {
+      setProgress(10)
       await installNginx()
+      setProgress(25)
+
+      setProgress(30)
       await installCertManager()
+      setProgress(50)
+
+      setProgress(60)
       await installEpinio()
+      setProgress(100)
 
       setInstalled(true)
       onInstallationChanged(true)
@@ -55,11 +79,18 @@ export default function EpinioInstaller({
 
   async function uninstall() {
     try {
+      setProgress(10)
       await uninstallEpinio()
-      await uninstallCertManager()
-      await uninstallNginx()
+      setProgress(25)
 
-      setInstalled(false)
+      setProgress(30)
+      await uninstallCertManager()
+      setProgress(50)
+
+      setProgress(75)
+      await uninstallNginx()
+      setProgress(100)
+
       onInstallationChanged(true)
     } catch (error) {
       onInstallationChanged(false)
@@ -72,7 +103,6 @@ export default function EpinioInstaller({
 
   const installNginx = async () => {
     console.log('installing nginx chart')
-    setProgress(10)
 
     await helm([
       'upgrade', '--install', '--atomic', 'ingress-nginx',
@@ -83,12 +113,10 @@ export default function EpinioInstaller({
     // https://github.com/docker/for-mac/issues/4903
     console.log('installed: nginx')
     console.log("you might need to restart docker-desktop if localhost:443 doesn't forward to nginx")
-    setProgress(25)
   }
 
   const installCertManager = async () => {
     console.log('installing cert-manager chart')
-    setProgress(30)
 
     await helm([
       'upgrade', '--install', '--atomic', 'cert-manager',
@@ -99,12 +127,10 @@ export default function EpinioInstaller({
     ])
 
     console.log('installed: cert-manager')
-    setProgress(50)
   }
 
   const installEpinio = async () => {
     console.log('installing epinio chart')
-    setProgress(55)
 
     await helm([
       'upgrade', '--install', 'epinio',
@@ -117,12 +143,10 @@ export default function EpinioInstaller({
     ])
 
     console.log('installed: epinio')
-    setProgress(100)
   }
 
   const uninstallEpinio = async () => {
     console.log('uninstalling epinio chart')
-    setProgress(10)
 
     await helm([
       'uninstall', '--namespace', 'epinio',
@@ -130,12 +154,10 @@ export default function EpinioInstaller({
     ])
 
     console.log('uninstalled: epinio')
-    setProgress(25)
   }
 
   const uninstallCertManager = async () => {
     console.log('uninstalling cert-manager chart')
-    setProgress(30)
 
     await helm([
       'uninstall', '--namespace', 'cert-manager',
@@ -143,12 +165,10 @@ export default function EpinioInstaller({
     ])
 
     console.log('uninstalled: cert-manager')
-    setProgress(50)
   }
 
   const uninstallNginx = async () => {
     console.log('uninstalling nginx chart')
-    setProgress(75)
 
     await helm([
       'uninstall', '--namespace', 'ingress-nginx',
@@ -156,21 +176,20 @@ export default function EpinioInstaller({
     ])
 
     console.log('uninstalled: nginx')
-    setProgress(100)
   }
 
-  if (installed === null) {
-    isEpinioInstalled()
-  }
+  // spawn epinio status check only once
+  useEffect(() => {
+    checkEpinioStatus()
+  }, [])
 
-  // TODO install is idempotent, but maybe also detect working installation?
   const isLoading = progress !== 100 && progress !== 0
 
   return (
     <Card sx={{ height: '160px' }}>
       <CardContent>
         <Typography>
-          Install Epinio in Kubernetes
+          Install Epinio in Kubernetesfff
         </Typography>
         <br/>
         <Typography variant="body2" align="left">
@@ -184,7 +203,7 @@ export default function EpinioInstaller({
           variant="contained"
           onClick={install}
           // install button is disabled if kubernetes not available or Epinio already installed
-          disabled={!!installed || isLoading || !hasKubernetes} >
+          disabled={installed == null || installed || isLoading || !hasKubernetes} >
           Install/Upgrade
         </Button>
         <Button
@@ -192,11 +211,11 @@ export default function EpinioInstaller({
           variant="contained"
           onClick={uninstall}
           // uninstall button is disabled if Epinio is not installed
-          disabled={!installed || isLoading}
+          disabled={installed == null || !installed || isLoading}
           color="secondary" >
           Uninstall
         </Button>
-        {isLoading && <CircularProgress style={{ width: '20px', height: '20px', marginLeft: '10px' }} />}
+        {(installed == null || isLoading) && <CircularProgress style={{ width: '20px', height: '20px', marginLeft: '10px' }} />}
       </CardActions>
       <Box sx={{ width: '100%' }}>
         {isLoading && <LinearProgress variant="determinate" value={progress} />}
