@@ -189,7 +189,7 @@ export default function EpinioInstaller({
     <Card sx={{ height: '160px' }}>
       <CardContent>
         <Typography>
-          Install Epinio in Kubernetesfff
+          Install Epinio in Kubernetes
         </Typography>
         <br/>
         <Typography variant="body2" align="left">
