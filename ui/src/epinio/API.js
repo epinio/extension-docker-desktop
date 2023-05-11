@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Buffer } from 'buffer'
 import { sprintf } from 'sprintf-js'
 import { Cloud as CloudIcon, CloudOff as CloudOffIcon } from '@mui/icons-material'
 import { Button, Grid } from '@mui/material'
@@ -9,26 +10,61 @@ export function infoOK(info) {
   return info && info !== '' && info !== '-'
 }
 
-export function Info(props) {
-  React.useEffect(() => {
-    if (props.enabled && credentialsOK(props.credentials)) {
-      const creds = props.credentials
-      const apiURL = sprintf('http://%s:%s@%s/api/v1/info', creds.username, creds.password, props.apiDomain)
-      console.log('check info api endpoint')
-      window.ddClient.extension.vm.service.get(apiURL).then(
-        (value) => {
-          props.onInfoChanged(value.version)
-        }
-      ).catch(
-        (error) => {
-          console.error(error)
-          props.onInfoChanged('-')
-        }
-      )
-    }
-  }, [props])
+function EpinioClient(
+  apiDomain,
+  username,
+  password
+) {
+  const authHeaders = () => {
+    const encodedUserPass = Buffer.from(`${username}:${password}`).toString('base64')
+    const authHeader = `Basic ${encodedUserPass}`
+    const headers = new Headers()
+    headers.set('Authorization', authHeader)
+    return headers
+  }
 
-  const icon = infoOK(props.info) ? <CloudIcon /> : <CloudOffIcon />
+  const info = async () => {
+    try {
+      console.log('check info api endpoint', apiDomain, username, password)
+
+      const resp = await fetch(`http://${apiDomain}/api/v1/info`, { headers: authHeaders() })
+      return await resp.json()
+    } catch (error) {
+      console.error(error)
+      return Error(error)
+    }
+  }
+
+  return {
+    info
+  }
+}
+
+export function Info({
+  apiDomain,
+  enabled,
+  credentials,
+  info,
+  onInfoChanged
+}) {
+  useEffect(async () => {
+    if (!onInfoChanged || !enabled || !credentialsOK(credentials)) {
+      return
+    }
+
+    const epinioClient = EpinioClient(apiDomain, credentials.username, credentials.password)
+
+    try {
+      console.log('check info api endpoint')
+      const infoResponse = await epinioClient.info()
+      onInfoChanged(infoResponse.version)
+    } catch (error) {
+      console.error(error)
+      onInfoChanged('-')
+    }
+  }, [enabled, credentials, onInfoChanged])
+
+  const icon = infoOK(info) ? <CloudIcon /> : <CloudOffIcon />
 
   return (
     <Grid container direction="row" alignItems="center" width="30%">
@@ -36,7 +72,7 @@ export function Info(props) {
         {icon}
       </Grid>
       <Grid item xs={11}>
-        Epinio: { props.info }
+        Epinio: { info }
       </Grid>
     </Grid>
   )

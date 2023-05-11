@@ -3,7 +3,7 @@ import { Card, CardActions, CardContent, Grid, Typography } from '@mui/material'
 import Pusher from './Pusher'
 import Lister from './API'
 
-export default function ApplicationsGrid({
+export default function Applications({
   uiDomain,
   credentials,
   onError,

@@ -10,7 +10,7 @@ import Credentials, { credentialsOK } from './epinio/Credentials'
 import { Info, infoOK } from './epinio/API'
 import KubernetesCheck from './KubernetesCheck'
 import './App.css'
-import ApplicationsGrid from './epinio/Applications'
+import Applications from './epinio/Applications'
 
 function Link(props) {
   const open = () => { window.ddClient.host.openExternal(props.url) }
@@ -115,7 +115,7 @@ function App() {
           </Grid>
 
           <Grid item xs={12} mt={2}>
-            <ApplicationsGrid
+            <Applications
               uiDomain={uiDomain}
               enabled={hasKubernetes}
               credentials={credentials}
