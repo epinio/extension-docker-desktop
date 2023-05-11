@@ -6,11 +6,11 @@ import {
   Card, CardActions, CardContent, Grid, Paper, Typography
 } from '@mui/material'
 import Installer from './epinio/Installer'
-import Pusher from './epinio/Pusher'
 import Credentials, { credentialsOK } from './epinio/Credentials'
-import { Info, Lister, infoOK } from './epinio/API'
+import { Info, infoOK } from './epinio/API'
 import KubernetesCheck from './KubernetesCheck'
 import './App.css'
+import ApplicationsGrid from './epinio/Applications'
 
 function Link(props) {
   const open = () => { window.ddClient.host.openExternal(props.url) }
@@ -115,20 +115,12 @@ function App() {
           </Grid>
 
           <Grid item xs={12} mt={2}>
-            <Card>
-              <CardContent>
-                <Typography>
-                  Applications
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Grid container spacing={2} direction="column">
-                  <Pusher apiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} onError={handleError} list={
-                    <Lister apiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} />
-                  } disabled={disabled} />
-                </Grid>
-              </CardActions>
-            </Card>
+            <ApplicationsGrid
+              uiDomain={uiDomain}
+              enabled={hasKubernetes}
+              credentials={credentials}
+              disabled={disabled}
+              onError={handleError} />
           </Grid>
 
         </Grid>
