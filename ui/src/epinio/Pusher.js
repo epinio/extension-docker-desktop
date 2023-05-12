@@ -5,7 +5,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 export function Pusher(props) {
   const [folder, setFolder] = React.useState('')
-  const [name, setName] = React.useState('test')
+  const [name, setName] = React.useState('')
   const [progress, setProgress] = React.useState(null)
 
   const drag = (ev) => {
@@ -76,13 +76,12 @@ export function Pusher(props) {
     <Grid container m={2}>
       <Grid item xs={3}>
         <label htmlFor="contained-input-name">
-          <Input value={name} onChange={e => setName(e.target.value)} disabled={props.disabled} />
-          <p>Name</p>
+          <Input value={name} placeholder='Application name' onChange={e => setName(e.target.value)} disabled={props.disabled} />
         </label>
       </Grid>
 
       <Grid item xs={6}>
-        <Input onDrop={drag} value={folder} disabled={props.disabled} sx={{ width: '30ch' }} />
+        <Input value={folder} placeholder='Source folder' onDrop={drag} disabled={props.disabled} sx={{ width: '30ch' }} />
         <IconButton aria-label="open" onClick={handleOpen} disabled={props.disabled}>
           <FolderOpenIcon />
         </IconButton>
@@ -97,7 +96,7 @@ export function Pusher(props) {
         </Box>
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid item xs={12} mt={'10px'}>
         {props.list}
       </Grid>
     </Grid>

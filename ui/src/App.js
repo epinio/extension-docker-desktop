@@ -7,7 +7,7 @@ import {
 } from '@mui/material'
 import Installer from './epinio/Installer'
 import Credentials, { credentialsOK } from './epinio/Credentials'
-import { Info, infoOK } from './epinio/API'
+import { Info, infoOK } from './epinio/Info'
 import KubernetesCheck from './KubernetesCheck'
 import './App.css'
 import Applications from './epinio/Applications'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, CardActions, CardContent, Grid, Typography } from '@mui/material'
 import Pusher from './Pusher'
-import Lister from './API'
+import Lister from './Lister'
 
 export default function Applications({
   uiDomain,
@@ -14,14 +14,20 @@ export default function Applications({
     <Card>
       <CardContent>
         <Typography>
-        Applications
+          Applications
         </Typography>
       </CardContent>
       <CardActions>
         <Grid container spacing={2} direction="column">
-        <Pusher apiDomain={uiDomain} enabled={enabled} credentials={credentials} onError={onError} list={
-            <Lister apiDomain={uiDomain} enabled={enabled} credentials={credentials} />
-        } disabled={disabled} />
+          <Pusher
+            apiDomain={uiDomain}
+            enabled={enabled}
+            disabled={disabled}
+            credentials={credentials}
+            onError={onError}
+            list={
+                <Lister apiDomain={uiDomain} enabled={enabled} credentials={credentials} />
+            } />
         </Grid>
       </CardActions>
     </Card>
