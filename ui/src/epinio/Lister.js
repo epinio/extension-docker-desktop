@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 import { credentialsOK } from './Credentials'
 import EpinioClient from './API'
@@ -66,14 +66,14 @@ export function Lister({ apiDomain, enabled, credentials }) {
   ]
 
   return (
-    <div style={{ height: 300, width: '100%' }}>
+    <Box sx={{ height: 300 }}>
       <DataGrid
         rows={table}
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5]}
       />
-    </div>
+    </Box>
   )
 }
 

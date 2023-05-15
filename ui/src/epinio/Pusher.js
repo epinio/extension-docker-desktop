@@ -97,7 +97,7 @@ export function Pusher(props) {
       </Grid>
 
       <Grid item xs={12} mt={'10px'}>
-        {props.list}
+        {props.children}
       </Grid>
     </Grid>
   )

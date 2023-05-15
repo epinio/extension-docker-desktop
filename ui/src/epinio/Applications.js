@@ -24,10 +24,9 @@ export default function Applications({
             enabled={enabled}
             disabled={disabled}
             credentials={credentials}
-            onError={onError}
-            list={
-                <Lister apiDomain={uiDomain} enabled={enabled} credentials={credentials} />
-            } />
+            onError={onError} >
+            <Lister apiDomain={uiDomain} enabled={enabled} credentials={credentials} />
+          </Pusher>
         </Grid>
       </CardActions>
     </Card>
