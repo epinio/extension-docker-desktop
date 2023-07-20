@@ -25,14 +25,14 @@ FROM alpine as downloader-amd64
 RUN apk add --no-cache wget coreutils unzip
 
 # https://github.com/helm/helm/releases
-ARG HELM_VERSION=3.11.1
+ARG HELM_VERSION=3.12.2
 
-# https://get.helm.sh/helm-v3.11.1-darwin-amd64.tar.gz.sha256sum
-ARG HELM_CHECKSUM_DARWIN_AMD64=2548a90e5cc957ccc5016b47060665a9d2cd4d5b4d61dcc32f5de3144d103826
-# https://get.helm.sh/helm-v3.11.1-linux-amd64.tar.gz.sha256sum
-ARG HELM_CHECKSUM_LINUX_AMD64=0b1be96b66fab4770526f136f5f1a385a47c41923d33aab0dcb500e0f6c1bf7c
-# https://get.helm.sh/helm-v3.11.1-windows-amd64.zip.sha256sum
-ARG HELM_CHECKSUM_WINDOWS_AMD64=bc37d5d283e57c5dfa94f92ff704c8e273599ff8df3f8132cef5ca73f6a23d0a
+# https://get.helm.sh/helm-v3.12.2-darwin-amd64.tar.gz.sha256sum
+ARG HELM_CHECKSUM_DARWIN_AMD64=6e8bfc84a640e0dc47cc49cfc2d0a482f011f4249e2dff2a7e23c7ef2df1b64e
+# https://get.helm.sh/helm-v3.12.2-linux-amd64.tar.gz.sha256sum
+ARG HELM_CHECKSUM_LINUX_AMD64=2b6efaa009891d3703869f4be80ab86faa33fa83d9d5ff2f6492a8aebe97b219
+# https://get.helm.sh/helm-v3.12.2-windows-amd64.zip.sha256sum
+ARG HELM_CHECKSUM_WINDOWS_AMD64=35dc439baad85728dafd2be0edd4721ae5b770c5cf72c3adf9558b1415a9cae6
 
 # https://www.downloadkubernetes.com/
 ARG KUBECTL_VERSION=1.25.9
@@ -97,12 +97,12 @@ FROM alpine as downloader-arm64
 RUN apk add --no-cache wget coreutils unzip
 
 # https://github.com/helm/helm/releases
-ARG HELM_VERSION=3.11.1
+ARG HELM_VERSION=3.12.2
 
-# https://get.helm.sh/helm-v3.11.1-darwin-arm64.tar.gz.sha256sum
-ARG HELM_CHECKSUM_DARWIN_ARM64=43d0198a7a2ea2639caafa81bb0596c97bee2d4e40df50b36202343eb4d5c46b
-# https://get.helm.sh/helm-v3.11.1-linux-arm64.tar.gz.sha256sum
-ARG HELM_CHECKSUM_LINUX_ARM64=919173e8fb7a3b54d76af9feb92e49e86d5a80c5185020bae8c393fa0f0de1e8
+# https://get.helm.sh/helm-v3.12.2-darwin-arm64.tar.gz.sha256sum
+ARG HELM_CHECKSUM_DARWIN_ARM64=b60ee16847e28879ae298a20ba4672fc84f741410f438e645277205824ddbf55
+# https://get.helm.sh/helm-v3.12.2-linux-arm64.tar.gz.sha256sum
+ARG HELM_CHECKSUM_LINUX_ARM64=39cc63757901eaea5f0c30b464d3253a5d034ffefcb9b9d3c9e284887b9bb381
 
 # https://www.downloadkubernetes.com/
 ARG KUBECTL_VERSION=1.25.9
