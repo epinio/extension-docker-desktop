@@ -107,7 +107,7 @@ export default function EpinioInstaller({
     await helm([
       'upgrade', '--install', '--atomic', 'ingress-nginx',
       '--create-namespace', '--namespace', 'ingress-nginx',
-      'https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.3.0/ingress-nginx-4.3.0.tgz'
+      'https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.7.1/ingress-nginx-4.7.1.tgz'
     ])
 
     // https://github.com/docker/for-mac/issues/4903
@@ -139,8 +139,7 @@ export default function EpinioInstaller({
       '--set', 'global.domain=' + domain,
       '--set', 'ingress.ingressClassName=nginx',
       '--set', 'ingress.nginxSSLRedirect=false',
-      '--set', 'server.accessControlAllowOrigin=*',
-      'https://github.com/epinio/helm-charts/releases/download/epinio-1.8.1/epinio-1.8.1.tgz'
+      'https://github.com/epinio/helm-charts/releases/download/epinio-1.9.0-rc5/epinio-1.9.0-rc5.tgz'
     ])
 
     console.log('installed: epinio')
