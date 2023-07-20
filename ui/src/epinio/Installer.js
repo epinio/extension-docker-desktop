@@ -107,7 +107,7 @@ export default function EpinioInstaller({
     await helm([
       'upgrade', '--install', '--atomic', 'ingress-nginx',
       '--create-namespace', '--namespace', 'ingress-nginx',
-      'https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.3.0/ingress-nginx-4.3.0.tgz'
+      'https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.7.1/ingress-nginx-4.7.1.tgz'
     ])
 
     // https://github.com/docker/for-mac/issues/4903
