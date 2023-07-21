@@ -119,7 +119,7 @@ export default function EpinioInstaller({
     console.log('installing cert-manager chart')
 
     await helm([
-      'upgrade', '--install', '--atomic', 'cert-manager',
+      'upgrade', '--install', '--wait', '--debug', 'cert-manager',
       '--create-namespace', '--namespace', 'cert-manager',
       '--set', 'installCRDs=true',
       '--set', 'extraArgs[0]=--enable-certificate-owner-ref=true',
