@@ -6,7 +6,7 @@ INFO_COLOR = \033[0;36m
 NO_COLOR   = \033[m
 
 extension: ## Build service image to be deployed as a desktop extension
-	docker build --tag=$(IMAGE) .
+	docker build --no-cache --tag=$(IMAGE) .
 
 prepare-buildx: ## Create buildx builder for multi-arch build, if not exists
 	docker buildx inspect $(BUILDER) || docker buildx create --name=$(BUILDER) --driver=docker-container --driver-opt=network=host

@@ -136,10 +136,10 @@ export default function EpinioInstaller({
       'upgrade', '--install', 'epinio',
       '--create-namespace', '--namespace', 'epinio',
       '--wait',
+      '--debug',
       '--set', 'global.domain=' + domain,
       '--set', 'ingress.ingressClassName=nginx',
       '--set', 'ingress.nginxSSLRedirect=false',
-      '--set', 'server.accessControlAllowOrigin=*',
       'https://github.com/epinio/helm-charts/releases/download/epinio-1.9.0-rc5/epinio-1.9.0-rc5.tgz'
     ])
 
