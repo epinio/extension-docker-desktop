@@ -139,7 +139,6 @@ export default function EpinioInstaller({
       '--set', 'global.domain=' + domain,
       '--set', 'ingress.ingressClassName=nginx',
       '--set', 'ingress.nginxSSLRedirect=false',
-      '--set', 'server.accessControlAllowOrigin=*',
       'https://github.com/epinio/helm-charts/releases/download/epinio-1.8.1/epinio-1.8.1.tgz'
     ])
 
