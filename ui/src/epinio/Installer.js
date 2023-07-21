@@ -12,7 +12,7 @@ export default function EpinioInstaller({
   const [installed, setInstalled] = useState(null)
 
   const helm = async (args) => {
-    const result = await window.ddClient.extension.host.cli.exec('helm', args)
+    const result = await window.ddClient.extension.host.cli.exec('helm', args, ' || true')
     console.debug(JSON.stringify(result))
 
     if (result.stderr) {
@@ -52,11 +52,11 @@ export default function EpinioInstaller({
   async function install() {
     try {
       setProgress(10)
-      await installNginx()
+      await installCertManager()
       setProgress(25)
 
       setProgress(30)
-      await installCertManager()
+      await installNginx()
       setProgress(50)
 
       setProgress(60)
