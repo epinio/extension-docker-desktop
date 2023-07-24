@@ -102,7 +102,7 @@ ARG HELM_VERSION=3.12.2
 # https://get.helm.sh/helm-v3.12.2-darwin-arm64.tar.gz.sha256sum
 ARG HELM_CHECKSUM_DARWIN_ARM64=b60ee16847e28879ae298a20ba4672fc84f741410f438e645277205824ddbf55
 # https://get.helm.sh/helm-v3.12.2-linux-arm64.tar.gz.sha256sum
-ARG HELM_CHECKSUM_LINUX_ARM64=39cc63757901eaea5f0c30b464d3253a5d034ffefcb9b9d3c9e284887b9bb381
+ARG HELM_CHECKSUM_LINUX_ARM64=cfafbae85c31afde88c69f0e5053610c8c455826081c1b2d665d9b44c31b3759
 
 # https://www.downloadkubernetes.com/
 ARG KUBECTL_VERSION=1.25.9
