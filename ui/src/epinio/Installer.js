@@ -52,10 +52,6 @@ export default function EpinioInstaller({
   async function install() {
     try {
       setProgress(10)
-      await installNginx()
-      setProgress(25)
-
-      setProgress(30)
       await installCertManager()
       setProgress(50)
 
@@ -83,12 +79,8 @@ export default function EpinioInstaller({
       await uninstallEpinio()
       setProgress(25)
 
-      setProgress(30)
-      await uninstallCertManager()
       setProgress(50)
-
-      setProgress(75)
-      await uninstallNginx()
+      await uninstallCertManager()
       setProgress(100)
 
       onInstallationChanged(true)
@@ -99,20 +91,6 @@ export default function EpinioInstaller({
     } finally {
       setProgress(0)
     }
-  }
-
-  const installNginx = async () => {
-    console.log('installing nginx chart')
-
-    await helm([
-      'upgrade', '--install', '--atomic', 'ingress-nginx',
-      '--create-namespace', '--namespace', 'ingress-nginx',
-      'https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.7.1/ingress-nginx-4.7.1.tgz'
-    ])
-
-    // https://github.com/docker/for-mac/issues/4903
-    console.log('installed: nginx')
-    console.log("you might need to restart docker-desktop if localhost:443 doesn't forward to nginx")
   }
 
   const installCertManager = async () => {
@@ -137,9 +115,7 @@ export default function EpinioInstaller({
       '--create-namespace', '--namespace', 'epinio',
       '--atomic',
       '--set', 'global.domain=' + domain,
-      '--set', 'ingress.ingressClassName=nginx',
-      '--set', 'ingress.nginxSSLRedirect=false',
-      'https://github.com/epinio/helm-charts/releases/download/epinio-1.10.0/epinio-1.10.0.tgz'
+      'https://github.com/epinio/helm-charts/releases/download/epinio-1.11.0-rc1/epinio-1.11.0-rc1.tgz'
     ])
 
     console.log('installed: epinio')
@@ -165,17 +141,6 @@ export default function EpinioInstaller({
     ])
 
     console.log('uninstalled: cert-manager')
-  }
-
-  const uninstallNginx = async () => {
-    console.log('uninstalling nginx chart')
-
-    await helm([
-      'uninstall', '--namespace', 'ingress-nginx',
-      '--wait', 'ingress-nginx'
-    ])
-
-    console.log('uninstalled: nginx')
   }
 
   // spawn epinio status check only once

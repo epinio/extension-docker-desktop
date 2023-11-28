@@ -10,34 +10,37 @@ export function Lister({ apiDomain, enabled, credentials }) {
   useEffect(() => {
     const fetchApplications = () => {
       const epinioClient = EpinioClient({ apiDomain, credentials })
-      epinioClient.listApplications('workspace')
-        .then(applications => {
-          const t = []
+      epinioClient.login('admin', 'password')
+        .then(
+          epinioClient.listApplications('workspace')
+            .then(applications => {
+              const t = []
 
-          for (let i = 0; i < applications.length; i++) {
-            const app = applications[i]
+              for (let i = 0; i < applications.length; i++) {
+                const app = applications[i]
 
-            t[i] = {
-              id: app.meta.name,
-              state: app.status,
-              instances: app.configuration.instances
-            }
+                t[i] = {
+                  id: app.meta.name,
+                  state: app.status,
+                  instances: app.configuration.instances
+                }
 
-            if (app.deployment) {
-              t[i].dstatus = app.deployment.status
-            }
+                if (app.deployment) {
+                  t[i].dstatus = app.deployment.status
+                }
 
-            if (app.configuration.routes.length > 0) {
-              t[i].route = app.configuration.routes[0]
-            }
-          }
+                if (app.configuration.routes.length > 0) {
+                  t[i].route = app.configuration.routes[0]
+                }
+              }
 
-          setTable(t)
-        })
-        .catch(error => {
-          console.error('error listing applications', error)
-          setTable([])
-        })
+              setTable(t)
+            })
+            .catch(error => {
+              console.error('error listing applications', error)
+              setTable([])
+            })
+        )
     }
 
     if (enabled && credentialsOK(credentials)) {

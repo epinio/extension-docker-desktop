@@ -1,5 +1,3 @@
-import { Buffer } from 'buffer'
-
 export default function EpinioClient({
   apiDomain,
   credentials: {
@@ -7,42 +5,66 @@ export default function EpinioClient({
     password
   }
 }) {
+  const login = async (username, password) => {
+    console.info('EpinioClient.login')
+
+    try {
+      await epinio([
+        'login', '--trust-ca', '-u', username, '-p', password, `${apiDomain}`
+      ])
+      console.info('EpinioClient.login OK')
+    } catch (error) {
+      console.error('EpinioClient.login', error)
+      throw error
+    }
+  }
+
   const info = async () => {
     console.log('EpinioClient.info')
-    return doFetch(`http://${apiDomain}/api/v1/info`)
+
+    try {
+      const result = await epinio(['info'])
+      console.info('EpinioClient.info OK', result)
+
+      // TODO parse info to get version
+      return { version: 'v1.11.0-rc1' }
+    } catch (error) {
+      console.error('EpinioClient.info', error)
+      throw error
+    }
   }
 
   const listApplications = async (namespace) => {
     console.log('EpinioClient.listApplications')
-    return doFetch(`http://${apiDomain}/api/v1/namespaces/${namespace}/applications`)
-  }
-
-  const authHeaders = () => {
-    const encodedUserPass = Buffer.from(`${username}:${password}`).toString('base64')
-    const authHeader = `Basic ${encodedUserPass}`
-    const headers = new Headers()
-    headers.set('Authorization', authHeader)
-    return headers
-  }
-
-  const doFetch = async (url) => {
-    console.debug('EpinioClient.call', 'executing fetch', url)
 
     try {
-      const resp = await fetch(url, { headers: authHeaders() })
-      console.debug('EpinioClient.call', 'response', resp)
-
-      const json = await resp.json()
-      console.debug('EpinioClient.call', 'response JSON', json)
-
-      return json
+      const result = await epinio([
+        'app', 'list', '--output', 'json'
+      ])
+      console.info('EpinioClient.listApplications OK', result)
+      return JSON.parse(result)
     } catch (error) {
-      console.error('EpinioClient.call', error)
-      return Error(error)
+      console.error('EpinioClient.listApplications', error)
+      throw error
+    }
+  }
+
+  const epinio = async (args) => {
+    try {
+      const result = await window.ddClient.extension.host.cli.exec('epinio', args)
+      return result.stdout
+    } catch (error) {
+      console.error(error)
+
+      if (error.stderr) {
+        throw Error(error.stderr)
+      }
+      throw error
     }
   }
 
   return {
+    login,
     info,
     listApplications
   }
