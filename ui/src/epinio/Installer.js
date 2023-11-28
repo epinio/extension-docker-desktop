@@ -23,6 +23,17 @@ export default function EpinioInstaller({
     return result?.stdout
   }
 
+  const kubectl = async (args) => {
+    const result = await window.ddClient.extension.host.cli.exec('kubectl', args)
+    console.debug(JSON.stringify(result))
+
+    if (result.stderr) {
+      throw Error(result?.stderr)
+    }
+
+    return result.parseJsonObject()
+  }
+
   const isEpinioInstalled = async () => {
     console.debug('check Epinio installation')
 
@@ -52,6 +63,13 @@ export default function EpinioInstaller({
   async function install() {
     try {
       setProgress(10)
+      const isInstalled = await checkTraefik()
+      if (!isInstalled) {
+        await installTraefik()
+      }
+      setProgress(30)
+
+      setProgress(40)
       await installCertManager()
       setProgress(50)
 
@@ -79,8 +97,12 @@ export default function EpinioInstaller({
       await uninstallEpinio()
       setProgress(25)
 
-      setProgress(50)
+      setProgress(30)
       await uninstallCertManager()
+      setProgress(50)
+
+      setProgress(60)
+      await uninstallTraefik()
       setProgress(100)
 
       onInstallationChanged(true)
@@ -91,6 +113,33 @@ export default function EpinioInstaller({
     } finally {
       setProgress(0)
     }
+  }
+
+  const checkTraefik = async () => {
+    console.log('checking traefik installation')
+
+    const result = await kubectl([
+      'get', 'svc', '-A',
+      '-l', 'app.kubernetes.io/name=traefik',
+      '-o', 'json'
+    ])
+
+    const isInstalled = result.items.length > 0
+    console.log(`traefik already installed: ${isInstalled}`)
+
+    return isInstalled
+  }
+
+  const installTraefik = async () => {
+    console.log('installing traefik chart')
+
+    await helm([
+      'upgrade', '--install', '--atomic', 'traefik',
+      '--create-namespace', '--namespace', 'ingress-traefik',
+      'https://traefik.github.io/charts/traefik/traefik-19.0.3.tgz'
+    ])
+
+    console.log('installed: traefik')
   }
 
   const installCertManager = async () => {
@@ -119,6 +168,17 @@ export default function EpinioInstaller({
     ])
 
     console.log('installed: epinio')
+  }
+
+  const uninstallTraefik = async () => {
+    console.log('uninstalling traefik chart')
+
+    await helm([
+      'uninstall', '--namespace', 'ingress-traefik',
+      '--wait', 'traefik'
+    ])
+
+    console.log('uninstalled: traefik')
   }
 
   const uninstallEpinio = async () => {

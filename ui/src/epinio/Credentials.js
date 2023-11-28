@@ -1,4 +1,5 @@
 import React from 'react'
+import EpinioClient from './API'
 
 function credsChanged(creds, update) {
   return creds.username !== update.username || creds.password !== update.password
@@ -11,22 +12,36 @@ export function credentialsOK(creds) {
 // Credentials will fetch the default user, when props.enabled is true
 function Credentials(props) {
   React.useEffect(() => {
-    const getCredentials = async () => {
+    const epinioClient = EpinioClient({ apiDomain: props.domain })
+
+    const login = async () => {
+      let u = { username: '-', password: '-' }
+
       try {
         await epinioClient.login('admin', 'password')
-        const u = { username: 'admin', password: 'password' }
-        if (credsChanged(props.credentials, u)) {
-          props.onCredentialsChanged(u)
-        }
+        u = { username: 'admin', password: 'password' }
       } catch (error) {
-        const u = { username: '-', password: '-' }
-        if (credsChanged(props.credentials, u)) {
-          props.onCredentialsChanged(u)
-        }
+        // fail
+      }
+
+      if (credsChanged(props.credentials, u)) {
+        props.onCredentialsChanged(u)
       }
     }
+
+    const logout = async () => {
+      await epinioClient.logout()
+
+      const u = { username: '-', password: '-' }
+      if (credsChanged(props.credentials, u)) {
+        props.onCredentialsChanged(u)
+      }
+    }
+
     if (props.enabled) {
-      getCredentials()
+      login()
+    } else {
+      logout()
     }
   }, [props])
 

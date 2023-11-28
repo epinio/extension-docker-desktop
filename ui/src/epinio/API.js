@@ -1,52 +1,45 @@
 export default function EpinioClient({
-  apiDomain,
-  credentials: {
-    username,
-    password
-  }
+  apiDomain
 }) {
   const login = async (username, password) => {
     console.info('EpinioClient.login')
 
-    try {
-      await epinio([
-        'login', '--trust-ca', '-u', username, '-p', password, `${apiDomain}`
-      ])
-      console.info('EpinioClient.login OK')
-    } catch (error) {
-      console.error('EpinioClient.login', error)
-      throw error
-    }
+    await epinio([
+      'login', '-u', username, '-p', password, '--trust-ca', `epinio.${apiDomain}`
+    ])
+  }
+
+  const logout = async () => {
+    console.info('EpinioClient.logout')
+
+    await epinio(['logout'])
   }
 
   const info = async () => {
     console.log('EpinioClient.info')
 
-    try {
-      const result = await epinio(['info'])
-      console.info('EpinioClient.info OK', result)
+    // TODO: update with '--output json' flag
+    const result = await epinio(['info'])
+    const lines = result.split('\n')
 
-      // TODO parse info to get version
-      return { version: 'v1.11.0-rc1' }
-    } catch (error) {
-      console.error('EpinioClient.info', error)
-      throw error
+    for (const i in lines) {
+      if (lines[i].indexOf('Epinio Server Version: ') === 0) {
+        const version = lines[i].replace('Epinio Server Version: ', '')
+        return { version }
+      }
     }
+
+    return { version: 'unknown' }
   }
 
   const listApplications = async (namespace) => {
     console.log('EpinioClient.listApplications')
 
-    try {
-      const result = await epinio([
-        'app', 'list', '--output', 'json'
-      ])
-      console.info('EpinioClient.listApplications OK', result)
-      return JSON.parse(result)
-    } catch (error) {
-      console.error('EpinioClient.listApplications', error)
-      throw error
-    }
+    const result = await epinio([
+      'app', 'list', '--output', 'json'
+    ])
+
+    return JSON.parse(result)
   }
 
   const epinio = async (args) => {
@@ -54,8 +47,6 @@ export default function EpinioClient({
       const result = await window.ddClient.extension.host.cli.exec('epinio', args)
       return result.stdout
     } catch (error) {
-      console.error(error)
-
       if (error.stderr) {
         throw Error(error.stderr)
       }
@@ -65,6 +56,7 @@ export default function EpinioClient({
 
   return {
     login,
+    logout,
     info,
     listApplications
   }

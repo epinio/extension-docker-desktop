@@ -93,7 +93,12 @@ function App() {
         </Modal>
         </div>
 
-        <Credentials enabled={hasKubernetes} credentials={credentials} onCredentialsChanged={setCredentials} installation={installation} />
+        <Credentials
+          enabled={hasKubernetes}
+          credentials={credentials}
+          onCredentialsChanged={setCredentials}
+          installation={installation}
+          domain={domain} />
 
         <Box sx={{ width: '100%' }}>
           <Typography variant="subtitle1" component="div" gutterBottom>
