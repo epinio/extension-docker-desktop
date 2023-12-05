@@ -21,7 +21,7 @@ function Credentials(props) {
         await epinioClient.login('admin', 'password')
         u = { username: 'admin', password: 'password' }
       } catch (error) {
-        // fail
+        console.error(error)
       }
 
       if (credsChanged(props.credentials, u)) {
