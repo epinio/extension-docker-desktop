@@ -83,7 +83,7 @@ export default function EpinioInstaller({
       setInstalled(false)
       onInstallationChanged(false)
 
-      message = 'Error installing Epinio'
+      let message = 'Error installing Epinio'
       if (error.stderr) {
         message = error.stderr
       }
