@@ -1,4 +1,5 @@
 import React from 'react'
+import EpinioClient from './API'
 
 function credsChanged(creds, update) {
   return creds.username !== update.username || creds.password !== update.password
@@ -11,35 +12,36 @@ export function credentialsOK(creds) {
 // Credentials will fetch the default user, when props.enabled is true
 function Credentials(props) {
   React.useEffect(() => {
-    const getCredentials = async () => {
+    const epinioClient = EpinioClient({ apiDomain: props.domain })
+
+    const login = async () => {
+      let u = { username: '-', password: '-' }
+
       try {
-        // note: `-l` returns a list, hence the `.items...`, even if only a single secret matches
-        const result = await window.ddClient.extension.host.cli.exec(
-          'kubectl',
-          ['get', 'secret', '-n', 'epinio', '-l', 'epinio.io/role=admin', '-o', 'jsonpath={.items[0].data}']
-        )
-        result.parseJsonObject()
-        // Retrieval above as check that epinio is present.
-        // Creds hardwired, unchanged from defaults
-        const u = { username: 'admin', password: 'password' }
-        if (credsChanged(props.credentials, u)) {
-          props.onCredentialsChanged(u)
-        }
+        await epinioClient.login('admin', 'password')
+        u = { username: 'admin', password: 'password' }
       } catch (error) {
-        // for debugging:
-        // if (error instanceof Error) {
-        //   console.error(error);
-        // } else {
-        //   console.log(JSON.stringify(error));
-        // }
-        const u = { username: '-', password: '-' }
-        if (credsChanged(props.credentials, u)) {
-          props.onCredentialsChanged(u)
-        }
+        console.error(error)
+      }
+
+      if (credsChanged(props.credentials, u)) {
+        props.onCredentialsChanged(u)
       }
     }
+
+    const logout = async () => {
+      await epinioClient.logout()
+
+      const u = { username: '-', password: '-' }
+      if (credsChanged(props.credentials, u)) {
+        props.onCredentialsChanged(u)
+      }
+    }
+
     if (props.enabled) {
-      getCredentials()
+      login()
+    } else {
+      logout()
     }
   }, [props])
 

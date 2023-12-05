@@ -93,7 +93,12 @@ function App() {
         </Modal>
         </div>
 
-        <Credentials enabled={hasKubernetes} credentials={credentials} onCredentialsChanged={setCredentials} installation={installation} />
+        <Credentials
+          enabled={hasKubernetes}
+          credentials={credentials}
+          onCredentialsChanged={setCredentials}
+          installation={installation}
+          domain={domain} />
 
         <Box sx={{ width: '100%' }}>
           <Typography variant="subtitle1" component="div" gutterBottom>
@@ -133,7 +138,7 @@ function App() {
           <BottomNavigation showLabels sx={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
             <Info apiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} info={epinioInfo} onInfoChanged={setEpinioInfo} />
             <BottomNavigationAction label="epinio.io" icon={<HomeIcon />} onClick={openURL} url="https://epinio.io" />
-            <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={openURL} url="https://github.com/epinio/epinio/releases/tag/v1.10.0" />
+            <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={openURL} url="https://github.com/epinio/epinio/releases/tag/v1.11.0" />
           </BottomNavigation>
         </Paper>
 

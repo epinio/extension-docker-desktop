@@ -23,6 +23,17 @@ export default function EpinioInstaller({
     return result?.stdout
   }
 
+  const kubectl = async (args) => {
+    const result = await window.ddClient.extension.host.cli.exec('kubectl', args)
+    console.debug(JSON.stringify(result))
+
+    if (result.stderr) {
+      throw Error(result?.stderr)
+    }
+
+    return result.parseJsonObject()
+  }
+
   const isEpinioInstalled = async () => {
     console.debug('check Epinio installation')
 
@@ -52,10 +63,13 @@ export default function EpinioInstaller({
   async function install() {
     try {
       setProgress(10)
-      await installNginx()
-      setProgress(25)
-
+      const isInstalled = await checkTraefik()
+      if (!isInstalled) {
+        await installTraefik()
+      }
       setProgress(30)
+
+      setProgress(40)
       await installCertManager()
       setProgress(50)
 
@@ -69,8 +83,12 @@ export default function EpinioInstaller({
       setInstalled(false)
       onInstallationChanged(false)
 
+      let message = 'Error installing Epinio'
+      if (error.stderr) {
+        message = error.stderr
+      }
       console.error(error)
-      const message = `If the nginx service is stuck in pending state, you might need to restart docker desktop. \n ${JSON.stringify(error)}`
+
       onError(message)
     } finally {
       setProgress(0)
@@ -87,8 +105,8 @@ export default function EpinioInstaller({
       await uninstallCertManager()
       setProgress(50)
 
-      setProgress(75)
-      await uninstallNginx()
+      setProgress(60)
+      await uninstallTraefik()
       setProgress(100)
 
       onInstallationChanged(true)
@@ -101,18 +119,31 @@ export default function EpinioInstaller({
     }
   }
 
-  const installNginx = async () => {
-    console.log('installing nginx chart')
+  const checkTraefik = async () => {
+    console.log('checking traefik installation')
 
-    await helm([
-      'upgrade', '--install', '--atomic', 'ingress-nginx',
-      '--create-namespace', '--namespace', 'ingress-nginx',
-      'https://github.com/kubernetes/ingress-nginx/releases/download/helm-chart-4.7.1/ingress-nginx-4.7.1.tgz'
+    const result = await kubectl([
+      'get', 'svc', '-A',
+      '-l', 'app.kubernetes.io/name=traefik',
+      '-o', 'json'
     ])
 
-    // https://github.com/docker/for-mac/issues/4903
-    console.log('installed: nginx')
-    console.log("you might need to restart docker-desktop if localhost:443 doesn't forward to nginx")
+    const isInstalled = result.items.length > 0
+    console.log(`traefik already installed: ${isInstalled}`)
+
+    return isInstalled
+  }
+
+  const installTraefik = async () => {
+    console.log('installing traefik chart')
+
+    await helm([
+      'upgrade', '--install', '--atomic', 'traefik',
+      '--create-namespace', '--namespace', 'ingress-traefik',
+      'https://traefik.github.io/charts/traefik/traefik-19.0.3.tgz'
+    ])
+
+    console.log('installed: traefik')
   }
 
   const installCertManager = async () => {
@@ -137,12 +168,21 @@ export default function EpinioInstaller({
       '--create-namespace', '--namespace', 'epinio',
       '--atomic',
       '--set', 'global.domain=' + domain,
-      '--set', 'ingress.ingressClassName=nginx',
-      '--set', 'ingress.nginxSSLRedirect=false',
-      'https://github.com/epinio/helm-charts/releases/download/epinio-1.10.0/epinio-1.10.0.tgz'
+      'https://github.com/epinio/helm-charts/releases/download/epinio-1.11.0/epinio-1.11.0.tgz'
     ])
 
     console.log('installed: epinio')
+  }
+
+  const uninstallTraefik = async () => {
+    console.log('uninstalling traefik chart')
+
+    await helm([
+      'uninstall', '--namespace', 'ingress-traefik',
+      '--wait', 'traefik'
+    ])
+
+    console.log('uninstalled: traefik')
   }
 
   const uninstallEpinio = async () => {
@@ -165,17 +205,6 @@ export default function EpinioInstaller({
     ])
 
     console.log('uninstalled: cert-manager')
-  }
-
-  const uninstallNginx = async () => {
-    console.log('uninstalling nginx chart')
-
-    await helm([
-      'uninstall', '--namespace', 'ingress-nginx',
-      '--wait', 'ingress-nginx'
-    ])
-
-    console.log('uninstalled: nginx')
   }
 
   // spawn epinio status check only once

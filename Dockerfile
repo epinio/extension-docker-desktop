@@ -45,7 +45,7 @@ ARG KUBECTL_CHECKSUM_LINUX_AMD64=aaa5ea3b3630730d2b8a8ef3cccb14b47754602c7207c7b
 ARG KUBECTL_CHECKSUM_WINDOWS_AMD64=ed404eb0c3b74341d2ff799e78f9c0352e2bbd5c1b645652de2725ec77c0a78e
 
 # https://github.com/epinio/epinio/releases
-ARG EPINIO_VERSION=1.10.0
+ARG EPINIO_VERSION=1.11.0
 
 # /darwin amd64
 RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-darwin-amd64.tar.gz && \
@@ -113,7 +113,7 @@ ARG KUBECTL_CHECKSUM_DARWIN_ARM64=4166d293b4f58e5293363f1f91a285d929a54557bf0c1a
 ARG KUBECTL_CHECKSUM_LINUX_ARM64=741e65b681a22074aaf9459b57dbcef6a9e993472b3019a87f57c191bc68575f
 
 # https://github.com/epinio/epinio/releases
-ARG EPINIO_VERSION=1.10.0
+ARG EPINIO_VERSION=1.11.0
 
 # /darwin arm64
 RUN wget -nv https://get.helm.sh/helm-v${HELM_VERSION}-darwin-arm64.tar.gz && \
