@@ -83,8 +83,12 @@ export default function EpinioInstaller({
       setInstalled(false)
       onInstallationChanged(false)
 
+      message = 'Error installing Epinio'
+      if (error.stderr) {
+        message = error.stderr
+      }
       console.error(error)
-      const message = `If the nginx service is stuck in pending state, you might need to restart docker desktop. \n ${JSON.stringify(error)}`
+
       onError(message)
     } finally {
       setProgress(0)
@@ -164,7 +168,7 @@ export default function EpinioInstaller({
       '--create-namespace', '--namespace', 'epinio',
       '--atomic',
       '--set', 'global.domain=' + domain,
-      'https://github.com/epinio/helm-charts/releases/download/epinio-1.11.0-rc1/epinio-1.11.0-rc1.tgz'
+      'https://github.com/epinio/helm-charts/releases/download/epinio-1.11.0/epinio-1.11.0.tgz'
     ])
 
     console.log('installed: epinio')

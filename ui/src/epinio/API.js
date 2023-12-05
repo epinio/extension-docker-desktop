@@ -18,18 +18,11 @@ export default function EpinioClient({
   const info = async () => {
     console.log('EpinioClient.info')
 
-    // TODO: update with '--output json' flag
-    const result = await epinio(['info'])
-    const lines = result.split('\n')
+    const result = await epinio([
+      'info', '--output', 'json'
+    ])
 
-    for (const i in lines) {
-      if (lines[i].indexOf('Epinio Server Version: ') === 0) {
-        const version = lines[i].replace('Epinio Server Version: ', '')
-        return { version }
-      }
-    }
-
-    return { version: 'unknown' }
+    return JSON.parse(result)
   }
 
   const listApplications = async (namespace) => {
