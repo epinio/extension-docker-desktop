@@ -1,6 +1,6 @@
-# Epinio
+# Epinio Docker/Rancher Desktop Extension
 
-https://epinio.io
+For more information on Epinio, please visit https://epinio.io
 
 ## Install Extension
 
@@ -15,6 +15,15 @@ https://epinio.io
     make
 
 ### Install/Update
+
+#### Install on Rancher Desktop
+
+To install on Rancher Desktop, use the Rancher Desktop CLI `rdctl`.
+
+    rdctl extension install splatform/epinio-docker-desktop
+    rdctl extension update splatform/epinio-docker-desktop
+
+#### Install on Docker Desktop
 
     docker extension install splatform/epinio-docker-desktop
     docker extension update splatform/epinio-docker-desktop
