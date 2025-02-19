@@ -14,7 +14,6 @@ export default function EpinioInstaller({
   const helm = async (args) => {
     const result = await window.ddClient.extension.host.cli.exec('helm', args)
     console.debug(JSON.stringify(result))
-
     if (result.stderr) {
       throw Error(result?.stderr)
     }
@@ -44,11 +43,13 @@ export default function EpinioInstaller({
       if (result.includes('STATUS: uninstalling')) {
         console.debug('uninstalling epinio release')
 
+        // alert('epinio not yet installed')
         setInstalled(null)
       } else {
         setInstalled(true)
       }
     } catch (error) {
+      // alert('epinio check error' + error)
       setInstalled(false)
     }
   }
@@ -57,23 +58,31 @@ export default function EpinioInstaller({
     isEpinioInstalled()
     setInterval(async () => {
       await isEpinioInstalled()
-    }, 3000)
+    }, 10000)
   }
 
   async function install() {
     try {
       setProgress(10)
-      const isInstalled = await checkTraefik()
-      if (!isInstalled) {
+      const isTraefikInstalled = await checkTraefik()
+      // alert(`Traefik is installed ${isTraefikInstalled}`)
+      // todo: prompt for optional installation of traefik
+      if (!isTraefikInstalled) {
+        // alert('Traefik is not installed, installing')
         await installTraefik()
       }
       setProgress(30)
 
+      const isCertManagerInstalled = await checkCertManager()
+      // alert(`CertManager is installed ${isCertManagerInstalled}`)
       setProgress(40)
-      await installCertManager()
+      if (!isCertManagerInstalled) {
+        await installCertManager()
+      }
       setProgress(50)
 
       setProgress(60)
+      // todo: Handle repo not found and "Error: no cached repo found (try 'helm repo update')"
       await installEpinio()
       setProgress(100)
 
@@ -84,12 +93,13 @@ export default function EpinioInstaller({
       onInstallationChanged(false)
 
       let message = 'Error installing Epinio'
+      // todo: Fix error message reflection. It appears as though stderr is not being captured.
       if (error.stderr) {
         message = error.stderr
       }
-      console.error(error)
+      // alert(error)
 
-      onError(message)
+      onError(message + '. \n' + error)
     } finally {
       setProgress(0)
     }
@@ -101,12 +111,14 @@ export default function EpinioInstaller({
       await uninstallEpinio()
       setProgress(25)
 
+      // todo: prompt for optional uninstallation of cert-manager
       setProgress(30)
-      await uninstallCertManager()
+      // await uninstallCertManager()
       setProgress(50)
 
+      // todo: prompt for optional uninstallation of traefik
       setProgress(60)
-      await uninstallTraefik()
+      // await uninstallTraefik()
       setProgress(100)
 
       onInstallationChanged(true)
@@ -137,19 +149,35 @@ export default function EpinioInstaller({
   const installTraefik = async () => {
     console.log('installing traefik chart')
 
-    await helm([
+    const result = await helm([
       'upgrade', '--install', '--atomic', 'traefik',
       '--create-namespace', '--namespace', 'ingress-traefik',
       'https://traefik.github.io/charts/traefik/traefik-19.0.3.tgz'
     ])
 
+    // alert(JSON.stringify(result))
     console.log('installed: traefik')
+  }
+
+  const checkCertManager = async () => {
+    console.log('checking traefik installation')
+
+    const result = await kubectl([
+      'get', 'deployment', '-A',
+      '-l', 'app.kubernetes.io/name=cert-manager',
+      '-o', 'json'
+    ])
+
+    const isInstalled = result.items.length > 0
+    console.log(`cert-manager already installed: ${isInstalled}`)
+
+    return isInstalled
   }
 
   const installCertManager = async () => {
     console.log('installing cert-manager chart')
-
-    await helm([
+    // alert('installing cert-manager')
+    const result = await helm([
       'upgrade', '--install', '--atomic', 'cert-manager',
       '--create-namespace', '--namespace', 'cert-manager',
       '--set', 'installCRDs=true',
@@ -157,20 +185,22 @@ export default function EpinioInstaller({
       'https://charts.jetstack.io/charts/cert-manager-v1.9.1.tgz'
     ])
 
+    // alert(JSON.stringify(result))
     console.log('installed: cert-manager')
   }
 
   const installEpinio = async () => {
     console.log('installing epinio chart')
 
-    await helm([
+    // alert('installing epinio')
+    const output = await helm([
       'upgrade', '--install', 'epinio',
       '--create-namespace', '--namespace', 'epinio',
       '--atomic',
       '--set', 'global.domain=' + domain,
-      'https://github.com/epinio/helm-charts/releases/download/epinio-1.11.0/epinio-1.11.0.tgz'
+      'https://github.com/epinio/helm-charts/releases/download/epinio-1.11.1/epinio-1.11.1.tgz'
     ])
-
+    // alert(JSON.stringify(output))
     console.log('installed: epinio')
   }
 
