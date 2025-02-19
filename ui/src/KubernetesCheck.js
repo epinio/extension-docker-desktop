@@ -26,15 +26,17 @@ class KubernetesCheck extends React.Component {
 
   async check() {
     try {
-      const result = await window.ddClient.extension.host.cli.exec('kubectl', ['get', 'nodes', '-o', 'json'])
+      const result = await window.ddClient.extension.host.cli.exec('kubectl', ['config', 'current-context'])
 
-      const obj = result.parseJsonObject()
-      if (obj.items.length < 1) {
-        this.setRunning(false, '', 'no nodes found in cluster')
+      if (result.stderr.length > 0) {
+        console.log(result.stderr)
+      }
+      if (result.stdout.length === 0) {
+        this.setRunning(false, '', 'no kube context found')
         return
       }
 
-      const node = obj.items[0].metadata.name
+      const node = result.stdout.trimEnd()
       this.setRunning(true, node, '')
     } catch (error) {
       if (error instanceof Error) {
@@ -55,13 +57,13 @@ class KubernetesCheck extends React.Component {
 }
 
 function KubernetesOK(props) {
-  if (props.node === 'docker-desktop') {
+  if (props.node.endsWith('-desktop')) {
     return null
   }
 
   return <Alert severity="info">
-    Kubernetes is running, however you are not connected to a Docker Desktop node.
-    The &quot;Install&quot; button might not work with other clusters.
+    Kubernetes is running, however you are not connected to a Docker Desktop or Rancher Desktop node.
+    The &quot;Install&quot; button might not work with other contexts.
   </Alert>
 }
 
