@@ -1,22 +1,3 @@
-################################
-#          UI Builder           #
-#################################
-FROM node:14.17-alpine3.13 AS client-builder
-
-WORKDIR /ui
-
-# cache packages in layer
-COPY ui/package.json /ui/package.json
-COPY ui/package-lock.json /ui/package-lock.json
-RUN --mount=type=cache,target=/usr/src/app/.npm \
-    npm set cache /usr/src/app/.npm && \
-    npm ci
-
-# build
-COPY ui /ui
-RUN npm run build
-
-
 #################################
 # Downloader for AMD64 binaries #
 #################################
@@ -25,24 +6,24 @@ FROM alpine as downloader-amd64
 RUN apk add --no-cache wget coreutils unzip
 
 # https://github.com/helm/helm/releases
-ARG HELM_VERSION=3.12.2
+ARG HELM_VERSION=3.17.1
 
-# https://get.helm.sh/helm-v3.12.2-darwin-amd64.tar.gz.sha256sum
-ARG HELM_CHECKSUM_DARWIN_AMD64=6e8bfc84a640e0dc47cc49cfc2d0a482f011f4249e2dff2a7e23c7ef2df1b64e
-# https://get.helm.sh/helm-v3.12.2-linux-amd64.tar.gz.sha256sum
-ARG HELM_CHECKSUM_LINUX_AMD64=2b6efaa009891d3703869f4be80ab86faa33fa83d9d5ff2f6492a8aebe97b219
-# https://get.helm.sh/helm-v3.12.2-windows-amd64.zip.sha256sum
-ARG HELM_CHECKSUM_WINDOWS_AMD64=35dc439baad85728dafd2be0edd4721ae5b770c5cf72c3adf9558b1415a9cae6
+# https://get.helm.sh/helm-v3.17.1-darwin-amd64.tar.gz.sha256sum
+ARG HELM_CHECKSUM_DARWIN_AMD64=aba59ba9511971a71943b5c76f15d52ace1681197bb3f71ed1f0b15caceacb2c
+# https://get.helm.sh/helm-v3.17.1-linux-amd64.tar.gz.sha256sum
+ARG HELM_CHECKSUM_LINUX_AMD64=3b66f3cd28409f29832b1b35b43d9922959a32d795003149707fea84cbcd4469
+# https://get.helm.sh/helm-v3.17.1-windows-amd64.zip.sha256sum
+ARG HELM_CHECKSUM_WINDOWS_AMD64=08281ee6d4d272835ff10c510b8b39736d112d9cb89dfbc853fe83913fbe48d0
 
 # https://www.downloadkubernetes.com/
-ARG KUBECTL_VERSION=1.25.9
+ARG KUBECTL_VERSION=1.29.5
 
-# https://dl.k8s.io/v1.25.9/bin/darwin/amd64/kubectl.sha256
-ARG KUBECTL_CHECKSUM_DARWIN_AMD64=a7a8af548747a6a059b0351a6b8af2ccd2c9726c650732e69059c0635cee5c6b
-# https://dl.k8s.io/v1.23.4/bin/linux/amd64/kubectl.sha256
-ARG KUBECTL_CHECKSUM_LINUX_AMD64=aaa5ea3b3630730d2b8a8ef3cccb14b47754602c7207c7b0717158ae83c7cb10
-# https://dl.k8s.io/v1.25.9/bin/windows/amd64/kubectl.exe.sha256
-ARG KUBECTL_CHECKSUM_WINDOWS_AMD64=ed404eb0c3b74341d2ff799e78f9c0352e2bbd5c1b645652de2725ec77c0a78e
+# https://dl.k8s.io/v1.29.5/bin/darwin/amd64/kubectl.sha256
+ARG KUBECTL_CHECKSUM_DARWIN_AMD64=395082ef84594ea4cb170d599056406ed2cf39555b53e92e0caee013c1ed5cdf
+# https://dl.k8s.io/v1.29.5/bin/linux/amd64/kubectl.sha256
+ARG KUBECTL_CHECKSUM_LINUX_AMD64=603c8681fc0d8609c851f9cc58bcf55eeb97e2934896e858d0232aa8d1138366
+# https://dl.k8s.io/v1.29.5/bin/windows/amd64/kubectl.exe.sha256
+ARG KUBECTL_CHECKSUM_WINDOWS_AMD64=8de419ccecdde90172345e7d12a63de42c217d28768d84c2398d932b44d73489
 
 # https://github.com/epinio/epinio/releases
 ARG EPINIO_VERSION=1.11.0
@@ -97,20 +78,20 @@ FROM alpine as downloader-arm64
 RUN apk add --no-cache wget coreutils unzip
 
 # https://github.com/helm/helm/releases
-ARG HELM_VERSION=3.12.2
+ARG HELM_VERSION=3.17.1
 
-# https://get.helm.sh/helm-v3.12.2-darwin-arm64.tar.gz.sha256sum
-ARG HELM_CHECKSUM_DARWIN_ARM64=b60ee16847e28879ae298a20ba4672fc84f741410f438e645277205824ddbf55
-# https://get.helm.sh/helm-v3.12.2-linux-arm64.tar.gz.sha256sum
-ARG HELM_CHECKSUM_LINUX_ARM64=cfafbae85c31afde88c69f0e5053610c8c455826081c1b2d665d9b44c31b3759
+# https://get.helm.sh/helm-v3.17.1-darwin-arm64.tar.gz.sha256sum
+ARG HELM_CHECKSUM_DARWIN_ARM64=b823a213d8d7937222becc63d9c7bb3d15a090e7ecd1f70f3a583ed39657e21b
+# https://get.helm.sh/helm-v3.17.1-linux-arm64.tar.gz.sha256sum
+ARG HELM_CHECKSUM_LINUX_ARM64=c86c9b23602d4abbfae39d9634e25ab1d0ea6c4c16c5b154113efe316a402547
 
 # https://www.downloadkubernetes.com/
-ARG KUBECTL_VERSION=1.25.9
+ARG KUBECTL_VERSION=1.29.5
 
-# https://dl.k8s.io/v1.25.9/bin/darwin/arm64/kubectl.sha256
-ARG KUBECTL_CHECKSUM_DARWIN_ARM64=4166d293b4f58e5293363f1f91a285d929a54557bf0c1a1ae22243ef24a0f58a
-# https://dl.k8s.io/v1.25.9/bin/linux/arm64/kubectl.sha256
-ARG KUBECTL_CHECKSUM_LINUX_ARM64=741e65b681a22074aaf9459b57dbcef6a9e993472b3019a87f57c191bc68575f
+# https://dl.k8s.io/v1.29.5/bin/darwin/arm64/kubectl.sha256
+ARG KUBECTL_CHECKSUM_DARWIN_ARM64=23b09c126c0a0b71b58cc725a32cf84f1753242b3892dfd762511f2da6cce165
+# https://dl.k8s.io/v1.29.5/bin/linux/arm64/kubectl.sha256
+ARG KUBECTL_CHECKSUM_LINUX_ARM64=9ee9168def12ac6a6c0c6430e0f73175e756ed262db6040f8aa2121ad2c1f62e
 
 # https://github.com/epinio/epinio/releases
 ARG EPINIO_VERSION=1.11.0
@@ -145,6 +126,23 @@ RUN wget -nv https://github.com/epinio/epinio/releases/download/v${EPINIO_VERSIO
 
 FROM downloader-$TARGETARCH AS downloader
 
+################################
+#          UI Builder           #
+#################################
+FROM node:14.17-alpine3.13 AS client-builder
+
+WORKDIR /ui
+
+# cache packages in layer
+COPY ui/package.json /ui/package.json
+COPY ui/package-lock.json /ui/package-lock.json
+RUN --mount=type=cache,target=/usr/src/app/.npm \
+    npm set cache /usr/src/app/.npm && \
+    npm ci
+
+# build
+COPY ui /ui
+RUN npm run build
 
 #################################
 #          Final image          #
@@ -153,7 +151,7 @@ FROM scratch
 
 LABEL org.opencontainers.image.title="Epinio" \
     org.opencontainers.image.description="Push from source to Kubernetes in one step" \
-    org.opencontainers.image.vendor="Rancher by SUSE" \
+    org.opencontainers.image.vendor="Epinio by Krumware and SUSE" \
     com.docker.desktop.extension.icon="https://epinio.io/images/icon-epinio.svg" \
     com.docker.extension.publisher-url="https://epinio.io" \
     com.docker.extension.screenshots='[{"alt": "Epinio after Installation", "url": "https://epinio.io/images/epinio-docker-desktop-screenshot.png"}]' \

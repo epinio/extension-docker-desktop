@@ -22,6 +22,7 @@ module.exports = {
     'react'
   ],
   rules: {
+    'no-unused-vars': 'off',
     'no-undef': 'off',
     'space-before-function-paren': [
       'error',
