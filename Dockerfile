@@ -1,7 +1,7 @@
 #################################
 # Downloader for AMD64 binaries #
 #################################
-FROM alpine as downloader-amd64
+FROM alpine AS downloader-amd64
 
 RUN apk add --no-cache wget coreutils unzip
 
@@ -73,7 +73,7 @@ RUN wget -nv https://github.com/epinio/epinio/releases/download/v${EPINIO_VERSIO
 #################################
 # Downloader for ARM64 binaries #
 #################################
-FROM alpine as downloader-arm64
+FROM alpine AS downloader-arm64
 
 RUN apk add --no-cache wget coreutils unzip
 
