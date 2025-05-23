@@ -49,5 +49,7 @@ jobs:
         tags: |
           splatform/epinio-docker-desktop:latest
           splatform/epinio-docker-desktop:${{ steps.get_tag.outputs.TAG }}
+          splatform/epinio-docker-desktop:v${{ steps.get_tag.outputs.TAG }}
           ghcr.io/epinio/extension-docker-desktop:latest
           ghcr.io/epinio/extension-docker-desktop:${{ steps.get_tag.outputs.TAG }}
+          ghcr.io/epinio/extension-docker-desktop:v${{ steps.get_tag.outputs.TAG }}
