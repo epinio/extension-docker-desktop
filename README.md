@@ -58,7 +58,7 @@ To install on Rancher Desktop, use the Rancher Desktop CLI `rdctl`.
 If having trouble installing Epinio, you may need to install it manually.
 
 ```
-helm upgrade --install epinio --create-namespace --namespace epinio --atomic --set global.domain=localdev.me https://github.com/epinio/helm-charts/releases/download/epinio-1.11.1/epinio-1.11.1.tgz
+helm upgrade --install epinio --create-namespace --namespace epinio --atomic --set global.domain=localtest.dev https://github.com/epinio/helm-charts/releases/download/epinio-1.11.1/epinio-1.11.1.tgz
 ```
 
 If you receive a "Error: no cached repo found (try 'helm repo update')" error, you may need to try `helm repo update` first.

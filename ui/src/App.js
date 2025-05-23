@@ -38,8 +38,8 @@ function Opener(props) {
 }
 
 function App() {
-  const domain = 'localdev.me'
-  const uiDomain = 'epinio.localdev.me'
+  const domain = 'localtest.dev'
+  const uiDomain = 'epinio.localtest.dev'
   const [hasKubernetes, setHasKubernetes] = useState(false)
   const [installation, setInstallation] = useState(false)
   const [credentials, setCredentials] = useState({ username: '-', password: '-' })
