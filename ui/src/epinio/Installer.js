@@ -198,7 +198,7 @@ export default function EpinioInstaller({
       '--create-namespace', '--namespace', 'epinio',
       '--atomic',
       '--set', 'global.domain=' + domain,
-      'https://github.com/epinio/helm-charts/releases/download/epinio-1.11.1/epinio-1.11.1.tgz'
+      'https://github.com/epinio/helm-charts/releases/download/epinio-1.12.0/epinio-1.12.0.tgz'
     ])
     // alert(JSON.stringify(output))
     console.log('installed: epinio')
