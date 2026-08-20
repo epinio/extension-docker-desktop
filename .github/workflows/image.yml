@@ -4,7 +4,8 @@ on:
   push:
     tags:
       - '0.*'
-
+      - 'v0.*'
+      
 permissions:
   contents: write
   packages: write
@@ -14,6 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: Get current tag
+      id: get_tag
+      run: |
+        TAG=${GITHUB_REF#refs/tags/}
+        echo "TAG=${TAG#v}" >> "$GITHUB_OUTPUT"
+        
     - name: Checkout
       uses: actions/checkout@v5
 
