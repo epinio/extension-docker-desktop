@@ -11,6 +11,7 @@ import { Info, infoOK } from './epinio/Info'
 import KubernetesCheck from './KubernetesCheck'
 import './App.css'
 import Applications from './epinio/Applications'
+import { DomainField, storedDomain } from './epinio/Domain'
 
 function Link(props) {
   const open = () => { window.ddClient.host.openExternal(props.url) }
@@ -38,8 +39,8 @@ function Opener(props) {
 }
 
 function App() {
-  const domain = 'localtest.me'
-  const uiDomain = 'epinio.localtest.me'
+  const [domain, setDomain] = useState(storedDomain)
+  const uiDomain = 'epinio.' + domain
   const [hasKubernetes, setHasKubernetes] = useState(false)
   const [installation, setInstallation] = useState(false)
   const [credentials, setCredentials] = useState({ username: '-', password: '-' })
@@ -106,6 +107,8 @@ function App() {
           </Typography>
         </Box>
 
+        <DomainField domain={domain} onDomainChanged={setDomain} />
+
         <Grid container mt={2} columnSpacing={2}>
           <Grid item xs={8}>
             <Installer
@@ -138,7 +141,7 @@ function App() {
           <BottomNavigation showLabels sx={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
             <Info apiDomain={uiDomain} enabled={hasKubernetes} credentials={credentials} info={epinioInfo} onInfoChanged={setEpinioInfo} />
             <BottomNavigationAction label="epinio.io" icon={<HomeIcon />} onClick={openURL} url="https://epinio.io" />
-            <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={openURL} url="https://github.com/epinio/epinio/releases/tag/v1.11.0" />
+            <BottomNavigationAction label="CLI" icon={<DownloadIcon />} onClick={openURL} url="https://github.com/epinio/epinio/releases/tag/v1.14.1" />
           </BottomNavigation>
         </Paper>
 

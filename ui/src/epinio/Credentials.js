@@ -43,7 +43,7 @@ function Credentials(props) {
     } else {
       logout()
     }
-  }, [props])
+  }, [props.enabled, props.domain, props.credentials, props.onCredentialsChanged])
 
   return null
 }
